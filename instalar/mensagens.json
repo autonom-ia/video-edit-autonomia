@@ -590,6 +590,11 @@
       "opcoes": ["Tentar de novo ★", "Deixar para depois"],
       "acao_automatica": "nenhuma"
     },
+    "ATUALIZACAO_INCOMPLETA": {
+      "texto": "Não consegui trocar os arquivos do estúdio, e alguns não voltaram sozinhos. Nada se perdeu: a versão de antes está guardada em {{copia_anterior}}. Feche os vídeos e as pastas do estúdio que estiverem abertos, e eu tento de novo.",
+      "opcoes": ["Tentar de novo ★", "Deixar para depois"],
+      "acao_automatica": "nenhuma"
+    },
     "JA_ATUALIZADO": {
       "texto": "O seu estúdio já está na versão mais nova ({{de}}). Não precisei mudar nada.",
       "opcoes": [],

@@ -81,6 +81,14 @@ jobs:
           (Get-FileHash -Algorithm SHA256 $Z).Hash.ToLower() + '  estudio-de-reels.zip' | Set-Content -Encoding ascii ($Z + '.sha256')
           # O instalador le a versao instalada do arquivo VERSAO.
           Set-Content -NoNewline -Encoding ascii (Join-Path $casa 'VERSAO') '0.0.1'
+          # Falha no meio da troca (README aberto com trava): tudo volta e nenhuma copia vazia fica.
+          $trava = [System.IO.File]::Open((Join-Path $casa 'README.md'), 'Open', 'Read', 'None')
+          $r = powershell.exe -NoProfile -ExecutionPolicy Bypass -File $inst atualizar $Z | Select-Object -Last 1
+          $trava.Close()
+          Write-Output "atualizar (com README travado) => $r"
+          if ($r -notlike '*ATUALIZACAO_FALHOU*') { $falhas += 'atualizar-falha' }
+          if ((Get-Content -Raw (Join-Path $casa 'VERSAO')).Trim() -ne '0.0.1') { $falhas += 'atualizar-falha-versao' }
+          if (@(Get-ChildItem (Join-Path $casa '.ferramentas') -Filter 'versao-anterior-*' -Directory -ErrorAction SilentlyContinue).Count -ne 0) { $falhas += 'atualizar-falha-copia' }
           $r = powershell.exe -NoProfile -ExecutionPolicy Bypass -File $inst atualizar $Z | Select-Object -Last 1
           Write-Output "atualizar (de uma versao antiga) => $r"
           if ($r -notlike '*"ok":true*' -or $r -like '*JA_ATUALIZADO*') { $falhas += 'atualizar' }
@@ -168,6 +176,14 @@ jobs:
           (cd "$(dirname "$Z")" && shasum -a 256 "$(basename "$Z")" > "$Z.sha256")
           # O instalador lê a versão instalada do arquivo VERSAO.
           printf '0.0.1\n' > VERSAO
+          # Falha no meio da troca (README travado): tudo volta e nenhuma cópia vazia fica.
+          chflags uchg README.md
+          r="$(bash instalar/instalar.sh atualizar "$Z" | tail -1)"
+          chflags nouchg README.md
+          echo "atualizar (com README travado) => $r"
+          case "$r" in *ATUALIZACAO_FALHOU*) ;; *) falhas="$falhas atualizar-falha" ;; esac
+          [ "$(cat VERSAO)" = "0.0.1" ] || falhas="$falhas atualizar-falha-versao"
+          ls -d .ferramentas/versao-anterior-* >/dev/null 2>&1 && falhas="$falhas atualizar-falha-copia"
           r="$(bash instalar/instalar.sh atualizar "$Z" | tail -1)"
           echo "atualizar (de uma versão antiga) => $r"
           case "$r" in *JA_ATUALIZADO*) falhas="$falhas atualizar" ;; *'"ok":true'*) ;; *) falhas="$falhas atualizar" ;; esac

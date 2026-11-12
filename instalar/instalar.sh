@@ -1402,12 +1402,22 @@ acao_atualizar() {
     cp -R "$item" "$REPO/$nome" 2>>"$LOG" || { falhou_troca="$nome"; break; }
   done
   if [ -n "$falhou_troca" ]; then
+    local voltou=1
     for nome in "${trocados[@]}"; do
-      rm -rf "${REPO:?}/$nome"
-      [ -e "$antigo/$nome" ] && mv "$antigo/$nome" "$REPO/$nome"
+      # Só devolve se o novo saiu: mover uma pasta para cima de outra que ficou
+      # a colocaria dentro dela, e o estúdio pareceria restaurado sem estar.
+      if ! rm -rf "${REPO:?}/$nome" 2>>"$LOG"; then voltou=0; continue; fi
+      if [ -e "$antigo/$nome" ]; then mv "$antigo/$nome" "$REPO/$nome" 2>>"$LOG" || voltou=0; fi
     done
-    diga "Não consegui trocar os arquivos do estúdio. Voltei tudo como estava."
-    printf '{"acao":"atualizar","ok":false,"codigo":"ATUALIZACAO_FALHOU","de":%s,"para":%s,"dados":{"arquivo":%s}}\n' "$(js "$de")" "$(js "$para")" "$(js "$falhou_troca")"
+    # Com tudo de volta, a pasta da cópia fica vazia e sai. Se ficasse, contaria
+    # como cópia anterior e empurraria uma cópia de verdade para fora da fila.
+    if [ "$voltou" = "1" ] && rmdir "$antigo" 2>>"$LOG"; then
+      diga "Não consegui trocar os arquivos do estúdio. Voltei tudo como estava."
+      printf '{"acao":"atualizar","ok":false,"codigo":"ATUALIZACAO_FALHOU","de":%s,"para":%s,"dados":{"arquivo":%s}}\n' "$(js "$de")" "$(js "$para")" "$(js "$falhou_troca")"
+    else
+      diga "Não consegui trocar os arquivos do estúdio, e alguns não voltaram sozinhos. Eles estão guardados em $antigo."
+      printf '{"acao":"atualizar","ok":false,"codigo":"ATUALIZACAO_INCOMPLETA","de":%s,"para":%s,"dados":{"arquivo":%s,"copia_anterior":%s}}\n' "$(js "$de")" "$(js "$para")" "$(js "$falhou_troca")" "$(js "$antigo")"
+    fi
     exit 1
   fi
   if [ -f "$antigo/.claude/settings.local.json" ]; then
@@ -1423,6 +1433,8 @@ acao_atualizar() {
   fi
   if [ "$fala_mudou" = "1" ] && [ -f "$ESTADO/fala.txt" ]; then
     diga "O ouvido de texto mudou na versão nova. Vou atualizar."
+    # Sem apagar o estado, o passo vê "pronto" com o modelo no lugar e não refaz nada.
+    rm -f "$ESTADO/fala.txt" "$ESTADO/fala.json"
     bash "$REPO/instalar/instalar.sh" passo fala >>"$LOG" 2>&1
   fi
   diga "Pronto: estúdio atualizado de $de para $para. A versão anterior ficou guardada em $antigo."
