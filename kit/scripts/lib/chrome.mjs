@@ -8,7 +8,7 @@ import { rodar, ultimasLinhas } from './executar.mjs';
 import { caminhoDoNavegador } from './hyperframes.mjs';
 import { falha } from './saida.mjs';
 import { escaparHtml } from './texto.mjs';
-import { exigirForaDaArea, codigoDoNavegador } from './area-protegida.mjs';
+import { codigoDoNavegador } from './area-protegida.mjs';
 
 const NAVEGADOR = 'o navegador escondido';
 
@@ -68,7 +68,6 @@ function argsBase(largura, altura) {
 }
 
 async function chamar(argumentos) {
-  exigirForaDaArea(NAVEGADOR);
   const exe = await acharChrome();
   const pasta = fs.mkdtempSync(path.join(os.tmpdir(), 'estudio-chrome-'));
   try {

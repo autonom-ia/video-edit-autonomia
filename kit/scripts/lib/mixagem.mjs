@@ -8,6 +8,8 @@ import { arred } from './texto.mjs';
 import { falha } from './saida.mjs';
 
 const TENTATIVAS = 4;
+// Abaixo disso o limitador já espreme a voz. Melhor falhar e avisar do que entregar o som achatado.
+const TETO_MINIMO_DBFS = -6;
 
 // Dentro do alvo de entrega: volume a ±0,3 LU de −14 (folga para a conferência de ±0,5) e pico no teto.
 function noAlvo(medida) {
@@ -74,24 +76,29 @@ export async function mixar({ pastaTmp, semTrilha, voz, musica, duracao, esquema
   let ganhoFinal = r2(SOM.alvoLufs - antes.lufs);
   let teto = SOM.limiterDbfs;
   let resultado = null;
-  for (let tentativa = 0; tentativa < TENTATIVAS; tentativa += 1) {
-    await ffmpegOk(
-      ['-y', '-i', semTrilha, '-i', wav, '-filter_complex', grafoFinal(ganhoFinal, teto), '-map', '0:v:0', '-map', '[a]', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '256k', '-ar', '48000', '-ac', '2', '-movflags', '+faststart', saida],
-      'MIXAGEM_FALHOU',
-    );
-    resultado = await loudness(saida);
-    if (noAlvo(resultado)) break;
-    // Pico alto se resolve baixando o teto do limitador; volume fora se resolve no ganho.
-    // Mexer só no ganho para conter o pico derruba o volume, e o laço fica oscilando.
-    if (resultado.pico_dbtp > SOM.picoMaxDbtp) teto = r2(teto - (resultado.pico_dbtp - SOM.picoMaxDbtp) - 0.2);
-    ganhoFinal = r2(ganhoFinal + (SOM.alvoLufs - resultado.lufs));
-  }
-  if (!noAlvo(resultado)) {
-    fs.rmSync(wav, { force: true });
+  try {
+    for (let tentativa = 0; tentativa < TENTATIVAS; tentativa += 1) {
+      await ffmpegOk(
+        ['-y', '-i', semTrilha, '-i', wav, '-filter_complex', grafoFinal(ganhoFinal, teto), '-map', '0:v:0', '-map', '[a]', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '256k', '-ar', '48000', '-ac', '2', '-movflags', '+faststart', saida],
+        'MIXAGEM_FALHOU',
+      );
+      resultado = await loudness(saida);
+      if (noAlvo(resultado)) break;
+      // Pico alto se resolve baixando o teto do limitador; volume fora se resolve no ganho.
+      // Mexer só no ganho para conter o pico derruba o volume, e o laço fica oscilando.
+      if (resultado.pico_dbtp > SOM.picoMaxDbtp) teto = r2(Math.max(TETO_MINIMO_DBFS, teto - (resultado.pico_dbtp - SOM.picoMaxDbtp) - 0.2));
+      ganhoFinal = r2(ganhoFinal + (SOM.alvoLufs - resultado.lufs));
+    }
+    if (!noAlvo(resultado)) {
+      falha('MIXAGEM_FORA_DO_ALVO', { lufs: resultado.lufs, pico_dbtp: resultado.pico_dbtp, alvo_lufs: SOM.alvoLufs, pico_max_dbtp: SOM.picoMaxDbtp, teto_limitador_dbfs: teto });
+    }
+  } catch (erro) {
+    // Arquivo pela metade ou fora do alvo não pode ficar para o creditar achar depois.
     fs.rmSync(saida, { force: true });
-    falha('MIXAGEM_FORA_DO_ALVO', { lufs: resultado.lufs, pico_dbtp: resultado.pico_dbtp, alvo_lufs: SOM.alvoLufs, pico_max_dbtp: SOM.picoMaxDbtp });
+    throw erro;
+  } finally {
+    fs.rmSync(wav, { force: true });
   }
-  fs.rmSync(wav, { force: true });
   const info = { lufs: resultado.lufs, pico_dbtp: resultado.pico_dbtp, ganho_final_db: ganhoFinal, teto_limitador_dbfs: teto, lufs_voz: lufsVoz };
   if (medida) {
     const vozFinal = lufsVoz + ganhoFinal;

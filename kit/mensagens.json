@@ -4,7 +4,7 @@
     "acao": "Só avise junto das amostras."
   },
   "AREA_PROTEGIDA": {
-    "texto": "O {{programa}} não abre dentro da área protegida do seu programa. Vou pedir para rodar fora dela.",
+    "texto": "O programa que desenha o vídeo não abre dentro da área protegida do seu assistente. Vou pedir para rodar fora dela.",
     "acao": "Rode o mesmo comando de novo fora da área protegida. No Codex: no próprio comando, sandbox_permissions \"require_escalated\" com uma justificativa curta. request_permissions não serve, porque só libera pasta e internet. No Claude Code: rodar sem a proteção (sandbox) só neste comando. Se o programa não oferecer isso ou o aluno negar, diga: \"No Codex, clique em Solicitar aprovação, embaixo da caixa de texto, e escolha Acesso completo. Depois me diga 'pronto'.\""
   },
   "ARGUMENTO_FALTANDO": {
@@ -25,7 +25,7 @@
   },
   "AVALIACAO_FALTANDO": {
     "texto": "Antes de entregar, o vídeo passa pelo avaliador independente.",
-    "acao": "Rode a skill avaliar, tipo video, e grave a nota com estado --nota-revisor <nota> --parece-copia sim|nao."
+    "acao": "Rode a skill avaliar, tipo video, e grave a nota com estado --nota-revisor <nota> --parece-copia sim|nao. Com dados.desatualizada = true, o som ou a imagem mudaram depois da última avaliação: avalie de novo (rodada seguinte)."
   },
   "BRIEFING_INCOMPLETO": {
     "texto": "Faltam algumas respostas sobre o seu negócio para eu montar a sua marca.",
@@ -192,8 +192,8 @@
     "acao": "Rode variantes e diga o F-06. Com a escolha, rode mixar de novo com --resposta e as palavras do aluno. Se a preferência do briefing for nunca, use --sem-musica --resposta \"preferência do briefing: nunca\"."
   },
   "NOTA_ABAIXO_DO_MINIMO": {
-    "texto": "O avaliador deu {{nota}} de 10. O mínimo para entregar é 8,5.",
-    "acao": "Se ainda não fez 3 rodadas, corrija pela imagem e avalie de novo. Na terceira, diga o F-07 e espere. Só com \"Postar assim\": estado --gate postar_assim=sim --resposta com as palavras do aluno, e entregar de novo. Nunca entregue dizendo que está pronto sem contar a nota."
+    "texto": "O avaliador ainda não aprovou o vídeo para entregar.",
+    "acao": "Veja dados.nota, dados.parece_copia e dados.rodada. Se ainda não fez 3 rodadas, corrija pela imagem e avalie de novo. Na terceira, diga o F-07 e espere. Só com \"Postar assim\" do aluno, dito depois da última avaliação: estado --gate postar_assim=sim --resposta com as palavras dele, e entregar de novo. Nunca diga que o vídeo está pronto sem contar a nota."
   },
   "NUMERO_SEM_ORIGEM": {
     "texto": "Tem um número sem a origem anotada. Preciso saber de onde ele vem.",

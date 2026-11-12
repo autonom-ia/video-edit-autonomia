@@ -25,7 +25,8 @@ async function qaDoFinal(projeto, final) {
 
 export default async function entregar({ opcoes }) {
   const projeto = abrirProjeto(opcoes);
-  const bloqueio = conferirEntrega(lerEstado(projeto));
+  const mix = projeto.arq('final-mix.mp4');
+  const bloqueio = conferirEntrega(lerEstado(projeto), fs.existsSync(mix) ? fs.statSync(mix).mtimeMs : null);
   if (bloqueio && bloqueio.codigo === 'NOTA_ABAIXO_DO_MINIMO') reprovado(bloqueio.codigo, bloqueio.dados);
   if (bloqueio) falha(bloqueio.codigo, bloqueio.dados);
   const final = exigirArquivo(projeto.arq('final.mp4'));

@@ -100,3 +100,27 @@ test('limitador final fica abaixo do pico máximo, com folga para o pico verdade
   assert.ok(grafoFinal(0).includes('alimiter=limit=0.794:'));
   assert.ok(grafoFinal(0, -3).includes('alimiter=limit=0.708:'));
 });
+
+test('entrega: avaliação mais velha que a última mixagem não vale', () => {
+  const avaliado = avaliar(fechar(estadoNovo('p', 'P', 'B'), 'previa', 'aprovado'), 9);
+  const depois = Date.parse(QUANDO) + 60000;
+  assert.deepEqual(conferirEntrega(avaliado, depois), { codigo: 'AVALIACAO_FALTANDO', dados: { tipo: 'video', desatualizada: true } });
+  assert.equal(conferirEntrega(avaliado, Date.parse(QUANDO) - 60000), null);
+});
+
+test('entrega: "postar assim" dito antes da avaliação não libera a nova', () => {
+  const comPrevia = fechar(estadoNovo('p', 'P', 'B'), 'previa', 'aprovado');
+  const antes = aplicarGate(comPrevia, 'postar_assim', 'sim', 'Postar assim', '2026-11-12T18:00:00.000Z').estado;
+  assert.equal(conferirEntrega(avaliar(antes, 8.2)).codigo, 'NOTA_ABAIXO_DO_MINIMO');
+});
+
+test('projeto antigo sem respostas: gates valem e fechar um novo não desfaz os antigos', () => {
+  const antigo = { ...estadoNovo('p', 'P', 'B'), gates: { cenas: 'aprovado', previa: 'aprovado', trilha: 'opcao-1:equilibrada' } };
+  delete antigo.respostas;
+  assert.ok(gateDoAluno(antigo, 'previa', 'aprovado'));
+  assert.equal(conferirMusica(antigo, 'opcao-1:equilibrada', undefined), null);
+  const depois = fechar(antigo, 'postar_assim', 'sim', 'Postar assim');
+  assert.ok(gateDoAluno(depois, 'previa', 'aprovado'));
+  assert.ok(gateDoAluno(depois, 'cenas', 'aprovado'));
+  assert.equal(depois.respostas.previa.texto, 'aprovado antes de o estúdio gravar as respostas');
+});
