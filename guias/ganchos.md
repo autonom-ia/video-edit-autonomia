@@ -8,8 +8,8 @@
 
 - Um Reel tem dois ganchos que disparam juntos e não são a mesma frase: **o falado** (cerca de 2 segundos) e **o escrito na tela** (cerca de 1 segundo, porque é lido antes de ser ouvido).
 - Para cada pauta, escreva **pelo menos 6 ganchos, de 6 fórmulas diferentes**, descarte os fracos e mostre os **3 melhores**. Não escreva versões da mesma fórmula.
-- **Teste do dedo:** alguém que não conhece quem fala pararia de rolar ouvindo só a frase? Gancho que começa por "eu" ou "meu" só passa se a mesma frase já mostrar o que quem assiste ganha.
-- Resultado visível (vídeo pronto, tela, antes e depois)? Prefira as fórmulas 13, 18 e 24: o resultado aparece no quadro 0.
+- **Teste do dedo**, no escrito e na fala: alguém que não conhece quem fala pararia de rolar lendo ou ouvindo só a frase? Gancho em primeira pessoa só passa se a mesma frase já mostrar o que quem assiste ganha.
+- Resultado visível (vídeo pronto, tela, antes e depois)? Prefira fórmulas que o mostram no quadro 0, como a 6, a 13 e a 18.
 - O gancho escolhido vira o fio do roteiro e volta no fecho.
 - Fala de até 8 palavras (3 segundos). Escrito de até 10 palavras.
 - Os exemplos abaixo mostram o jeito. Nunca use um exemplo como está: o gancho sai da dor do público do aluno, nas palavras dele.
@@ -72,7 +72,7 @@
 - Exemplo: "Trabalhei oito anos em cozinha de restaurante. Isto a gente nunca conta ao cliente."
 - Na tela: 8 ANOS NA COZINHA
 - Quando usar: para ter autoridade sem virar biografia. Só funciona se os anos forem reais e o segredo vier logo.
-- Como estraga: prometer segredo e entregar folheto. E cuidado: os anos não podem virar o assunto do vídeo.
+- Como estraga: prometer segredo e entregar folheto. E cuidado: abrir pelos anos é biografia (regra 11). Os anos entram só junto com o segredo, na mesma frase, ou escolha outra fórmula.
 
 **9. Pega para você**
 - Molde: "Pega esse {material pronto}. Levei {tempo} para acertar."

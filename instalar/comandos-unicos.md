@@ -90,7 +90,7 @@ Na V3, o zip da plataforma precisa ter uma única pasta dentro (qualquer nome: `
 ## Publicar uma versão (para quem mantém o estúdio)
 
 1. Rode `npm run conferir-distribuicao`. Ele falha se sobrar o marcador antigo da conta (a palavra em maiúsculas que ficava no lugar de `autonom-ia`) no `README.md`, neste arquivo ou em `instalar/versoes.env`, ou se faltar `package-lock.json` ou `uv.lock`.
-2. Atualize `VERSAO`, crie a tag (`v1.0.1`, `v1.0.3`...) e publique um release no GitHub `autonom-ia/video-edit-autonomia` com dois anexos:
+2. Atualize `VERSAO`, crie a tag (`v1.0.1`, `v1.0.2`, `v1.0.3`...) e publique um release no GitHub `autonom-ia/video-edit-autonomia` com dois anexos:
    - `estudio-de-reels.zip`: o estúdio inteiro, com uma única pasta dentro, com os bits de execução de `estudio` e `instalar/*.sh`;
    - `estudio-de-reels.zip.sha256`: o SHA256 do zip (`shasum -a 256 estudio-de-reels.zip > estudio-de-reels.zip.sha256`).
 3. O `atualizar` do aluno baixa `releases/latest/download/estudio-de-reels.zip` (ver `ESTUDIO_ATUALIZAR_URL` em `instalar/versoes.env`), confere pelo `.sha256` e só aceita endereço `https://github.com/autonom-ia/video-edit-autonomia/...`. O zip automático da tag não serve para o `atualizar`: precisa do anexo.

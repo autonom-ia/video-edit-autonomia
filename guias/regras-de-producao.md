@@ -51,10 +51,10 @@ Porquê: o aluno responde pela profissão dele. Uma palavra proibida pode render
 
 ## 2. Gancho
 
-**11. Abrir pelo problema de quem assiste.**
+**11. Abrir pelo problema de quem assiste ou pelo resultado visível no quadro 0.**
 Nunca por biografia, apresentação, "oi", nome, anos de profissão ou "neste vídeo".
 Porquê: credencial não segura ninguém no primeiro segundo. O vídeo começa na frase que você normalmente diria no sexto segundo.
-Gancho que começa por "eu" ou "meu" (confissão, tropeço, bastidor) só passa se a mesma frase já mostrar o que quem assiste ganha. Faça o **teste do dedo**: alguém que não conhece quem fala pararia de rolar ouvindo só essa frase? Se ela fala só de quem grava, troque.
+Gancho em primeira pessoa (confissão, tropeço, bastidor, recibo) só passa se a mesma frase já mostrar o que quem assiste ganha. Faça o **teste do dedo**, no escrito e na fala: alguém que não conhece quem fala pararia de rolar lendo ou ouvindo só essa frase? Se ela fala só de quem grava, troque. Quem decide é você, pelo sentido da frase, não por uma palavra do começo.
 Exemplo: "Meu primeiro Reel levou nove versões" é sobre quem grava, e a pessoa pula. "Não editei esse Reel. Escrevi três frases." mostra o resultado e deixa a pergunta "como?".
 
 **12. A fala do gancho cabe em 3 segundos.**
@@ -74,7 +74,7 @@ Porquê: o golpe marca a virada e acorda quem está rolando sem prestar atençã
 
 **16. Três ganchos de fórmulas diferentes, escolhidos entre pelo menos seis.**
 Escreva pelo menos 6 ganchos, cada um de uma fórmula diferente de `guias/ganchos.md`. Sozinho, descarte os que falham no teste do dedo (regra 11), falam só de quem grava, exageram o que aconteceu, prometem o que o produto não faz ou passam de 8 palavras. Mostre os 3 melhores. Não são 3 reescritas da mesma frase.
-Quando o resultado é visível (vídeo pronto, tela, antes e depois), prefira as fórmulas 13, 18 e 24: o resultado aparece no quadro 0, antes de qualquer explicação, e a curiosidade é "como?".
+Quando o resultado é visível (vídeo pronto, tela, antes e depois), prefira fórmulas que o mostram no quadro 0, como a 6, a 13 e a 18: o resultado aparece antes de qualquer explicação, e a curiosidade é "como?".
 O gancho escolhido vira o fio do roteiro e volta no fecho. Exemplo: "Escrevi três frases" vira "Frase um... Frase dois... Frase três..." e o pedido final repete "as três frases".
 Nunca reescreva um gancho só para passar numa medida (`tempo-de-fala`, avaliador). A medida confere o gancho; quem escolhe é o teste do dedo.
 Porquê: reescrever a mesma frase só troca palavra. Fórmulas diferentes dão escolha de verdade. Com 3 candidatos só, o primeiro gancho razoável vira o escolhido; com 6, o fraco cai antes de chegar ao aluno.
