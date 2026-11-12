@@ -585,6 +585,11 @@
       "acao_automatica": "nenhuma",
       "depois": "Se o aluno escolher a primeira, passe a usar a pasta de \"para\" e rode \"checar\" de novo. Nunca apague nenhuma das duas."
     },
+    "ATUALIZACAO_FALHOU": {
+      "texto": "Não consegui trocar os arquivos do estúdio, então voltei tudo como estava. O seu estúdio continua funcionando na versão de antes. Feche os vídeos e as pastas do estúdio que estiverem abertos, e eu tento de novo.",
+      "opcoes": ["Tentar de novo ★", "Deixar para depois"],
+      "acao_automatica": "nenhuma"
+    },
     "JA_ATUALIZADO": {
       "texto": "O seu estúdio já está na versão mais nova ({{de}}). Não precisei mudar nada.",
       "opcoes": [],

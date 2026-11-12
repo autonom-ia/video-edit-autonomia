@@ -5,9 +5,9 @@
 // O número da versão do próprio estúdio muda em todo lançamento e aparece no
 // package.json, no package-lock.json, no pyproject.toml e no uv.lock. Ele é
 // ignorado aqui; senão toda atualização reinstalaria o montador e o ouvido.
-import { readFileSync } from 'node:fs';
+import { readFileSync, realpathSync } from 'node:fs';
 import path from 'node:path';
-import { pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
 
 const PACOTE_FALA = 'estudio-de-reels-fala';
 
@@ -78,7 +78,15 @@ export function dependenciasMudaram(pastaAtual, pastaNova) {
   };
 }
 
-if (import.meta.url === pathToFileURL(process.argv[1] || '').href) {
+function ehOProgramaChamado() {
+  try {
+    return realpathSync(fileURLToPath(import.meta.url)) === realpathSync(process.argv[1] || '');
+  } catch {
+    return false;
+  }
+}
+
+if (ehOProgramaChamado()) {
   const [pastaAtual, pastaNova] = process.argv.slice(2);
   if (!pastaAtual || !pastaNova) {
     process.stdout.write('{"montador":true,"fala":true}\n');
