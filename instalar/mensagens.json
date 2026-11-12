@@ -153,6 +153,10 @@
       "quando": "no Codex, antes do passo montador, do passo pastas e de comandos do estúdio que abrem janelas",
       "texto": "O Codex vai pedir para eu rodar fora da área protegida. É para abrir o navegador escondido que desenha o vídeo. Pode aprovar."
     },
+    "CODEX-FORA-DA-AREA-MUDAR-PASTA": {
+      "quando": "no Codex, antes de mudar-pasta, quando o estúdio foi descompactado fora do lugar de sempre",
+      "texto": "O Codex vai pedir para eu rodar fora da área protegida. É para pôr a pasta do estúdio na sua pasta pessoal, que é o lugar dela. Nada é apagado. Pode aprovar."
+    },
     "CODEX-FORA-DA-AREA-PASTAS": {
       "quando": "no Codex, antes do passo pastas",
       "texto": "O Codex vai pedir para eu rodar fora da área protegida. É para abrir as suas pastas na tela. Pode aprovar."

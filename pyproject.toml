@@ -1,9 +1,17 @@
 [project]
 name = "estudio-de-reels-fala"
-version = "1.0.1"
+version = "1.0.2"
 description = "Ouvido de texto do Estúdio de Reels: transcrição em português com tempo por palavra."
 requires-python = ">=3.12,<3.13"
-dependencies = ["faster-whisper==1.2.1", "av>=11,<19"]
+dependencies = [
+    "faster-whisper==1.2.1",
+    # PyAV 19 quebra o faster-whisper 1.2.1 (argumento metadata_errors).
+    "av>=11,<19",
+    # O onnxruntime parou de publicar pacote para Mac Intel na 1.24; a 1.23.2 é a última.
+    "onnxruntime<1.24; sys_platform == 'darwin' and platform_machine == 'x86_64'",
+    # Nos outros sistemas fica a nova, que tem pacote para Windows ARM (a 1.23.2 não tem).
+    "onnxruntime>=1.24; sys_platform != 'darwin' or platform_machine != 'x86_64'",
+]
 
 [tool.uv]
 package = false

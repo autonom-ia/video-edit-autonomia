@@ -12,6 +12,7 @@ O aluno é leigo. Ele não lê o que aparece na tela técnica, não digita nada 
 - Textos: todos os textos desta skill (I-01 a I-15, os itens e os erros) estão em `instalar/mensagens.json`. Use-os **literalmente**, trocando só o que está entre `{{ }}`. `{{agente}}` é "Claude" ou "Codex", conforme quem você é.
 - Pasta: rode tudo de dentro da pasta do estúdio (`~/estudio-de-reels` no Mac; `%USERPROFILE%\estudio-de-reels` ou `C:\EstudioDeReels\estudio-de-reels` no Windows). Os programas ficam em `.ferramentas`, dentro dela.
 - Sistema: descubra se é Mac, Windows com PowerShell ou Windows com Git Bash antes do primeiro comando.
+- Lugar da pasta: se a pessoa colou o link do zip e você descompactou o estúdio fora do lugar de sempre (em Downloads, dentro de outra pasta ou com outro nome), rode `mudar-pasta` de dentro da pasta descompactada, antes do `checar`. Não pergunte: é a cópia que você acabou de baixar, e nada é apagado. No Codex, peça para sair da área protegida com o texto `CODEX-FORA-DA-AREA-MUDAR-PASTA`. Continue da pasta do campo `para`. Se vier `PASTA_DESTINO_EXISTE`, olhe a pasta do campo `para`. Se ela tem `AGENTS.md` e `instalar/instalar.sh`, é o estúdio baixado antes: siga nela sem perguntar, que retoma de onde parou, e diga em uma frase que a cópia nova ficou na pasta do campo `de` e pode ir para a Lixeira. Se não tem, mostre o texto de `PASTA_DESTINO_EXISTE`; em "Deixar como está", pare a instalação e diga que, para instalar, a pasta com esse nome precisa sair da pasta pessoal. Nunca apague nenhuma das duas.
 - Saída: todo comando termina com uma linha JSON. Leia só ela. Nunca mostre nada técnico ao aluno.
 - Retomada: se a pessoa fechou a janela e voltou (pelo atalho ou colando o texto de novo), siga daqui mesmo. O `plano` mostra o que já está `pronto`; o briefing continua da primeira pergunta sem resposta. Nunca recomece do zero.
 
@@ -26,7 +27,7 @@ O aluno é leigo. Ele não lê o que aparece na tela técnica, não digita nada 
 - No Windows, escreva sempre `instalar/instalar.ps1` com barra normal.
 - `USE_O_INSTALADOR_DO_WINDOWS`: você rodou o `instalar.sh` no Windows. Sem falar nada, rode o mesmo pedido com a linha do Windows.
 
-Ações: `checar`, `plano`, `passo <id>`, `segundo-plano <id>`, `status <id>`, `desinstalar` (só na seção "Desinstalar"). A ação `atualizar` existe, mas **nunca** rode nesta skill.
+Ações: `checar`, `mudar-pasta`, `plano`, `passo <id>`, `segundo-plano <id>`, `status <id>`, `desinstalar` (só na seção "Desinstalar"). A ação `atualizar` existe, mas **nunca** rode nesta skill.
 
 ### As caixinhas de permissão
 
