@@ -12,10 +12,10 @@ Use só uma das três versões, de acordo com a forma de acesso escolhida.
 
 ## V1: repositório público
 
-O texto do aluno é uma frase e um link. O link `releases/latest/download/estudio-de-reels.zip` sempre entrega a versão mais nova, e o zip já vem com uma única pasta chamada `estudio-de-reels`. Tudo o que o texto longo dizia (aprovar as caixinhas, descobrir o sistema, falar simples, pedir licença) está dentro do estúdio: no aviso do topo do `README.md`, no `AGENTS.md` e na skill `instalar-estudio`. Se o assistente descompactar em outro lugar (Downloads, por exemplo), a skill muda a pasta para o lugar certo antes de instalar.
+O texto do aluno é só "instale:" e o link (testado no Codex em 12/11: ele baixou, conferiu o SHA256, leu o AGENTS.md e a skill e instalou). O link `releases/latest/download/estudio-de-reels.zip` sempre entrega a versão mais nova, e o zip já vem com uma única pasta chamada `estudio-de-reels`. Tudo o que o texto longo dizia (aprovar as caixinhas, descobrir o sistema, falar simples, pedir licença) está dentro do estúdio: no aviso do topo do `README.md`, no `AGENTS.md` e na skill `instalar-estudio`. Se o assistente descompactar em outro lugar (Downloads, por exemplo), a skill muda a pasta para o lugar certo antes de instalar.
 
 ```
-Quero instalar o Estúdio de Reels no meu computador. Baixe este arquivo, descompacte e siga as instruções que estão dentro dele: https://github.com/autonom-ia/video-edit-autonomia/releases/latest/download/estudio-de-reels.zip
+instale: https://github.com/autonom-ia/video-edit-autonomia/releases/latest/download/estudio-de-reels.zip
 ```
 
 ### V1 longa (reserva)
