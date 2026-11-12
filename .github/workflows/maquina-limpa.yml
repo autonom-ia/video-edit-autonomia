@@ -34,6 +34,7 @@ jobs:
           Write-Output "verificar => $($v | Select-Object -Last 1)"
           if ($falhas.Count -gt 0) { Write-Output "FALHARAM: $($falhas -join ', ')"; exit 1 }
       - name: Testes do kit
+        if: always()
         shell: cmd
         run: .\estudio.cmd conferir-kit
       - name: Guardar logs
@@ -66,6 +67,7 @@ jobs:
           echo "verificar => $(bash instalar/verificar.sh | tail -1)"
           if [ -n "$falhas" ]; then echo "FALHARAM:$falhas"; exit 1; fi
       - name: Testes do kit
+        if: always()
         run: ./estudio conferir-kit
       - name: Guardar logs
         if: always()
