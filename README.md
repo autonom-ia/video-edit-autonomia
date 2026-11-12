@@ -85,6 +85,10 @@ Três dias depois de postar, escreva **como foi meu vídeo** para aprender com o
 
 A pasta `estudio-de-reels` fica na sua pasta pessoal. No Windows, quando o nome do usuário tem acento ou espaço, ela fica em `C:\EstudioDeReels\estudio-de-reels`.
 
+## Atualizar
+
+Com o app aberto na pasta do estúdio, escreva **atualizar o estúdio**. Se você tem uma versão até a 1.0.3, cole de novo a linha de instalação: o assistente percebe que o estúdio já existe e oferece a atualização. Nos dois casos, o seu trabalho, a sua marca e os seus vídeos ficam como estão, e a versão de antes fica guardada.
+
 ## Desinstalar
 
 Peça ao assistente: **desinstalar o estúdio**. Ele mostra o que vai apagar e pede confirmação. Saem os programas (a pasta `.ferramentas` e as peças do montador) e os dois atalhos da Área de Trabalho. Os seus vídeos, a sua marca e os projetos ficam. Se quiser tirar tudo, apague depois a pasta `estudio-de-reels`, guardando antes os vídeos que quiser.

@@ -76,6 +76,21 @@ jobs:
           $r = powershell.exe -NoProfile -ExecutionPolicy Bypass -File $inst plano --agente codex | Select-Object -Last 1
           Write-Output "plano (depois de colar de novo) => $r"
 
+          # 4. Atualizar: finge que o instalado e mais antigo e atualiza a partir do zip deste commit.
+          Set-Location $casa
+          (Get-FileHash -Algorithm SHA256 $Z).Hash.ToLower() + '  estudio-de-reels.zip' | Set-Content -Encoding ascii ($Z + '.sha256')
+          $ps1 = Get-Content -Raw $inst
+          $ps1 = $ps1.Replace("`$script:VersaoEstudio = '", "`$script:VersaoEstudio = '0.0.1-") 
+          Set-Content -NoNewline -Encoding ascii $inst $ps1
+          $r = powershell.exe -NoProfile -ExecutionPolicy Bypass -File $inst atualizar $Z | Select-Object -Last 1
+          Write-Output "atualizar (de uma versao antiga) => $r"
+          if ($r -notlike '*"ok":true*' -or $r -like '*JA_ATUALIZADO*') { $falhas += 'atualizar' }
+          $log = Get-Content -Raw (Join-Path $casa '.ferramentas\logs\atualizar.log') -ErrorAction SilentlyContinue
+          if ($log -like '*montador mudou*') { $falhas += 'atualizar-refez-montador' }
+          $r = powershell.exe -NoProfile -ExecutionPolicy Bypass -File $inst atualizar $Z | Select-Object -Last 1
+          Write-Output "atualizar (de novo) => $r"
+          if ($r -notlike '*JA_ATUALIZADO*') { $falhas += 'ja-atualizado' }
+
           if ($falhas.Count -gt 0) { Write-Output "FALHARAM: $($falhas -join ', ')"; exit 1 }
           Write-Output "TUDO OK"
       - name: Testes do kit
@@ -148,6 +163,18 @@ jobs:
           case "$r" in *'"codigo":"PASTA_DESTINO_EXISTE"'*) ;; *) falhas="$falhas colar-de-novo" ;; esac
           cd "$HOME/estudio-de-reels"
           echo "plano (depois de colar de novo) => $(bash instalar/instalar.sh plano --agente codex | tail -1)"
+
+          # 4. Atualizar: finge que o instalado é mais antigo e atualiza a partir do zip deste commit.
+          cd "$HOME/estudio-de-reels"
+          (cd "$(dirname "$Z")" && shasum -a 256 "$(basename "$Z")" > "$Z.sha256")
+          python3 -c 'import sys,pathlib; p=pathlib.Path(sys.argv[1]); p.write_text(p.read_text().replace("VERSAO_ESTUDIO=\"", "VERSAO_ESTUDIO=\"0.0.1-", 1))' instalar/instalar.sh
+          r="$(bash instalar/instalar.sh atualizar "$Z" | tail -1)"
+          echo "atualizar (de uma versão antiga) => $r"
+          case "$r" in *JA_ATUALIZADO*) falhas="$falhas atualizar" ;; *'"ok":true'*) ;; *) falhas="$falhas atualizar" ;; esac
+          grep -q "montador mudou" .ferramentas/logs/atualizar.log && falhas="$falhas atualizar-refez-montador"
+          r="$(bash instalar/instalar.sh atualizar "$Z" | tail -1)"
+          echo "atualizar (de novo) => $r"
+          case "$r" in *JA_ATUALIZADO*) ;; *) falhas="$falhas ja-atualizado" ;; esac
 
           if [ -n "$falhas" ]; then echo "FALHARAM:$falhas"; exit 1; fi
           echo "TUDO OK"

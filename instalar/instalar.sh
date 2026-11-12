@@ -79,7 +79,7 @@ ler_versoes() {
 }
 ler_versoes
 
-VERSAO_ESTUDIO="1.0.3"
+VERSAO_ESTUDIO="1.0.4"
 if [ -f "$REPO/VERSAO" ]; then
   IFS= read -r VERSAO_ESTUDIO < "$REPO/VERSAO" || true
   VERSAO_ESTUDIO="${VERSAO_ESTUDIO%$'\r'}"
@@ -1316,7 +1316,7 @@ limpar_versoes_antigas() {
 }
 
 acao_atualizar() {
-  local origem="${1:-${V_ESTUDIO_ATUALIZAR_URL:-}}" novo de para antigo item nome pkg_mudou=0 sha tem rc
+  local origem="${1:-${V_ESTUDIO_ATUALIZAR_URL:-}}" novo de para antigo item nome pkg_mudou=0 fala_mudou=0 sha tem rc
   # O bash lê o script aos poucos: antes de copiar por cima, roda a partir de uma cópia.
   if [ -z "${ESTUDIO_ATUALIZANDO:-}" ]; then
     preparar_tmp
@@ -1358,8 +1358,26 @@ acao_atualizar() {
   de="$VERSAO_ESTUDIO"
   IFS= read -r para < "$novo/VERSAO" || true
   para="${para%$'\r'}"
-  cmp -s "$REPO/package.json" "$novo/package.json" || pkg_mudou=1
-  cmp -s "$REPO/package-lock.json" "$novo/package-lock.json" || pkg_mudou=1
+  if [ "$para" = "$de" ]; then
+    diga "O estúdio já está na versão mais nova ($de)."
+    printf '{"acao":"atualizar","ok":true,"codigo":"JA_ATUALIZADO","de":%s,"para":%s}\n' "$(js "$de")" "$(js "$para")"
+    exit 0
+  fi
+  # Só refaz o montador ou o ouvido de texto se as dependências deles mudaram
+  # (o número da versão do estúdio, que muda sempre, é ignorado).
+  local deps=""
+  if [ -x "$NODE_BIN" ] && [ -f "$novo/instalar/dependencias-mudaram.mjs" ]; then
+    deps="$("$NODE_BIN" "$novo/instalar/dependencias-mudaram.mjs" "$REPO" "$novo" 2>>"$LOG")"
+  fi
+  if [ -n "$deps" ]; then
+    [ "$(jcampo "$deps" montador)" = "false" ] || pkg_mudou=1
+    [ "$(jcampo "$deps" fala)" = "false" ] || fala_mudou=1
+  else
+    cmp -s "$REPO/package.json" "$novo/package.json" || pkg_mudou=1
+    cmp -s "$REPO/package-lock.json" "$novo/package-lock.json" || pkg_mudou=1
+    cmp -s "$REPO/pyproject.toml" "$novo/pyproject.toml" || fala_mudou=1
+    cmp -s "$REPO/uv.lock" "$novo/uv.lock" || fala_mudou=1
+  fi
   antigo="$FERR/versao-anterior-$(date +%Y%m%d-%H%M%S)"
   mkdir -p "$antigo"
   for item in "$novo"/* "$novo"/.[!.]*; do
@@ -1382,6 +1400,10 @@ acao_atualizar() {
     diga "O montador mudou na versão nova. Vou atualizar."
     rm -f "$ESTADO/montador.txt" "$ESTADO/montador.json"
     bash "$REPO/instalar/instalar.sh" passo montador >>"$LOG" 2>&1
+  fi
+  if [ "$fala_mudou" = "1" ] && [ -f "$ESTADO/fala.txt" ]; then
+    diga "O ouvido de texto mudou na versão nova. Vou atualizar."
+    bash "$REPO/instalar/instalar.sh" passo fala >>"$LOG" 2>&1
   fi
   diga "Pronto: estúdio atualizado de $de para $para. A versão anterior ficou guardada em $antigo."
   printf '{"acao":"atualizar","ok":true,"de":%s,"para":%s,"copia_anterior":%s}\n' "$(js "$de")" "$(js "$para")" "$(js "$antigo")"

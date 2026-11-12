@@ -4,7 +4,7 @@ O aluno cola **um** destes textos no Claude Code ou no Codex, aberto na pasta pe
 
 Endereço do estúdio no GitHub: conta **autonom-ia**, repositório **video-edit-autonomia**: <https://github.com/autonom-ia/video-edit-autonomia>.
 
-A pasta na máquina do aluno continua se chamando `estudio-de-reels`, e o produto continua sendo o Estúdio de Reels. O zip de uma tag do GitHub descompacta numa pasta chamada `video-edit-autonomia-<versão sem o v>` (para a tag `v1.0.3`: `video-edit-autonomia-1.0.3`); os comandos abaixo trocam esse nome por `estudio-de-reels`. Se a tag mudar, troque `v1.0.3` e `1.0.3` em todos os textos (aqui; o `README.md` usa o link `latest` e não tem versão).
+A pasta na máquina do aluno continua se chamando `estudio-de-reels`, e o produto continua sendo o Estúdio de Reels. O zip de uma tag do GitHub descompacta numa pasta chamada `video-edit-autonomia-<versão sem o v>` (para a tag `v1.0.4`: `video-edit-autonomia-1.0.4`); os comandos abaixo trocam esse nome por `estudio-de-reels`. Se a tag mudar, troque `v1.0.4` e `1.0.4` em todos os textos (aqui; o `README.md` usa o link `latest` e não tem versão).
 
 Use só uma das três versões, de acordo com a forma de acesso escolhida.
 
@@ -30,11 +30,11 @@ Quero instalar o Estúdio de Reels no meu computador.
 2. Se já existir a pasta "estudio-de-reels" na minha pasta pessoal, não apague nada e pule para o passo 4.
 3. Baixe e descompacte o estúdio na minha pasta pessoal, com o nome "estudio-de-reels":
    - Mac (Terminal):
-     cd ~ && curl -fL -o estudio.zip "https://github.com/autonom-ia/video-edit-autonomia/archive/refs/tags/v1.0.3.zip" && ditto -x -k estudio.zip .estudio-baixando && mv .estudio-baixando/video-edit-autonomia-1.0.3 estudio-de-reels && rm -rf .estudio-baixando estudio.zip
+     cd ~ && curl -fL -o estudio.zip "https://github.com/autonom-ia/video-edit-autonomia/archive/refs/tags/v1.0.4.zip" && ditto -x -k estudio.zip .estudio-baixando && mv .estudio-baixando/video-edit-autonomia-1.0.4 estudio-de-reels && rm -rf .estudio-baixando estudio.zip
    - Windows (PowerShell):
-     $ProgressPreference="SilentlyContinue"; cd $HOME; curl.exe -fL -o estudio.zip "https://github.com/autonom-ia/video-edit-autonomia/archive/refs/tags/v1.0.3.zip"; tar.exe -xf estudio.zip; Rename-Item video-edit-autonomia-1.0.3 estudio-de-reels; Remove-Item estudio.zip
+     $ProgressPreference="SilentlyContinue"; cd $HOME; curl.exe -fL -o estudio.zip "https://github.com/autonom-ia/video-edit-autonomia/archive/refs/tags/v1.0.4.zip"; tar.exe -xf estudio.zip; Rename-Item video-edit-autonomia-1.0.4 estudio-de-reels; Remove-Item estudio.zip
    - Windows (Git Bash):
-     cd ~ && curl -fL -o estudio.zip "https://github.com/autonom-ia/video-edit-autonomia/archive/refs/tags/v1.0.3.zip" && /c/Windows/System32/tar.exe -xf estudio.zip && mv video-edit-autonomia-1.0.3 estudio-de-reels && rm estudio.zip
+     cd ~ && curl -fL -o estudio.zip "https://github.com/autonom-ia/video-edit-autonomia/archive/refs/tags/v1.0.4.zip" && /c/Windows/System32/tar.exe -xf estudio.zip && mv video-edit-autonomia-1.0.4 estudio-de-reels && rm estudio.zip
 4. Leia o arquivo estudio-de-reels/AGENTS.md inteiro e siga o que ele manda, começando pela instalação.
 
 Fale comigo em português simples, um passo por vez. Antes de instalar qualquer coisa, me explique o que é e me peça licença.
@@ -59,13 +59,13 @@ Igual à V1, trocando o passo 3 por este. O `gh` fica numa pasta temporária: ai
       - Windows (PowerShell): & "$env:TEMP\estudio-gh\gh.exe" auth login --hostname github.com --web --git-protocol https
       - Windows (Git Bash): "$TEMP/estudio-gh/gh.exe" auth login --hostname github.com --web --git-protocol https
    c) Na minha pasta pessoal, rode:
-      - Mac: cd ~ && "$TMPDIR/estudio-gh/gh" release download v1.0.3 --repo autonom-ia/video-edit-autonomia --archive zip --output estudio.zip
-      - Windows (PowerShell): cd $HOME; & "$env:TEMP\estudio-gh\gh.exe" release download v1.0.3 --repo autonom-ia/video-edit-autonomia --archive zip --output estudio.zip
-      - Windows (Git Bash): cd ~ && "$TEMP/estudio-gh/gh.exe" release download v1.0.3 --repo autonom-ia/video-edit-autonomia --archive zip --output estudio.zip
-   d) Descompacte como na versão pública (a pasta de dentro do zip se chama video-edit-autonomia-1.0.3) e apague o estudio.zip:
-      - Mac: ditto -x -k estudio.zip .estudio-baixando && mv .estudio-baixando/video-edit-autonomia-1.0.3 estudio-de-reels && rm -rf .estudio-baixando estudio.zip
-      - Windows (PowerShell): tar.exe -xf estudio.zip; Rename-Item video-edit-autonomia-1.0.3 estudio-de-reels; Remove-Item estudio.zip
-      - Windows (Git Bash): /c/Windows/System32/tar.exe -xf estudio.zip && mv video-edit-autonomia-1.0.3 estudio-de-reels && rm estudio.zip
+      - Mac: cd ~ && "$TMPDIR/estudio-gh/gh" release download v1.0.4 --repo autonom-ia/video-edit-autonomia --archive zip --output estudio.zip
+      - Windows (PowerShell): cd $HOME; & "$env:TEMP\estudio-gh\gh.exe" release download v1.0.4 --repo autonom-ia/video-edit-autonomia --archive zip --output estudio.zip
+      - Windows (Git Bash): cd ~ && "$TEMP/estudio-gh/gh.exe" release download v1.0.4 --repo autonom-ia/video-edit-autonomia --archive zip --output estudio.zip
+   d) Descompacte como na versão pública (a pasta de dentro do zip se chama video-edit-autonomia-1.0.4) e apague o estudio.zip:
+      - Mac: ditto -x -k estudio.zip .estudio-baixando && mv .estudio-baixando/video-edit-autonomia-1.0.4 estudio-de-reels && rm -rf .estudio-baixando estudio.zip
+      - Windows (PowerShell): tar.exe -xf estudio.zip; Rename-Item video-edit-autonomia-1.0.4 estudio-de-reels; Remove-Item estudio.zip
+      - Windows (Git Bash): /c/Windows/System32/tar.exe -xf estudio.zip && mv video-edit-autonomia-1.0.4 estudio-de-reels && rm estudio.zip
 ```
 
 O `gh` fica na pasta temporária do sistema, sem mexer no resto do computador. Para atualizar depois, o aluno usa a mesma conta.
@@ -83,7 +83,7 @@ Igual à V1, trocando o passo 3 por este:
    - Windows (Git Bash): rode a linha do PowerShell assim: powershell.exe -NoProfile -Command '<a linha do PowerShell acima>'
 ```
 
-Na V3, o zip da plataforma precisa ter uma única pasta dentro (qualquer nome: `video-edit-autonomia-1.0.3`, `estudio-de-reels`...). O anexo `estudio-de-reels.zip` do release já vem assim. O Mac pode perguntar se o Terminal pode mexer em Downloads: clique em Permitir.
+Na V3, o zip da plataforma precisa ter uma única pasta dentro (qualquer nome: `video-edit-autonomia-1.0.4`, `estudio-de-reels`...). O anexo `estudio-de-reels.zip` do release já vem assim. O Mac pode perguntar se o Terminal pode mexer em Downloads: clique em Permitir.
 
 ---
 

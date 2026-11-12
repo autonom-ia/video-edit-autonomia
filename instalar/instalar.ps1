@@ -81,7 +81,7 @@ function Vv([string]$Chave) {
     return ''
 }
 
-$script:VersaoEstudio = '1.0.3'
+$script:VersaoEstudio = '1.0.4'
 $arquivoVersao = Join-Path $script:Repo 'VERSAO'
 if (Test-Path -LiteralPath $arquivoVersao) { $script:VersaoEstudio = ([System.IO.File]::ReadAllText($arquivoVersao)).Trim() }
 
@@ -1449,12 +1449,23 @@ function Invoke-AcaoAtualizar([string]$Origem) {
     $novo = $versaoArq.DirectoryName
     $de = $script:VersaoEstudio
     $para = ([System.IO.File]::ReadAllText($versaoArq.FullName)).Trim()
-    $pkgMudou = $false
-    foreach ($f in @('package.json', 'package-lock.json')) {
-        $a = ''; $b = ''
-        try { $a = [System.IO.File]::ReadAllText((Join-Path $script:Repo $f)) } catch { }
-        try { $b = [System.IO.File]::ReadAllText((Join-Path $novo $f)) } catch { }
-        if ($a -ne $b) { $pkgMudou = $true }
+    if ($para -eq $de) {
+        Diga ('O estudio ja esta na versao mais nova (' + $de + ').')
+        Remove-Tmp
+        Sair ([ordered]@{ acao = 'atualizar'; ok = $true; codigo = 'JA_ATUALIZADO'; de = $de; para = $para }) 0
+    }
+    # So refaz o montador ou o ouvido de texto se as dependencias deles mudaram
+    # (o numero da versao do estudio, que muda sempre, e ignorado).
+    $pkgMudou = $true
+    $falaMudou = $true
+    $scriptDeps = Join-Path $novo 'instalar\dependencias-mudaram.mjs'
+    if ((Test-Path -LiteralPath $script:NodeExe) -and (Test-Path -LiteralPath $scriptDeps)) {
+        $r = Invoke-Nativo -Exe $script:NodeExe -Argumentos @($scriptDeps, $script:Repo, $novo) -Pasta $script:Repo
+        $j = ConvertFrom-JsonSeguro $r.so
+        if ($null -ne $j) {
+            $pkgMudou = ($j.montador -ne $false)
+            $falaMudou = ($j.fala -ne $false)
+        }
     }
     $antigo = Join-Path $script:Ferr ('versao-anterior-' + (Get-Date -Format 'yyyyMMdd-HHmmss'))
     New-Item -ItemType Directory -Force -Path $antigo | Out-Null
@@ -1484,6 +1495,11 @@ function Invoke-AcaoAtualizar([string]$Origem) {
         foreach ($f in @('montador.json')) { $x = Join-Path $script:Estado $f; if (Test-Path -LiteralPath $x) { Remove-Item -LiteralPath $x -Force } }
         $ps = (Get-Process -Id $PID).Path
         $null = Invoke-Nativo -Exe $ps -Argumentos @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', (Join-Path $script:Repo 'instalar\instalar.ps1'), 'passo', 'montador') -Pasta $script:Repo
+    }
+    if ($falaMudou -and (Test-Path -LiteralPath (Join-Path $script:Estado 'fala.json'))) {
+        Diga 'O ouvido de texto mudou na versao nova. Vou atualizar.'
+        $ps = (Get-Process -Id $PID).Path
+        $null = Invoke-Nativo -Exe $ps -Argumentos @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', (Join-Path $script:Repo 'instalar\instalar.ps1'), 'passo', 'fala') -Pasta $script:Repo
     }
     Diga ('Pronto: estudio atualizado de ' + $de + ' para ' + $para + '. A versao anterior ficou guardada em ' + $antigo + '.')
     Remove-Tmp

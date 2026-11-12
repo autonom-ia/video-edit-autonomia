@@ -60,6 +60,7 @@ Você entende o pedido do aluno. Não existe lista de palavras: decida pelo sent
 | Uma nota ou uma revisão de um roteiro ou vídeo | `avaliar` |
 | Saber como foi um vídeo postado, mandar números ou print | `postar-e-medir` |
 | Algo deu erro, travou, sumiu | `consertar` |
+| Atualizar o estúdio | `instalar-estudio`, seção "Atualizar" |
 | Desinstalar o estúdio | `instalar-estudio`, seção "Desinstalar" |
 
 Quando nada se aplica ou o pedido é ambíguo, pergunte com no máximo 3 opções. Pedido fora do estúdio (outro assunto): responda curto e volte ao estúdio.
