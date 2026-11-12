@@ -1,0 +1,13 @@
+# Fim de linha fixo por tipo: o Mac precisa de LF nos scripts de shell e o Windows de CRLF nos .cmd e .ps1.
+* text=auto
+*.sh text eol=lf
+estudio text eol=lf
+instalar/versoes.env text eol=lf
+*.ps1 text eol=crlf
+*.cmd text eol=crlf
+*.wav binary
+*.ttf binary
+*.otf binary
+*.png binary
+*.jpg binary
+*.ico binary

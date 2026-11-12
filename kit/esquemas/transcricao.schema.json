@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "transcricao.schema.json",
+  "title": "Transcrição com tempo por palavra",
+  "type": "object",
+  "required": [
+    "idioma",
+    "modelo",
+    "duracao_s",
+    "palavras",
+    "segmentos"
+  ],
+  "properties": {
+    "idioma": {
+      "type": "string"
+    },
+    "modelo": {
+      "type": "string"
+    },
+    "duracao_s": {
+      "type": "number",
+      "minimum": 0
+    },
+    "palavras": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "texto",
+          "inicio",
+          "fim"
+        ],
+        "properties": {
+          "texto": {
+            "type": "string"
+          },
+          "inicio": {
+            "type": "number"
+          },
+          "fim": {
+            "type": "number"
+          },
+          "prob": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "segmentos": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "texto",
+          "inicio",
+          "fim"
+        ],
+        "properties": {
+          "texto": {
+            "type": "string"
+          },
+          "inicio": {
+            "type": "number"
+          },
+          "fim": {
+            "type": "number"
+          }
+        }
+      }
+    }
+  }
+}

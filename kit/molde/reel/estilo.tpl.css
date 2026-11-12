@@ -1,0 +1,164 @@
+/* Estilo do Reel. Gerado pelo estúdio a partir de kit/molde/reel/estilo.tpl.css.
+   As cores e as letras vêm de minha-marca/marca.json (tokens abaixo). Não use cor solta aqui. */
+{{FONTES}}
+:root {
+  {{TOKENS}}
+  --cap-tx: #ffffff;
+  --cap-sh: rgba(0, 0, 0, 0.6);
+  --cartao: color-mix(in srgb, var(--papel) 65%, #ffffff);
+  --borda: color-mix(in srgb, var(--tinta) 10%, transparent);
+  --sombra: color-mix(in srgb, var(--tinta) 16%, transparent);
+  --suave: color-mix(in srgb, var(--tinta) 58%, var(--papel));
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--fundo); }
+#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: var(--fonte-leitura); color: var(--tinta); }
+
+/* camada 1: o rosto, sempre de ponta a ponta, sem moldura */
+#cam { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; z-index: 1; }
+#zoom { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; transform-origin: 540px 760px; }
+#take, .rosto-amostra { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; object-fit: cover; }
+#sombra-rosto { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.58) 0%, rgba(0,0,0,.3) 24%, rgba(0,0,0,0) 44%, rgba(0,0,0,0) 72%, rgba(0,0,0,.34) 100%); }
+
+/* camada 2: a faixa clara de cima (0, 35, 50 ou 100% da altura) */
+#faixa { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; z-index: 4; clip-path: inset(0px 0px 1920px 0px);
+  background:
+    radial-gradient(60% 30% at 18% 12%, color-mix(in srgb, var(--principal) 7%, transparent), transparent 70%),
+    radial-gradient(70% 30% at 40% 80%, color-mix(in srgb, var(--principal) 5%, transparent), transparent 70%),
+    var(--papel); }
+#costura { position: absolute; left: 0; top: 0; width: 1080px; height: 80px; z-index: 5; opacity: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,.30), rgba(0,0,0,0)); }
+
+/* gancho escrito no quadro 0, sobre o rosto */
+#gancho { position: absolute; inset: 0; z-index: 6; }
+.gancho-sobre { position: absolute; left: 70px; right: 250px; top: 250px; font: 700 28px/1.25 var(--fonte-leitura); letter-spacing: .16em; text-transform: uppercase; color: var(--papel); text-shadow: 0 2px 10px rgba(0,0,0,.6); }
+.gancho-titulo { position: absolute; left: 70px; right: 110px; top: 310px; font: var(--peso-titulo) 96px/1.04 var(--fonte-titulo); letter-spacing: -.02em; color: #ffffff; text-shadow: 0 4px 24px rgba(0,0,0,.45); }
+.gw { display: inline-block; }
+.enf-t { background: var(--destaque); color: var(--tinta); padding: 0 14px 6px; border-radius: 14px; text-shadow: none; text-transform: uppercase; }
+
+/* camada 3: telas (um sistema só de cartões, 90% da largura) */
+#telas { position: absolute; inset: 0; z-index: 6; }
+.tela { position: absolute; left: 54px; width: 972px; top: 250px; overflow: hidden; color: var(--tinta); }
+.t-p { max-height: 382px; }
+.t-m { max-height: 670px; }
+.t-g { max-height: 1250px; top: 280px; }
+.cartao { background: var(--cartao); border: 2px solid var(--borda); border-radius: 32px; padding: 40px 48px; box-shadow: 0 18px 48px var(--sombra); }
+.t-p .cartao { padding: 26px 34px; border-radius: 26px; }
+.solta .cartao, .solta .janela-conversa, .solta .janela-ia, .solta .notif { box-shadow: 0 26px 70px rgba(0,0,0,.42); }
+.centro { text-align: center; }
+.rotulo { font: 800 28px/1.1 var(--fonte-leitura); letter-spacing: .12em; text-transform: uppercase; color: var(--principal); margin-bottom: 26px; }
+.t-p .rotulo { font-size: 22px; margin-bottom: 14px; }
+.t-g .rotulo { font-size: 34px; margin-bottom: 36px; }
+
+.card-texto { font: var(--peso-titulo) 84px/1.06 var(--fonte-titulo); letter-spacing: -.02em; }
+.t-p .card-texto { font-size: 62px; }
+.t-g .card-texto { font-size: 108px; }
+
+.frase-texto { font: var(--peso-titulo) 72px/1.1 var(--fonte-titulo); letter-spacing: -.015em; }
+.frase-apoio { font: 500 38px/1.3 var(--fonte-leitura); color: var(--suave); margin-top: 22px; }
+.t-p .frase-texto { font-size: 52px; }
+.t-p .frase-apoio { font-size: 28px; margin-top: 12px; }
+.t-g .frase-texto { font-size: 92px; }
+.t-g .frase-apoio { font-size: 48px; }
+
+.num-grande { font: var(--peso-titulo) 190px/1 var(--fonte-titulo); letter-spacing: -.04em; color: var(--principal); }
+.num-apoio { font: 600 42px/1.25 var(--fonte-leitura); margin-top: 14px; }
+.t-p .num-grande { font-size: 118px; }
+.t-p .num-apoio { font-size: 30px; margin-top: 6px; }
+.t-g .num-grande { font-size: 260px; }
+.t-g .num-apoio { font-size: 54px; }
+
+.lista, .passos { list-style: none; display: flex; flex-direction: column; gap: 18px; }
+.lista li { display: flex; gap: 22px; align-items: center; font: 600 46px/1.2 var(--fonte-leitura); }
+.marca-item { flex: none; width: 40px; height: 40px; border-radius: 50%; background: var(--principal); box-shadow: inset 0 0 0 11px var(--cartao); border: 3px solid var(--principal); }
+.t-p .lista { gap: 10px; }
+.t-p .lista li { font-size: 32px; gap: 14px; }
+.t-p .marca-item { width: 28px; height: 28px; box-shadow: inset 0 0 0 8px var(--cartao); }
+.t-g .lista { gap: 30px; }
+.t-g .lista li { font-size: 58px; }
+
+.barra { height: 14px; border-radius: 7px; background: var(--borda); overflow: hidden; margin-bottom: 26px; }
+.barra i { display: block; height: 100%; width: 0; background: var(--principal); border-radius: 7px; }
+.passos li { display: flex; gap: 20px; align-items: center; font: 600 42px/1.2 var(--fonte-leitura); color: var(--suave); }
+.passos li b { flex: none; width: 58px; height: 58px; border-radius: 50%; display: grid; place-items: center; font: 800 30px/1 var(--fonte-titulo); border: 3px solid var(--borda); color: var(--suave); }
+.passos li.feito b { background: var(--principal); border-color: var(--principal); color: var(--papel); }
+.passos li.atual { color: var(--tinta); }
+.passos li.atual b { background: var(--destaque); border-color: var(--destaque); color: var(--tinta); }
+.t-p .passos { gap: 8px; }
+.t-p .passos li { font-size: 30px; }
+.t-p .passos li b { width: 42px; height: 42px; font-size: 22px; }
+.t-p .barra { margin-bottom: 14px; height: 10px; }
+.t-g .passos li { font-size: 54px; }
+.t-g .passos li b { width: 72px; height: 72px; font-size: 36px; }
+
+/* conversa genérica, nas cores da marca, sem app real */
+.janela-conversa { background: color-mix(in srgb, var(--papel) 82%, var(--tinta)); border-radius: 32px; overflow: hidden; border: 2px solid var(--borda); box-shadow: 0 18px 48px var(--sombra); }
+.conv-topo { display: flex; align-items: center; gap: 18px; padding: 22px 28px; background: var(--cartao); border-bottom: 2px solid var(--borda); }
+.avatar { flex: none; width: 70px; height: 70px; border-radius: 50%; background: var(--principal); color: var(--papel); display: grid; place-items: center; font: 800 28px/1 var(--fonte-titulo); }
+.conv-nome b { display: block; font: 700 34px/1.1 var(--fonte-leitura); }
+.conv-nome small { display: block; font: 500 24px/1.2 var(--fonte-leitura); color: var(--suave); margin-top: 4px; }
+.conv-corpo { display: flex; flex-direction: column; gap: 14px; padding: 24px 26px 28px; }
+.msg { max-width: 78%; padding: 16px 22px; border-radius: 26px; font: 500 36px/1.3 var(--fonte-leitura); }
+.msg.de-outro { align-self: flex-start; background: var(--cartao); color: var(--tinta); border-bottom-left-radius: 8px; }
+.msg.de-eu { align-self: flex-end; background: var(--principal); color: var(--papel); border-bottom-right-radius: 8px; }
+.t-p .conv-topo { padding: 12px 20px; }
+.t-p .avatar { width: 48px; height: 48px; font-size: 20px; }
+.t-p .conv-nome b { font-size: 26px; }
+.t-p .conv-nome small { font-size: 18px; }
+.t-p .conv-corpo { gap: 8px; padding: 12px 16px 16px; }
+.t-p .msg { font-size: 26px; padding: 10px 16px; border-radius: 20px; }
+.t-g .msg { font-size: 46px; }
+.t-g .conv-nome b { font-size: 42px; }
+
+/* tela de IA genérica, sem marca */
+.janela-ia { background: var(--cartao); border-radius: 32px; border: 2px solid var(--borda); box-shadow: 0 18px 48px var(--sombra); padding: 26px 32px 32px; }
+.ia-topo { display: flex; align-items: center; gap: 14px; padding-bottom: 18px; border-bottom: 2px solid var(--borda); margin-bottom: 22px; }
+.ia-topo b { font: 700 30px/1 var(--fonte-leitura); }
+.ia-ponto { width: 26px; height: 26px; border-radius: 50%; background: var(--principal); box-shadow: 0 0 0 6px color-mix(in srgb, var(--principal) 20%, transparent); }
+.ia-pergunta { margin-left: auto; width: fit-content; max-width: 86%; background: color-mix(in srgb, var(--papel) 70%, var(--tinta) 8%); border-radius: 24px; padding: 16px 22px; font: 500 34px/1.32 var(--fonte-leitura); margin-bottom: 20px; }
+.ia-resposta { font: 500 34px/1.38 var(--fonte-leitura); }
+.t-p .janela-ia { padding: 14px 20px 18px; }
+.t-p .ia-topo { padding-bottom: 10px; margin-bottom: 12px; }
+.t-p .ia-topo b { font-size: 22px; }
+.t-p .ia-pergunta, .t-p .ia-resposta { font-size: 26px; }
+.t-g .ia-pergunta, .t-g .ia-resposta { font-size: 42px; }
+
+/* notificação genérica */
+.notif { display: flex; gap: 26px; align-items: flex-start; background: color-mix(in srgb, var(--tinta) 82%, var(--papel)); color: #ffffff; border-radius: 40px; padding: 30px 34px; box-shadow: 0 18px 48px var(--sombra); }
+.notif-icone { flex: none; width: 92px; height: 92px; border-radius: 24px; background: var(--principal); color: var(--papel); display: grid; place-items: center; }
+.notif-icone svg { width: 58px; height: 58px; }
+.notif-corpo { flex: 1; min-width: 0; }
+.notif-linha { display: flex; justify-content: space-between; font: 700 32px/1.2 var(--fonte-leitura); }
+.notif-linha small { font: 500 26px/1.2 var(--fonte-leitura); opacity: .7; }
+.notif-texto { display: block; font: 500 38px/1.3 var(--fonte-leitura); margin-top: 8px; }
+.t-p .notif { padding: 18px 22px; gap: 16px; border-radius: 30px; }
+.t-p .notif-icone { width: 64px; height: 64px; border-radius: 18px; }
+.t-p .notif-icone svg { width: 40px; height: 40px; }
+.t-p .notif-linha { font-size: 24px; }
+.t-p .notif-texto { font-size: 28px; }
+.t-g .notif-texto { font-size: 48px; }
+
+/* pedido (CTA) */
+.cta-frase { font: 600 44px/1.25 var(--fonte-leitura); margin-bottom: 22px; }
+.cta-palavra { display: inline-block; font: var(--peso-titulo) 120px/1 var(--fonte-titulo); letter-spacing: -.02em; text-transform: uppercase; background: var(--principal); color: var(--papel); padding: 18px 40px 26px; border-radius: 28px; }
+.cta-arroba { font: 600 34px/1 var(--fonte-leitura); color: var(--suave); margin-top: 26px; }
+.t-p .cta-frase { font-size: 32px; margin-bottom: 12px; }
+.t-p .cta-palavra { font-size: 76px; padding: 12px 28px 18px; }
+.t-p .cta-arroba { font-size: 26px; margin-top: 12px; }
+.t-g .cta-palavra { font-size: 150px; }
+#cta-selo { position: absolute; left: 0; right: 0; top: 1290px; margin: 0 auto; width: fit-content; z-index: 7; display: flex; gap: 16px; align-items: center;
+  background: var(--principal); color: var(--papel); padding: 16px 20px 16px 34px; border-radius: 999px; font: var(--peso-titulo) 42px/1 var(--fonte-titulo); box-shadow: 0 18px 48px rgba(0,0,0,.35); }
+#cta-selo b { background: var(--destaque); color: var(--tinta); padding: 10px 22px 12px; border-radius: 999px; text-transform: uppercase; }
+
+/* camada 4: legenda palavra a palavra, acompanha a costura da faixa */
+#capshost { position: absolute; inset: 0; z-index: 8; }
+#caps { position: absolute; left: 0; top: 0; width: 1080px; height: 0; }
+.cap { position: absolute; left: 60px; right: 60px; top: 0; text-align: center; }
+.capin { display: inline-block; white-space: nowrap; font: var(--peso-leitura) 56px/1.15 var(--fonte-leitura); color: var(--cap-tx); text-shadow: 0 3px 16px var(--cap-sh); }
+.w { display: inline-block; }
+.w.k { font: var(--peso-titulo) 64px/1.1 var(--fonte-titulo); letter-spacing: -.01em; text-transform: uppercase; background: var(--destaque); color: var(--tinta); padding: 0 12px 4px; border-radius: 10px; text-shadow: none; }
+
+/* só nas amostras e na conferência das telas */
+.amostra-rotulo { position: absolute; left: 40px; top: 1560px; z-index: 20; background: rgba(0,0,0,.7); color: #ffffff; font: 700 34px/1 Arial, sans-serif; padding: 14px 22px; border-radius: 12px; }
+.faixa-estourou { position: absolute; left: 0; right: 0; top: 0; z-index: 30; background: #d40000; color: #ffffff; font: 800 34px/1 Arial, sans-serif; padding: 22px 30px; }
+.estourou { outline: 8px solid #d40000; }

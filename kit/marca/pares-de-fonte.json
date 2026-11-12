@@ -1,0 +1,23 @@
+{
+  "versao": 1,
+  "pares": [
+    {
+      "id": 1,
+      "nome": "Moderno",
+      "titulo": { "familia": "Space Grotesk", "arquivo": "kit/fontes/space-grotesk/SpaceGrotesk-Variable.ttf", "peso": 700 },
+      "leitura": { "familia": "Inter", "arquivo": "kit/fontes/inter/Inter-Variable.ttf", "peso": 800 }
+    },
+    {
+      "id": 2,
+      "nome": "Elegante",
+      "titulo": { "familia": "Fraunces", "arquivo": "kit/fontes/fraunces/Fraunces-Variable.ttf", "peso": 800 },
+      "leitura": { "familia": "Inter", "arquivo": "kit/fontes/inter/Inter-Variable.ttf", "peso": 700 }
+    },
+    {
+      "id": 3,
+      "nome": "Amigável",
+      "titulo": { "familia": "Nunito", "arquivo": "kit/fontes/nunito/Nunito-Variable.ttf", "peso": 900 },
+      "leitura": { "familia": "Nunito", "arquivo": "kit/fontes/nunito/Nunito-Variable.ttf", "peso": 800 }
+    }
+  ]
+}

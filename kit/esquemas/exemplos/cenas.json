@@ -1,0 +1,102 @@
+{
+  "versao": 1,
+  "duracao_alvo_s": 40,
+  "direcao_de_arte": [
+    {
+      "de": 0,
+      "ate": 3,
+      "domina": "gancho escrito e rosto cheio",
+      "porque": "decide o polegar"
+    },
+    {
+      "de": 3,
+      "ate": 9,
+      "domina": "tabela de fatias",
+      "porque": "mostra a prova"
+    }
+  ],
+  "titulo_gancho": {
+    "texto": "Seu bolo chega menor que a festa?",
+    "publico": "Para quem organiza aniversário"
+  },
+  "cenas": [
+    {
+      "id": "c01",
+      "fala": "O bolo chegou e não deu para todo mundo.",
+      "inicio": 0.0,
+      "fim": 2.6,
+      "rosto": "cheio",
+      "faixa": 0,
+      "zoom": "abertura",
+      "tela": null,
+      "enfase": [
+        {
+          "palavra": "todo",
+          "inicio": 1.82
+        }
+      ],
+      "sons": [],
+      "virada": false,
+      "reconstrucao": false
+    },
+    {
+      "id": "c02",
+      "fala": "A conta certa é simples.",
+      "inicio": 2.6,
+      "fim": 5.4,
+      "rosto": "dividido",
+      "faixa": 50,
+      "zoom": "nenhum",
+      "tela": "t01",
+      "enfase": [],
+      "sons": [],
+      "virada": true,
+      "reconstrucao": false
+    },
+    {
+      "id": "c03",
+      "fala": "Comenta FATIAS que eu te mando a tabela.",
+      "inicio": 5.4,
+      "fim": 8.6,
+      "rosto": "cheio",
+      "faixa": 0,
+      "zoom": "punch",
+      "tela": null,
+      "enfase": [
+        {
+          "palavra": "FATIAS",
+          "inicio": 6.0
+        }
+      ],
+      "sons": [
+        {
+          "efeito": "pop",
+          "em": 6.0,
+          "volume": 0.8
+        }
+      ],
+      "virada": false,
+      "reconstrucao": false
+    }
+  ],
+  "telas": [
+    {
+      "id": "t01",
+      "tipo": "passos",
+      "campos": {
+        "itens": [
+          "Conte os convidados",
+          "Some 10% de folga",
+          "Peça por fatias"
+        ],
+        "atual": 1
+      },
+      "entra": 2.6,
+      "sai": 5.4
+    }
+  ],
+  "cta": {
+    "palavra": "FATIAS",
+    "em": 6.0
+  }
+}

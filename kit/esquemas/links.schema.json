@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "links.schema.json",
+  "title": "Lista curada de referências (1-referencias/links.json)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "versao",
+    "exemplos"
+  ],
+  "properties": {
+    "versao": {
+      "const": 1
+    },
+    "exemplos": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "slug",
+          "url"
+        ],
+        "properties": {
+          "slug": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 60
+          },
+          "url": {
+            "type": "string",
+            "minLength": 8
+          },
+          "o_que_observar": {
+            "type": "string"
+          },
+          "duracao_s": {
+            "type": "number",
+            "minimum": 0
+          },
+          "credito": {
+            "type": "string"
+          },
+          "regua": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

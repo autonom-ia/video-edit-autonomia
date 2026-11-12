@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Amostra do estúdio</title>
+    <!-- Página de 1080x1920 usada para as amostras (cores, letras, estilo) e para conferir as telas. -->
+    <style>
+{{ESTILO}}
+    </style>
+  </head>
+  <body>
+    <div id="root">
+      <div id="cam" style="transform: translateY({{CAM_Y}}px)">
+        <div id="zoom" style="transform: scale({{ESCALA}})">
+          {{FUNDO}}
+          <div id="sombra-rosto"></div>
+        </div>
+      </div>
+      <div id="faixa" style="clip-path: inset(0px 0px {{FAIXA_RESTO}}px 0px)"></div>
+      <div id="costura" style="transform: translateY({{FAIXA_ALTURA}}px); opacity: {{COSTURA}}"></div>
+      <div id="gancho">{{GANCHO}}</div>
+      <div id="telas">{{TELA}}</div>
+      {{CTA}}
+      <div id="capshost">
+        <div id="caps" style="transform: translateY({{LEGENDA_Y}}px); --cap-tx: {{LEGENDA_COR}}; --cap-sh: {{LEGENDA_SOMBRA}}">{{LEGENDA}}</div>
+      </div>
+      {{ROTULO}}
+    </div>
+    <script>
+      (function () {
+        function conferir() {
+          var ruins = [];
+          document.querySelectorAll('.caixa').forEach(function (el) {
+            if (el.scrollHeight > el.clientHeight + 2 || el.scrollWidth > el.clientWidth + 2) {
+              ruins.push(el.getAttribute('data-tela') || el.id || 'caixa');
+              el.classList.add('estourou');
+            }
+          });
+          document.querySelectorAll('.capin').forEach(function (el) {
+            if (el.getBoundingClientRect().width > 960) {
+              ruins.push('legenda');
+              el.classList.add('estourou');
+            }
+          });
+          if (ruins.length) {
+            document.body.setAttribute('data-estourou', ruins.join(','));
+            var faixa = document.createElement('div');
+            faixa.className = 'faixa-estourou';
+            faixa.textContent = 'TEXTO ESTOUROU: ' + ruins.join(', ');
+            document.getElementById('root').appendChild(faixa);
+          } else {
+            document.body.setAttribute('data-estourou', 'nao');
+          }
+        }
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(conferir);
+        else conferir();
+      })();
+    </script>
+  </body>
+</html>

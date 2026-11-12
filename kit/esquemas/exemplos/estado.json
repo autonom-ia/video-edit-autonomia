@@ -1,0 +1,20 @@
+{
+  "versao": 1,
+  "projeto": "2026-11-12-fatias",
+  "titulo": "Quantas fatias pedir",
+  "caminho": "A",
+  "etapa": "roteiro",
+  "gates": {
+    "pauta": "A",
+    "gancho": "1",
+    "cenas": null,
+    "previa": null,
+    "trilha": null
+  },
+  "rodadas": {
+    "roteiro": 1,
+    "video": 0
+  },
+  "notas": [],
+  "atualizado_em": "2026-11-12T10:00:00.000Z"
+}

@@ -1,0 +1,637 @@
+{
+  "versao": 1,
+  "como_usar": [
+    "Estes são os textos que o assistente mostra ao aluno durante a instalação. Use o texto como está, trocando só o que está entre {{ }}.",
+    "{{agente}} vale \"Claude\" ou \"Codex\". {{nome}}, {{frase}}, {{tamanho}} e {{consequencia}} vêm de \"itens\". Quando um texto tem uma variante por agente (\"..._claude\" / \"..._codex\"), use a do agente certo.",
+    "Mostre o \"texto\" e, embaixo, as \"opcoes\" numeradas (1., 2., ...). A opção com ★ é a recomendada e vem primeiro. O aluno pode responder com o número ou com palavras.",
+    "Como rodar o instalador (sempre de dentro da pasta do estúdio, com barra normal no caminho):",
+    "- Mac: cd ~/estudio-de-reels && bash instalar/instalar.sh <acao> [id] --agente <claude|codex> [--modo tudo|um_por_um]. Kit: ./estudio <comando>.",
+    "- Windows, PowerShell: cd <pasta do estúdio>; powershell.exe -NoProfile -ExecutionPolicy Bypass -File instalar/instalar.ps1 <acao> [id] --agente <claude|codex> [--modo tudo|um_por_um]. Kit: .\\estudio.cmd <comando>.",
+    "- Windows, Git Bash (onde roda a ferramenta Bash do Claude Code no Windows): o mesmo instalador do Windows, cd <pasta do estúdio> && powershell.exe -NoProfile -ExecutionPolicy Bypass -File instalar/instalar.ps1 ... (barra normal; a invertida some no Git Bash). Kit: ./estudio <comando>. Nunca rode instalar.sh no Windows: ele recusa com USE_O_INSTALADOR_DO_WINDOWS.",
+    "A pasta do estúdio é ~/estudio-de-reels no Mac e %USERPROFILE%\\estudio-de-reels no Windows (ou C:\\EstudioDeReels\\estudio-de-reels, depois de \"mudar-pasta\"). Os programas ficam dentro dela, em .ferramentas.",
+    "Sempre passe --agente. Depois da resposta ao I-03, passe também --modo tudo ou --modo um_por_um.",
+    "Leia só a última linha da saída: é um JSON. Se ok=false, procure o \"codigo\" em \"erros\" deste arquivo. Se o JSON tiver \"origem\":\"kit\", procure o código em kit/mensagens.json.",
+    "Quando o erro tiver \"acao_automatica\":\"tentar_de_novo\", rode o mesmo comando mais uma vez sem falar nada. Só mostre o texto se falhar de novo.",
+    "Nunca mostre o terminal, o caminho do log nem o nome técnico do código ao aluno.",
+    "Ordem dos passos: pasta, atalho, python, node, ffmpeg, baixador, montador, fala, ouvido, git (só Windows com Claude), referencias, pastas. O atalho vem logo depois da pasta: se a janela fechar no meio, a pessoa volta por ele.",
+    "Numeração \"{{i}} de {{n}}\": {{i}} é o campo \"numero\" do passo no \"plano\" e {{n}} é \"total_programas\". Ela segue a lista do I-03. Passo com numero 0 (pasta, atalho, referencias, pastas) não tem contador: mostre o \"pronto\" do item como está.",
+    "Andamento dos passos em segundo plano: leia o arquivo .ferramentas/estado/fala.json e .ferramentas/estado/ouvido.json com a ferramenta de ler arquivo, sem rodar nada, e só entre as partes do briefing.",
+    "Depois de \"checar\": se aparecer PASTA_NA_NUVEM ou NOME_COM_ACENTO, pergunte com o texto do erro e rode a ação \"mudar-pasta\". A partir daí use a pasta do campo \"para\" em todos os comandos.",
+    "No Codex, rode o \"checar\" já pedindo internet (texto CODEX-INTERNET, com {{nome}} = \"teste de internet\"). Se mesmo assim vier SEM_INTERNET, tente mais uma vez pedindo internet antes de mostrar o texto do Wi-Fi.",
+    "Depois de \"verificar\": cada item com ok=false traz \"passo\". Para tentar de novo, rode \"passo <passo>\" desse item.",
+    "Desinstalar: rode \"desinstalar\" sem --confirmar, mostre DESINSTALAR-PERGUNTA e, se o aluno confirmar, rode \"desinstalar --confirmar\" e mostre DESINSTALAR-PRONTO."
+  ],
+  "textos": {
+    "I-01": {
+      "quando": "logo depois de ler o AGENTS.md, antes de qualquer comando",
+      "texto": "Oi! Vou montar o seu Estúdio de Reels. Vai ser assim:\n1. Eu olho se o seu computador tem espaço.\n2. Instalo os programas. Você aprova.\n3. Faço umas perguntas sobre o seu negócio.\n4. Abro três pastas para você.\n\nLeva uns 30 minutos. Você não precisa digitar nada difícil.\n\nUm aviso: toda vez que eu for mexer no computador, o {{agente}} mostra uma caixinha pedindo licença. É normal. É para a sua segurança. Quando for coisa nossa, eu aviso antes, e você pode aprovar.\n{{linha_caixinha}}\n\nSe a janela fechar sem querer, abra o {{agente}} do mesmo jeito e cole o mesmo texto de novo: eu continuo de onde parou.\n\nPrimeiro vou só olhar o computador, sem instalar nada. Posso olhar?",
+      "linha_caixinha_claude": "A caixinha vem em inglês. Para aprovar, aperte Enter na opção **1. Yes**. Quando eu for gravar um arquivo, escolha uma vez a opção **Yes, allow all edits during this session**: aí ele para de perguntar isso.",
+      "linha_caixinha_codex": "A caixinha vem em inglês. Para aprovar, aperte Enter na primeira opção, a que começa com **Yes**.",
+      "opcoes": [
+        "Pode olhar ★",
+        "Agora não"
+      ]
+    },
+    "I-02": {
+      "quando": "depois de \"checar\" sem problema que bloqueia",
+      "texto": "Olhei. Está tudo certo:\n- Computador: {{nome_sistema}}\n- Espaço livre: {{espaco_gb}} GB (preciso de 12)\n- Memória: {{memoria_gb}} GB\n- Internet: funcionando",
+      "variaveis": "nome_sistema, espaco_gb e memoria_gb vêm do JSON do checar. nome_sistema já vem pronto: Mac com chip Apple, Mac Intel, Windows 11, Windows 10 (com \" ARM\" no fim quando for o caso)."
+    },
+    "I-03": {
+      "quando": "depois do I-02",
+      "texto": "Vou instalar {{n}} programas. Todos são grátis e ficam numa pasta só do estúdio. Nenhum pede a sua senha.\n1. **Python**: roda a parte que escuta a sua fala. (uns 160 MB)\n2. **Node**: o motor que monta os vídeos. (uns 190 MB)\n3. **FFmpeg**: a tesoura. Corta o vídeo e acerta o som. (uns 150 MB)\n4. **Baixador de vídeos**: traz vídeos de exemplo para você estudar. (uns 35 MB)\n5. **Montador de vídeo**: desenha as telas e monta o Reel. Vem com um navegador escondido, que não mexe no seu Chrome. (uns 500 MB)\n6. **Ouvido de texto**: escuta a sua fala e escreve a legenda, palavra por palavra. (uns 2 GB)\n7. **Ouvido de som**: escuta o vídeo pronto e avisa se a música está alta ou se o som sumiu. (uns 2,4 GB){{linha_git}}\n\nTotal: uns 6 GB. Com internet boa, uns 15 minutos. Os dois ouvidos são grandes: eles baixam enquanto eu faço as perguntas, então você quase não espera.\n\nComo você prefere?",
+      "linha_git": "\n8. **Git** (opcional): deixa o Claude mais rápido no Windows. (uns 350 MB)",
+      "variaveis": "n = 8 só no Windows com Claude (e aí {{linha_git}} recebe o texto de \"linha_git\"); senão n = 7 e {{linha_git}} fica vazio. No Mac Intel e no Windows ARM, o item 7 continua na lista: o instalador avisa depois que ele não existe para esse computador.",
+      "opcoes": [
+        "Pode instalar tudo. Me avise antes de cada um. ★",
+        "Quero aprovar um por um."
+      ],
+      "modo_por_opcao": [
+        "tudo",
+        "um_por_um"
+      ]
+    },
+    "I-04": {
+      "quando": "modo tudo: antes de cada passo",
+      "texto": "Agora: **{{nome}}**. {{frase}}. O {{agente}} vai pedir licença para mexer no computador. Pode aprovar."
+    },
+    "I-04-codex-internet": {
+      "quando": "modo tudo, no Codex, quando o passo baixa da internet (itens com precisa_internet=true)",
+      "texto": "Agora: **{{nome}}**. {{frase}}. O Codex vai pedir para usar a internet. Pode aprovar: é para baixar o {{nome}}."
+    },
+    "I-05": {
+      "quando": "modo um por um: antes de cada passo",
+      "texto": "Posso instalar o **{{nome}}**? {{frase}}. Ocupa uns {{tamanho}}. É grátis.",
+      "opcoes": [
+        "Sim, instalar ★",
+        "Agora não"
+      ]
+    },
+    "I-06": {
+      "quando": "o aluno recusou um passo",
+      "texto": "Tudo bem. Sem o {{nome}}, {{consequencia}}. Quer instalar mesmo assim?",
+      "opcoes": [
+        "Sim, pode instalar ★",
+        "Não, seguir sem"
+      ],
+      "opcoes_obrigatorio": [
+        "Sim, pode instalar ★",
+        "Parar a instalação por agora"
+      ]
+    },
+    "I-07": {
+      "quando": "um passo terminou com ok=true",
+      "texto": "Pronto: {{nome}} instalado. ({{i}} de {{n}})",
+      "variaveis": "{{i}} é o \"numero\" do passo no plano e {{n}} é \"total_programas\". Para passo com numero 0, use o \"pronto\" do item, sem contador."
+    },
+    "I-08": {
+      "quando": "logo depois de \"segundo-plano fala\" e \"segundo-plano ouvido\"",
+      "texto": "Os dois ouvidos são grandes. Comecei a baixar agora, em segundo plano. Enquanto isso, vamos falar do seu negócio. São umas perguntas rápidas. Pode responder \"não sei\" em qualquer uma."
+    },
+    "I-08-sem-segundo-plano": {
+      "quando": "\"segundo-plano\" respondeu iniciado=false: rode \"passo fala\" e \"passo ouvido\" normalmente, antes das perguntas",
+      "texto": "Os dois ouvidos são grandes e vão levar uns {{minutos}} minutos para baixar. Vou baixar agora. Eu aviso quando acabar, e aí fazemos as perguntas."
+    },
+    "I-09": {
+      "quando": "só no Windows com Claude, depois do briefing",
+      "texto": "Agora o Git, que é opcional. Ele deixa o Claude mais rápido no Windows. O Windows pode abrir uma janela perguntando se permite alterações. Pode dizer Sim ou Não: as duas funcionam.",
+      "opcoes": [
+        "Instalar ★",
+        "Pular"
+      ]
+    },
+    "I-10": {
+      "quando": "antes de \"passo referencias\". {{N}} é o número de vídeos em 1-referencias/links.json; {{M}} é o \"tamanho_mb\" do passo referencias no plano (único lugar desse cálculo).",
+      "texto": "Posso baixar os vídeos de exemplo para a pasta 1-referencias? São {{N}} vídeos, uns {{M}} MB. Eles ficam só no seu computador. Servem para você ver o nível que a gente busca.",
+      "opcoes": [
+        "Pode baixar ★",
+        "Agora não"
+      ],
+      "depois": "Se o download não der certo (por exemplo, o site pediu login), diga em uma frase que os exemplos não vieram e siga: o estúdio usa a régua que já vem no guia. Nunca prenda o aluno nisso."
+    },
+    "I-11": {
+      "quando": "logo depois de \"passo pasta\", antes de \"passo atalho\". Sem pergunta.",
+      "texto": "Vou pôr dois atalhos na sua Área de Trabalho: **Abrir o Estúdio**, que abre o {{agente}} já na pasta certa, e **Estúdio de Reels**, que abre a pasta dos seus vídeos. Se a janela fechar sem querer, é só clicar em Abrir o Estúdio: eu continuo de onde parou.",
+      "texto_mac": "O Mac pode perguntar se o Terminal pode mexer na sua Mesa. Clique em **Permitir**."
+    },
+    "I-12": {
+      "quando": "depois de \"passo pastas\"",
+      "texto": "Abri 3 pastas para você:\n- **1-referencias**: vídeos de exemplo para estudar. {{situacao_referencias}} Pode pôr aí vídeos que você admira.\n- **2-videos-brutos**: aqui você põe o vídeo que gravar, do jeito que saiu do celular.\n- **3-videos-prontos**: aqui aparece o seu Reel pronto para postar.",
+      "situacao_referencias": [
+        "Já coloquei {{N}} lá.",
+        "Está vazia por enquanto."
+      ]
+    },
+    "I-13": {
+      "quando": "os ouvidos ainda estão baixando (\"status\" com estado=rodando)",
+      "texto": "Falta só terminar de baixar os ouvidos. {{Faltam uns N minutos.}} Eu aviso quando acabar."
+    },
+    "I-14": {
+      "quando": "\"verificar\" com ok=true",
+      "texto": "Tudo pronto: {{ok}} de {{total}}.\n\nPara fazer um vídeo:\n1. Clique duas vezes em **Abrir o Estúdio**, na Área de Trabalho.\n2. Escreva: **quero gravar um vídeo**\n\nEu monto o roteiro com você. Você grava, põe o vídeo na pasta 2-videos-brutos e escreve: **faz meu vídeo**. Para achar essa pasta, clique duas vezes em **Estúdio de Reels**, na Área de Trabalho.\n\nJá tem um vídeo gravado? Ponha na pasta 2-videos-brutos e escreva: **faz meu vídeo**.\n\nAmanhã, na primeira vez, o {{agente}} pergunta em inglês se confia na pasta. {{linha_confianca}}",
+      "linha_confianca_claude": "A pergunta é **Do you trust the files in this folder?** Aperte Enter na opção **1. Yes, proceed**. Se escolher No, ele fecha.",
+      "linha_confianca_codex": "Escolha a primeira opção, a que começa com **Yes**. Se escolher No, ele fecha."
+    },
+    "I-15": {
+      "quando": "\"verificar\" com ok=false",
+      "texto": "Ficou quase tudo pronto: {{ok}} de {{total}}. Faltou: {{lista em palavras simples}}. {{texto do código}}. Quer que eu tente de novo?",
+      "opcoes": [
+        "Tentar de novo ★",
+        "Seguir assim"
+      ]
+    },
+    "MUDAR-PASTA-PRONTO": {
+      "quando": "\"mudar-pasta\" com ok=true e copiado=false",
+      "texto": "Pronto. Mudei o estúdio para {{para}}. Daqui para a frente ele fica lá.",
+      "texto_codex": "Pronto. Mudei o estúdio para {{para}}. Daqui para a frente ele fica lá. Até você abrir pelo atalho, o Codex vai pedir para eu rodar fora da área protegida em cada passo. Pode aprovar."
+    },
+    "CODEX-INTERNET": {
+      "quando": "no Codex, antes de qualquer comando que baixa da internet",
+      "texto": "O Codex vai pedir para usar a internet. Pode aprovar: é para baixar o {{nome}}."
+    },
+    "CODEX-FORA-DA-AREA": {
+      "quando": "no Codex, antes do passo montador, do passo pastas e de comandos do estúdio que abrem janelas",
+      "texto": "O Codex vai pedir para eu rodar fora da área protegida. É para abrir o navegador escondido que desenha o vídeo. Pode aprovar."
+    },
+    "CODEX-FORA-DA-AREA-PASTAS": {
+      "quando": "no Codex, antes do passo pastas",
+      "texto": "O Codex vai pedir para eu rodar fora da área protegida. É para abrir as suas pastas na tela. Pode aprovar."
+    },
+    "CAIXINHA": {
+      "quando": "antes de qualquer comando que vai gerar a caixinha de aprovação, quando não houver texto mais específico",
+      "texto": "O {{agente}} vai pedir licença para mexer no computador. É para {{motivo em 1 linha}}. Pode aprovar."
+    },
+    "I-11-pastas": {
+      "quando": "antes de \"passo pastas\". Sem pergunta.",
+      "texto": "Agora vou abrir as suas 3 pastas."
+    },
+    "MUDAR-PASTA-COPIADO": {
+      "quando": "\"mudar-pasta\" com ok=true e copiado=true",
+      "texto": "Pronto. O estúdio agora fica em {{para}}. Ficou uma cópia antiga em {{antiga}}: pode apagar depois, quando quiser."
+    },
+    "CODEX-FORA-DA-AREA-ATALHO": {
+      "quando": "no Codex, antes do passo atalho",
+      "texto": "O Codex vai pedir para eu rodar fora da área protegida. É para pôr os atalhos na sua Área de Trabalho. Pode aprovar."
+    },
+    "DESINSTALAR-PERGUNTA": {
+      "quando": "depois de \"desinstalar\" sem --confirmar",
+      "texto": "Posso apagar os programas do estúdio (uns {{tamanho_mb}} MB) e os atalhos da Área de Trabalho? Os seus vídeos, a sua marca e os projetos ficam onde estão.",
+      "opcoes": [
+        "Pode apagar ★",
+        "Deixar como está"
+      ]
+    },
+    "DESINSTALAR-PRONTO": {
+      "quando": "\"desinstalar --confirmar\" com ok=true",
+      "texto": "Pronto. Apaguei os programas do estúdio e os atalhos. Os seus vídeos continuam na pasta {{pasta_do_estudio}}. Se quiser tirar tudo, pode apagar essa pasta depois de guardar os vídeos."
+    }
+  },
+  "itens": {
+    "pasta": {
+      "nome": "Pasta do estúdio",
+      "artigo": "a",
+      "frase": "Guarda todos os programas do estúdio num lugar só",
+      "tamanho": "quase nada",
+      "tamanho_mb": 0,
+      "consequencia": "o estúdio não tem onde guardar os programas. Esse é obrigatório",
+      "obrigatorio": true,
+      "segundo_plano": false,
+      "precisa_internet": false,
+      "fora_da_area_codex": false,
+      "anuncio": "Agora: **pasta do estúdio**. Ela guarda todos os programas num lugar só. O {{agente}} vai pedir licença para mexer no computador. Pode aprovar.",
+      "pedido": "Posso criar a **pasta do estúdio**? Ela guarda todos os programas num lugar só. Não ocupa quase nada.",
+      "recusa": "Tudo bem. Sem a pasta do estúdio, o estúdio não tem onde guardar os programas. Esse é obrigatório. Quer criar mesmo assim?",
+      "pronto": "Pronto: pasta do estúdio criada."
+    },
+    "python": {
+      "nome": "Python",
+      "artigo": "o",
+      "frase": "Roda a parte que escuta a sua fala",
+      "tamanho": "160 MB",
+      "tamanho_mb": 160,
+      "consequencia": "não consigo escrever a legenda do vídeo",
+      "obrigatorio": false,
+      "segundo_plano": false,
+      "precisa_internet": true,
+      "fora_da_area_codex": false,
+      "anuncio": "Agora: **Python**. Roda a parte que escuta a sua fala. O {{agente}} vai pedir licença para mexer no computador. Pode aprovar.",
+      "anuncio_codex": "Agora: **Python**. Roda a parte que escuta a sua fala. O Codex vai pedir para usar a internet. Pode aprovar: é para baixar o Python.",
+      "pedido": "Posso instalar o **Python**? Ele roda a parte que escuta a sua fala. Ocupa uns 160 MB. É grátis.",
+      "recusa": "Tudo bem. Sem o Python, não consigo escrever a legenda do vídeo. Quer instalar mesmo assim?",
+      "pronto": "Pronto: Python instalado. ({{i}} de {{n}})"
+    },
+    "node": {
+      "nome": "Node",
+      "artigo": "o",
+      "frase": "É o motor que monta os vídeos",
+      "tamanho": "190 MB",
+      "tamanho_mb": 190,
+      "consequencia": "o estúdio não funciona. Esse é obrigatório",
+      "obrigatorio": true,
+      "segundo_plano": false,
+      "precisa_internet": true,
+      "fora_da_area_codex": false,
+      "anuncio": "Agora: **Node**. É o motor que monta os vídeos. O {{agente}} vai pedir licença para mexer no computador. Pode aprovar.",
+      "anuncio_codex": "Agora: **Node**. É o motor que monta os vídeos. O Codex vai pedir para usar a internet. Pode aprovar: é para baixar o Node.",
+      "pedido": "Posso instalar o **Node**? É o motor que monta os vídeos. Ocupa uns 190 MB. É grátis.",
+      "recusa": "Tudo bem. Sem o Node, o estúdio não funciona. Esse é obrigatório. Quer instalar mesmo assim?",
+      "pronto": "Pronto: Node instalado. ({{i}} de {{n}})"
+    },
+    "ffmpeg": {
+      "nome": "FFmpeg",
+      "artigo": "o",
+      "frase": "É a tesoura. Corta o vídeo e acerta o som",
+      "tamanho": "150 MB",
+      "tamanho_mb": 150,
+      "consequencia": "não consigo cortar nem juntar o vídeo. Esse é obrigatório",
+      "obrigatorio": true,
+      "segundo_plano": false,
+      "precisa_internet": true,
+      "fora_da_area_codex": false,
+      "anuncio": "Agora: **FFmpeg**. É a tesoura: corta o vídeo e acerta o som. O {{agente}} vai pedir licença para mexer no computador. Pode aprovar.",
+      "anuncio_codex": "Agora: **FFmpeg**. É a tesoura: corta o vídeo e acerta o som. O Codex vai pedir para usar a internet. Pode aprovar: é para baixar o FFmpeg.",
+      "pedido": "Posso instalar o **FFmpeg**? É a tesoura: corta o vídeo e acerta o som. Ocupa uns 150 MB. É grátis.",
+      "recusa": "Tudo bem. Sem o FFmpeg, não consigo cortar nem juntar o vídeo. Esse é obrigatório. Quer instalar mesmo assim?",
+      "pronto": "Pronto: FFmpeg instalado. ({{i}} de {{n}})"
+    },
+    "baixador": {
+      "nome": "Baixador de vídeos",
+      "artigo": "o",
+      "frase": "Traz vídeos de exemplo para você estudar",
+      "tamanho": "35 MB",
+      "tamanho_mb": 35,
+      "consequencia": "não consigo trazer os vídeos de exemplo, mas o resto funciona",
+      "obrigatorio": false,
+      "segundo_plano": false,
+      "precisa_internet": true,
+      "fora_da_area_codex": false,
+      "anuncio": "Agora: **baixador de vídeos**. Traz vídeos de exemplo para você estudar. O {{agente}} vai pedir licença para mexer no computador. Pode aprovar.",
+      "anuncio_codex": "Agora: **baixador de vídeos**. Traz vídeos de exemplo para você estudar. O Codex vai pedir para usar a internet. Pode aprovar: é para baixar o baixador de vídeos.",
+      "pedido": "Posso instalar o **baixador de vídeos**? Ele traz vídeos de exemplo para você estudar. Ocupa uns 35 MB. É grátis.",
+      "recusa": "Tudo bem. Sem o baixador de vídeos, não consigo trazer os vídeos de exemplo, mas o resto funciona. Quer instalar mesmo assim?",
+      "pronto": "Pronto: baixador de vídeos instalado. ({{i}} de {{n}})"
+    },
+    "montador": {
+      "nome": "Montador de vídeo",
+      "artigo": "o",
+      "frase": "Desenha as telas e monta o Reel. Vem com um navegador escondido, que não mexe no seu Chrome",
+      "tamanho": "500 MB",
+      "tamanho_mb": 500,
+      "consequencia": "não consigo montar o vídeo. Esse é obrigatório",
+      "obrigatorio": true,
+      "segundo_plano": false,
+      "precisa_internet": true,
+      "fora_da_area_codex": true,
+      "anuncio": "Agora: **montador de vídeo**. Desenha as telas e monta o Reel. Vem com um navegador escondido, que não mexe no seu Chrome. O {{agente}} vai pedir licença para mexer no computador. Pode aprovar.",
+      "anuncio_codex": "Agora: **montador de vídeo**. Desenha as telas e monta o Reel. O Codex vai pedir para usar a internet e para eu rodar fora da área protegida. Pode aprovar: é para baixar o montador e o navegador escondido que desenha o vídeo.",
+      "pedido": "Posso instalar o **montador de vídeo**? Ele desenha as telas e monta o Reel. Vem com um navegador escondido, que não mexe no seu Chrome. Ocupa uns 500 MB. É grátis.",
+      "recusa": "Tudo bem. Sem o montador de vídeo, não consigo montar o vídeo. Esse é obrigatório. Quer instalar mesmo assim?",
+      "pronto": "Pronto: montador de vídeo instalado. ({{i}} de {{n}})"
+    },
+    "fala": {
+      "nome": "Ouvido de texto",
+      "artigo": "o",
+      "frase": "Escuta a sua fala e escreve a legenda, palavra por palavra",
+      "tamanho": "2 GB",
+      "tamanho_mb": 2000,
+      "consequencia": "a legenda não sai",
+      "obrigatorio": false,
+      "segundo_plano": true,
+      "precisa_internet": true,
+      "fora_da_area_codex": false,
+      "anuncio": "Agora: **ouvido de texto**. Escuta a sua fala e escreve a legenda, palavra por palavra. O {{agente}} vai pedir licença para mexer no computador. Pode aprovar.",
+      "anuncio_codex": "Agora: **ouvido de texto**. Escuta a sua fala e escreve a legenda. O Codex vai pedir para usar a internet. Pode aprovar: é para baixar o ouvido de texto.",
+      "pedido": "Posso instalar o **ouvido de texto**? Ele escuta a sua fala e escreve a legenda, palavra por palavra. Ocupa uns 2 GB. É grátis.",
+      "recusa": "Tudo bem. Sem o ouvido de texto, a legenda não sai. Quer instalar mesmo assim?",
+      "pronto": "Pronto: ouvido de texto instalado. ({{i}} de {{n}})"
+    },
+    "ouvido": {
+      "nome": "Ouvido de som",
+      "artigo": "o",
+      "frase": "Escuta o vídeo pronto e avisa se a música está alta ou se o som sumiu",
+      "tamanho": "2,4 GB",
+      "tamanho_mb": 2400,
+      "consequencia": "o vídeo sai, mas sem a conferência automática da música",
+      "obrigatorio": false,
+      "segundo_plano": true,
+      "precisa_internet": true,
+      "fora_da_area_codex": false,
+      "anuncio": "Agora: **ouvido de som**. Escuta o vídeo pronto e avisa se a música está alta ou se o som sumiu. O {{agente}} vai pedir licença para mexer no computador. Pode aprovar.",
+      "anuncio_codex": "Agora: **ouvido de som**. Escuta o vídeo pronto e confere a música. O Codex vai pedir para usar a internet. Pode aprovar: é para baixar o ouvido de som.",
+      "pedido": "Posso instalar o **ouvido de som**? Ele escuta o vídeo pronto e avisa se a música está alta ou se o som sumiu. Ocupa uns 2,4 GB. É grátis.",
+      "recusa": "Tudo bem. Sem o ouvido de som, o vídeo sai, mas sem a conferência automática da música. Quer instalar mesmo assim?",
+      "pronto": "Pronto: ouvido de som instalado. ({{i}} de {{n}})"
+    },
+    "git": {
+      "nome": "Git",
+      "artigo": "o",
+      "frase": "Deixa o Claude mais rápido no Windows",
+      "tamanho": "350 MB",
+      "tamanho_mb": 350,
+      "consequencia": "o Claude fica um pouco mais lento, mas tudo funciona",
+      "obrigatorio": false,
+      "segundo_plano": false,
+      "precisa_internet": true,
+      "fora_da_area_codex": false,
+      "so_windows_com_claude": true,
+      "anuncio": "Agora: **Git**. Deixa o Claude mais rápido no Windows. O Windows pode abrir uma janela pedindo licença. Sim ou Não: as duas funcionam.",
+      "pedido": "Posso instalar o **Git**? Ele deixa o Claude mais rápido no Windows. Ocupa uns 350 MB. É grátis.",
+      "recusa": "Tudo bem. Sem o Git, o Claude fica um pouco mais lento, mas tudo funciona. Quer instalar mesmo assim?",
+      "pronto": "Pronto: Git instalado."
+    },
+    "referencias": {
+      "nome": "Vídeos de exemplo",
+      "artigo": "os",
+      "frase": "Mostram o nível que a gente busca. Ficam só no seu computador",
+      "tamanho": "uns {{M}} MB",
+      "tamanho_mb": null,
+      "consequencia": "a pasta 1-referencias fica vazia por enquanto, mas o resto funciona",
+      "obrigatorio": false,
+      "segundo_plano": false,
+      "precisa_internet": true,
+      "fora_da_area_codex": false,
+      "anuncio": "Agora: **vídeos de exemplo**. Eles mostram o nível que a gente busca. O {{agente}} vai pedir licença para mexer no computador. Pode aprovar.",
+      "anuncio_codex": "Agora: **vídeos de exemplo**. O Codex vai pedir para usar a internet. Pode aprovar: é para baixar os vídeos de exemplo.",
+      "pedido": "Posso baixar os **vídeos de exemplo**? Eles mostram o nível que a gente busca e ficam só no seu computador. Ocupam uns {{M}} MB.",
+      "recusa": "Tudo bem. Sem os vídeos de exemplo, a pasta 1-referencias fica vazia por enquanto, mas o resto funciona. Quer baixar mesmo assim?",
+      "pronto": "Pronto: vídeos de exemplo na pasta 1-referencias.",
+      "tamanho_nota": "{{M}} é o \"tamanho_mb\" do passo referencias no plano. É o único lugar desse cálculo."
+    },
+    "atalho": {
+      "nome": "Atalhos na Área de Trabalho",
+      "artigo": "os",
+      "frase": "Abrir o Estúdio, por onde você volta amanhã, e Estúdio de Reels, que abre a pasta dos seus vídeos",
+      "tamanho": "quase nada",
+      "tamanho_mb": 0,
+      "consequencia": "você volta pelo programa, do jeito que abriu hoje",
+      "obrigatorio": false,
+      "segundo_plano": false,
+      "precisa_internet": false,
+      "fora_da_area_codex": true,
+      "anuncio": "Agora: **atalhos na Área de Trabalho**. O {{agente}} vai pedir licença para mexer no computador. Pode aprovar.",
+      "pedido": "Posso pôr dois atalhos na sua Área de Trabalho? **Abrir o Estúdio** é por onde você volta amanhã. **Estúdio de Reels** abre a pasta dos seus vídeos.",
+      "recusa": "Tudo bem. Sem os atalhos, você volta pelo programa, do jeito que abriu hoje. Quer os atalhos mesmo assim?",
+      "pronto": "Pronto: atalhos \"Abrir o Estúdio\" e \"Estúdio de Reels\" na sua Área de Trabalho.",
+      "anuncio_codex": "Agora: **atalhos na Área de Trabalho**. O Codex vai pedir para eu rodar fora da área protegida. É para pôr os atalhos na sua Área de Trabalho. Pode aprovar."
+    },
+    "pastas": {
+      "nome": "Suas 3 pastas",
+      "artigo": "as",
+      "frase": "1-referencias, 2-videos-brutos e 3-videos-prontos",
+      "tamanho": "quase nada",
+      "tamanho_mb": 0,
+      "consequencia": "eu não consigo abrir as pastas na tela, mas elas estão dentro da pasta estudio-de-reels",
+      "obrigatorio": false,
+      "segundo_plano": false,
+      "precisa_internet": false,
+      "fora_da_area_codex": true,
+      "anuncio": "Agora vou abrir as suas 3 pastas. O {{agente}} vai pedir licença para mexer no computador. Pode aprovar.",
+      "anuncio_codex": "Agora vou abrir as suas 3 pastas. O Codex vai pedir para eu rodar fora da área protegida. É para abrir as pastas na tela. Pode aprovar.",
+      "pedido": "Posso abrir as suas **3 pastas** na tela?",
+      "recusa": "Tudo bem. As pastas estão dentro da pasta estudio-de-reels, na sua pasta pessoal.",
+      "pronto": "Pronto: abri as 3 pastas."
+    }
+  },
+  "sucesso": {
+    "INSTALADO": "O passo terminou agora. Mostre o \"pronto\" do item.",
+    "JA_PRONTO": "Já estava instalado. Mostre o \"pronto\" do item, sem dizer que instalou de novo.",
+    "NAO_SE_APLICA": "Este passo não existe neste computador. Siga sem falar nada."
+  },
+  "erros": {
+    "POUCO_ESPACO": {
+      "texto": "Seu computador está com pouco espaço: {{livre_gb}} GB livres. Preciso de {{precisa_gb}} GB. Dá para liberar apagando vídeos antigos ou esvaziando a Lixeira.",
+      "opcoes": [
+        "Já liberei ★",
+        "Me ajude a achar o que apagar"
+      ],
+      "acao_automatica": "nenhuma",
+      "depois": "\"Já liberei\": rode \"checar\" de novo. \"Me ajude\": mostre onde costuma ter coisa grande (Downloads, vídeos antigos, Lixeira). Nunca apague nada sozinho."
+    },
+    "SEM_INTERNET": {
+      "texto": "Não consegui falar com a internet. Confira se o Wi-Fi está ligado.",
+      "opcoes": [
+        "Já liguei, tente de novo ★"
+      ],
+      "acao_automatica": "nenhuma",
+      "depois": "No Codex, antes de mostrar este texto, rode o mesmo comando mais uma vez pedindo internet (texto CODEX-INTERNET). Só culpe o Wi-Fi se falhar de novo com a internet liberada."
+    },
+    "DOWNLOAD_FALHOU": {
+      "texto": "Não consegui baixar o {{nome}}. Às vezes a internet oscila.",
+      "opcoes": [
+        "Tentar de novo ★",
+        "Tentar mais tarde"
+      ],
+      "acao_automatica": "tentar_de_novo"
+    },
+    "ARQUIVO_DIFERENTE": {
+      "texto": "O {{nome}} chegou diferente do esperado. Por segurança, não instalei. Vou baixar de novo.",
+      "opcoes": [],
+      "acao_automatica": "tentar_de_novo"
+    },
+    "ANTIVIRUS_BLOQUEOU": {
+      "texto": "O antivírus do computador segurou o {{nome}}. Isso acontece com programas novos. Abra a Segurança do Windows, vá em \"Proteção contra vírus\", depois \"Histórico de proteção\", e permita o arquivo {{arquivo}}.",
+      "opcoes": [
+        "Já permiti ★",
+        "Seguir sem"
+      ],
+      "acao_automatica": "nenhuma"
+    },
+    "MAC_BLOQUEOU": {
+      "texto": "O Mac não deixou abrir o {{nome}}. Vou tirar a trava de \"baixado da internet\" e tentar de novo.",
+      "opcoes": [],
+      "acao_automatica": "tentar_de_novo"
+    },
+    "FFMPEG_INCOMPLETO": {
+      "texto": "A tesoura de vídeo veio sem uma peça que eu preciso. Vou baixar outra versão.",
+      "opcoes": [],
+      "acao_automatica": "tentar_de_novo"
+    },
+    "MONTADOR_FALHOU": {
+      "texto": "O montador de vídeo não ficou pronto. Vou instalar de novo.",
+      "opcoes": [
+        "Tentar de novo ★"
+      ],
+      "acao_automatica": "tentar_de_novo"
+    },
+    "NAVEGADOR_FALHOU": {
+      "texto": "O navegador escondido que desenha as telas não baixou. Vou tentar de novo.",
+      "opcoes": [],
+      "acao_automatica": "tentar_de_novo"
+    },
+    "FALA_FALHOU": {
+      "texto": "O ouvido de texto não terminou de instalar. Vou tentar de novo.",
+      "opcoes": [
+        "Tentar de novo ★"
+      ],
+      "acao_automatica": "tentar_de_novo"
+    },
+    "OUVIDO_NAO_SUPORTADO": {
+      "texto": "O ouvido de som não existe para este tipo de computador ({{tipo}}). O vídeo sai igual. Eu confiro o som de outro jeito.",
+      "opcoes": [],
+      "acao_automatica": "so_avisar"
+    },
+    "OUVIDO_FALHOU": {
+      "texto": "O ouvido de som não instalou. O vídeo sai mesmo assim, só sem a conferência automática da música.",
+      "opcoes": [
+        "Tentar de novo ★",
+        "Seguir sem"
+      ],
+      "acao_automatica": "tentar_de_novo"
+    },
+    "SISTEMA_ANTIGO": {
+      "texto": "Este computador tem um sistema muito antigo ({{versao}}). O estúdio precisa de {{minimo}} ou mais novo.",
+      "opcoes": [
+        "Entendi"
+      ],
+      "acao_automatica": "nenhuma",
+      "depois": "No Windows ARM, o mínimo é o Windows 11 (o Windows 10 ARM não roda os programas do estúdio). O campo \"minimo\" já vem certo."
+    },
+    "PASTA_NA_NUVEM": {
+      "texto": "A pasta do estúdio ficou dentro do {{nuvem}}. Isso deixa tudo lento e pode quebrar. Posso mudar para {{caminho}}?",
+      "opcoes": [
+        "Pode mudar ★"
+      ],
+      "acao_automatica": "nenhuma",
+      "depois": "Rode a ação \"mudar-pasta\". Depois use o caminho do campo \"para\" e rode \"checar\" de novo."
+    },
+    "NOME_COM_ACENTO": {
+      "texto": "O nome do seu usuário no Windows tem acento ou espaço. Alguns programas se perdem com isso. Vou guardar o estúdio em C:\\EstudioDeReels.",
+      "opcoes": [
+        "Pode ★"
+      ],
+      "acao_automatica": "nenhuma",
+      "depois": "Rode a ação \"mudar-pasta\". Depois use o caminho do campo \"para\" e rode \"checar\" de novo. Os programas vão junto, dentro da pasta do estúdio."
+    },
+    "POUCA_MEMORIA": {
+      "texto": "Seu computador tem {{memoria_gb}} GB de memória. Vou usar um ouvido de texto menor. A legenda fica um pouco menos precisa, e eu confiro palavra por palavra.",
+      "opcoes": [],
+      "acao_automatica": "so_avisar"
+    },
+    "MAC_INTEL_PRAZO": {
+      "texto": "Seu Mac é do tipo Intel. Quase tudo funciona. Só o ouvido de som não existe para ele.",
+      "opcoes": [],
+      "acao_automatica": "so_avisar"
+    },
+    "ARQUIVO_EM_USO": {
+      "texto": "Um arquivo está aberto em outro programa. Feche os vídeos e programas abertos e me diga \"pronto\".",
+      "opcoes": [
+        "Pronto ★"
+      ],
+      "acao_automatica": "nenhuma"
+    },
+    "PERMISSAO_NEGADA": {
+      "texto": "O computador não deixou eu gravar em {{pasta}}. Feche os programas que possam estar usando essa pasta e me diga \"pronto\".",
+      "opcoes": [
+        "Pronto ★"
+      ],
+      "acao_automatica": "nenhuma",
+      "depois": "Depois de \"pronto\", rode o mesmo passo de novo. Se falhar de novo, rode a skill consertar."
+    },
+    "CODEX_UAC": {
+      "texto": "O Windows perguntou se pode fazer alterações. É a proteção do Codex. Pode dizer Sim. Se disser Não, ele funciona num modo mais simples.",
+      "opcoes": [],
+      "acao_automatica": "so_avisar",
+      "depois": "Mostre só quando a janela do Windows aparecer por causa do Codex. O instalador não gera este código."
+    },
+    "COMANDO_RECUSADO": {
+      "texto": "Você não aprovou a caixinha. Sem problema: sem esse passo, {{consequencia}}. Quer tentar de novo?",
+      "opcoes": [
+        "Tentar de novo ★",
+        "Pular"
+      ],
+      "acao_automatica": "nenhuma",
+      "depois": "Use quando o aluno negar a caixinha do Claude Code ou do Codex. A consequência vem de \"itens\". O instalador não gera este código."
+    },
+    "DESCONHECIDO": {
+      "texto": "Algo deu errado no passo {{nome}} e eu não entendi o motivo. Vou tentar de novo uma vez. Se não der, eu te digo como seguir.",
+      "opcoes": [],
+      "acao_automatica": "tentar_de_novo",
+      "depois": "Se falhar de novo, rode a skill consertar."
+    },
+    "FALTA_PASSO_ANTERIOR": {
+      "texto": "Antes disso eu preciso instalar o {{falta}}. Vou fazer agora.",
+      "opcoes": [],
+      "acao_automatica": "rodar_passo_que_falta",
+      "depois": "Rode \"passo <dados.falta>\" com o aviso do item e depois repita o passo que tinha parado."
+    },
+    "FALTA_INSTALAR": {
+      "texto": "Ainda falta instalar: {{nome}}. Vou instalar agora.",
+      "opcoes": [
+        "Instalar ★",
+        "Agora não"
+      ],
+      "acao_automatica": "nenhuma",
+      "depois": "Rode \"passo <passo do item>\" com o aviso ou a pergunta do item."
+    },
+    "PASTA_DESTINO_EXISTE": {
+      "texto": "Já existe uma pasta do estúdio em {{pasta}}. Para não misturar nada, não mexi em nenhuma das duas. Quer que eu use a que já está lá?",
+      "opcoes": [
+        "Usar a que já está lá ★",
+        "Deixar como está"
+      ],
+      "acao_automatica": "nenhuma",
+      "depois": "Se o aluno escolher a primeira, passe a usar a pasta de \"para\" e rode \"checar\" de novo. Nunca apague nenhuma das duas."
+    },
+    "ESTUDIO_NAO_INSTALADO": {
+      "texto": "O estúdio ainda não terminou de instalar. Vou terminar agora.",
+      "opcoes": [],
+      "acao_automatica": "rodar_instalar_estudio",
+      "depois": "Rode a skill instalar-estudio a partir do plano."
+    },
+    "ATUALIZACAO_SEM_ENDERECO": {
+      "texto": "Não sei de onde baixar a versão nova. Pergunte ao seu professor o link da versão nova e me mande.",
+      "opcoes": [],
+      "acao_automatica": "nenhuma",
+      "depois": "Quando o aluno mandar um link ou um arquivo .zip, rode \"atualizar <link ou caminho do zip>\". O link precisa ser do endereço oficial; o .zip precisa do arquivo .sha256 ao lado."
+    },
+    "GIT_INDISPONIVEL": {
+      "texto": "Não deu para instalar o Git neste computador. Tudo funciona sem ele, só um pouco mais devagar.",
+      "opcoes": [],
+      "acao_automatica": "so_avisar"
+    },
+    "PASSO_DESCONHECIDO": {
+      "texto": "Algo deu errado do meu lado. Vou conferir e tentar de novo.",
+      "opcoes": [],
+      "acao_automatica": "nenhuma",
+      "depois": "O id do passo estava errado. Confira a lista: pasta, atalho, python, node, ffmpeg, baixador, montador, fala, ouvido, git, referencias, pastas."
+    },
+    "ACAO_DESCONHECIDA": {
+      "texto": "Algo deu errado do meu lado. Vou conferir e tentar de novo.",
+      "opcoes": [],
+      "acao_automatica": "nenhuma",
+      "depois": "A ação estava errada. Confira a lista em dados.acoes."
+    },
+    "INTERNET_BLOQUEADA_PELA_CAIXA": {
+      "texto": "O {{agente}} está protegendo o computador e não me deixou usar a internet. Vou pedir licença para usar a internet. Quando a caixinha aparecer, pode aprovar.",
+      "opcoes": [],
+      "acao_automatica": "pedir_internet",
+      "depois": "Rode o mesmo comando de novo pedindo internet (no Codex: com acesso à rede, fora da área protegida). Não fale do Wi-Fi: a internet do aluno está funcionando."
+    },
+    "ATALHO_NEGADO_PELO_MAC": {
+      "texto": "O Mac não deixou eu pôr o atalho na sua Mesa. Para liberar: abra **Ajustes do Sistema** > **Privacidade e Segurança** > **Arquivos e Pastas** > **Terminal** e ligue **Mesa**. Depois me diga.",
+      "opcoes": [
+        "Tentar de novo ★",
+        "Seguir sem atalho"
+      ],
+      "acao_automatica": "nenhuma",
+      "depois": "\"Tentar de novo\": rode \"passo atalho\" de novo. \"Seguir sem atalho\": siga a instalação; no fim, diga que ele volta pelo programa, do jeito que abriu hoje."
+    },
+    "USE_O_INSTALADOR_DO_WINDOWS": {
+      "texto": "Este computador é Windows. Vou usar o instalador do Windows.",
+      "opcoes": [],
+      "acao_automatica": "tentar_de_novo",
+      "depois": "Rode o mesmo passo com o instalador do Windows: powershell.exe -NoProfile -ExecutionPolicy Bypass -File instalar/instalar.ps1 ... (barra normal). Não mostre este texto ao aluno se der certo."
+    },
+    "ATUALIZACAO_ENDERECO_ESTRANHO": {
+      "texto": "Esse link não é do endereço oficial do estúdio. Por segurança, não baixei nada. Peça ao seu professor o link certo.",
+      "opcoes": [],
+      "acao_automatica": "nenhuma",
+      "depois": "O \"atualizar\" só aceita https://github.com/autonom-ia/video-edit-autonomia/... ou um .zip no computador com o arquivo .sha256 do mesmo release ao lado."
+    },
+    "SISTEMA_NAO_SUPORTADO": {
+      "texto": "Este estúdio funciona no Mac e no Windows. Se o seu computador é Windows, feche esta janela e abra o programa pelo PowerShell: menu Iniciar, digite PowerShell e aperte Enter. Não use o Ubuntu.",
+      "opcoes": [],
+      "depois": "Pare a instalação aqui. Não tente instalar no Linux."
+    }
+  }
+}

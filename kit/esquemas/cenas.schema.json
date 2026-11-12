@@ -1,0 +1,246 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cenas.schema.json",
+  "title": "Tabela de cenas (projetos/<P>/cenas.json)",
+  "description": "Forma do arquivo. Os limites de palavras, tempos e regras de faixa ficam no validador do kit (./estudio telas).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "versao",
+    "duracao_alvo_s",
+    "titulo_gancho",
+    "cenas",
+    "telas"
+  ],
+  "properties": {
+    "versao": {
+      "const": 1
+    },
+    "duracao_alvo_s": {
+      "type": "number",
+      "minimum": 5,
+      "maximum": 180
+    },
+    "direcao_de_arte": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "de",
+          "ate",
+          "domina",
+          "porque"
+        ],
+        "properties": {
+          "de": {
+            "type": "number"
+          },
+          "ate": {
+            "type": "number"
+          },
+          "domina": {
+            "type": "string"
+          },
+          "porque": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "titulo_gancho": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "texto"
+      ],
+      "properties": {
+        "texto": {
+          "type": "string"
+        },
+        "publico": {
+          "type": "string"
+        }
+      }
+    },
+    "cenas": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "fala",
+          "inicio",
+          "fim",
+          "faixa"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "fala": {
+            "type": "string"
+          },
+          "inicio": {
+            "type": "number"
+          },
+          "fim": {
+            "type": "number"
+          },
+          "rosto": {
+            "enum": [
+              "cheio",
+              "dividido",
+              "nenhum"
+            ]
+          },
+          "faixa": {
+            "enum": [
+              0,
+              35,
+              50,
+              100
+            ]
+          },
+          "zoom": {
+            "enum": [
+              "abertura",
+              "punch",
+              "lento",
+              "nenhum"
+            ]
+          },
+          "tela": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "enfase": {
+            "type": "array",
+            "maxItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "palavra"
+              ],
+              "properties": {
+                "palavra": {
+                  "type": "string"
+                },
+                "inicio": {
+                  "type": "number"
+                }
+              }
+            }
+          },
+          "sons": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "efeito",
+                "em"
+              ],
+              "properties": {
+                "efeito": {
+                  "enum": [
+                    "impacto-forte",
+                    "impacto-medio",
+                    "whoosh-rapido",
+                    "whoosh-medio",
+                    "swish",
+                    "pop",
+                    "zip",
+                    "teclado",
+                    "brilho",
+                    "notificacao-saida",
+                    "notificacao-sucesso",
+                    "vibrar",
+                    "subida",
+                    "cintilar"
+                  ]
+                },
+                "em": {
+                  "type": "number"
+                },
+                "volume": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 3.98
+                }
+              }
+            }
+          },
+          "virada": {
+            "type": "boolean"
+          },
+          "reconstrucao": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "telas": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "tipo",
+          "campos",
+          "entra",
+          "sai"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "tipo": {
+            "enum": [
+              "card",
+              "frase",
+              "numero",
+              "lista",
+              "passos",
+              "conversa",
+              "prompt",
+              "notificacao",
+              "cta"
+            ]
+          },
+          "campos": {
+            "type": "object"
+          },
+          "entra": {
+            "type": "number"
+          },
+          "sai": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "cta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "palavra",
+        "em"
+      ],
+      "properties": {
+        "palavra": {
+          "type": "string"
+        },
+        "em": {
+          "type": "number"
+        }
+      }
+    }
+  }
+}

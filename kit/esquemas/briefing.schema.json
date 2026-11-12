@@ -1,0 +1,335 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "briefing.schema.json",
+  "title": "Briefing do aluno (minha-marca/briefing.json)",
+  "description": "Respostas do questionário. Valores vazios são aceitos: os obrigatórios são conferidos pelo comando marca.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "versao",
+    "atualizado_em",
+    "marca",
+    "nicho",
+    "publico",
+    "oferta",
+    "cta",
+    "provas",
+    "tom",
+    "palavras_proibidas",
+    "termos_obrigatorios",
+    "cuidados_do_nicho",
+    "marcas_proibidas",
+    "rosto",
+    "gravacao",
+    "musica",
+    "duracao_alvo",
+    "referencias",
+    "padroes_usados"
+  ],
+  "properties": {
+    "versao": {
+      "const": 1
+    },
+    "atualizado_em": {
+      "type": "string"
+    },
+    "marca": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "nome",
+        "arroba",
+        "logo",
+        "cores",
+        "paleta_escolhida",
+        "fontes",
+        "par_de_fontes_escolhido"
+      ],
+      "properties": {
+        "nome": {
+          "type": "string",
+          "maxLength": 60
+        },
+        "arroba": {
+          "type": "string",
+          "maxLength": 40
+        },
+        "logo": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "cores": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "principal",
+            "destaque",
+            "papel",
+            "tinta",
+            "fundo"
+          ],
+          "properties": {
+            "principal": {
+              "type": "string",
+              "format": "cor-hex-ou-vazio"
+            },
+            "destaque": {
+              "type": "string",
+              "format": "cor-hex-ou-vazio"
+            },
+            "papel": {
+              "type": "string",
+              "format": "cor-hex-ou-vazio"
+            },
+            "tinta": {
+              "type": "string",
+              "format": "cor-hex-ou-vazio"
+            },
+            "fundo": {
+              "type": "string",
+              "format": "cor-hex-ou-vazio"
+            }
+          }
+        },
+        "paleta_escolhida": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 3
+        },
+        "fontes": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "titulo",
+            "leitura"
+          ],
+          "properties": {
+            "titulo": {
+              "type": "string"
+            },
+            "leitura": {
+              "type": "string"
+            }
+          }
+        },
+        "par_de_fontes_escolhido": {
+          "enum": [
+            null,
+            1,
+            2,
+            3,
+            "proprio"
+          ]
+        }
+      }
+    },
+    "nicho": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "descricao"
+      ],
+      "properties": {
+        "descricao": {
+          "type": "string"
+        }
+      }
+    },
+    "publico": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "quem",
+        "dores"
+      ],
+      "properties": {
+        "quem": {
+          "type": "string"
+        },
+        "dores": {
+          "type": "array",
+          "maxItems": 3,
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "oferta": {
+      "type": "string"
+    },
+    "cta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tipo",
+        "palavra",
+        "entrega"
+      ],
+      "properties": {
+        "tipo": {
+          "enum": [
+            "",
+            "comentar_palavra",
+            "direct",
+            "salvar",
+            "seguir"
+          ]
+        },
+        "palavra": {
+          "type": "string"
+        },
+        "entrega": {
+          "type": "string"
+        }
+      }
+    },
+    "provas": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "valor",
+          "origem"
+        ],
+        "properties": {
+          "valor": {
+            "type": "string"
+          },
+          "origem": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "tom": {
+      "enum": [
+        "",
+        "calmo",
+        "animado",
+        "divertido",
+        "direto"
+      ]
+    },
+    "palavras_proibidas": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "termos_obrigatorios": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "evitar",
+          "usar"
+        ],
+        "properties": {
+          "evitar": {
+            "type": "string"
+          },
+          "usar": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "cuidados_do_nicho": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "marcas_proibidas": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "rosto": {
+      "enum": [
+        "",
+        "sim",
+        "nao"
+      ]
+    },
+    "gravacao": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "local",
+        "microfone"
+      ],
+      "properties": {
+        "local": {
+          "type": "string"
+        },
+        "microfone": {
+          "enum": [
+            "",
+            "lapela",
+            "fone_com_fio",
+            "nenhum"
+          ]
+        }
+      }
+    },
+    "musica": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "preferencia"
+      ],
+      "properties": {
+        "preferencia": {
+          "enum": [
+            "",
+            "quando_combinar",
+            "baixinha",
+            "nunca"
+          ]
+        }
+      }
+    },
+    "duracao_alvo": {
+      "enum": [
+        "",
+        "medio",
+        "curto"
+      ]
+    },
+    "referencias": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "url",
+          "porque"
+        ],
+        "properties": {
+          "url": {
+            "type": "string"
+          },
+          "porque": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "padroes_usados": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

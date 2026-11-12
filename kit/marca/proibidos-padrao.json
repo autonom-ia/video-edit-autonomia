@@ -1,0 +1,18 @@
+{
+  "versao": 1,
+  "explicacao": "Cores e nomes de apps e marcas famosas que não podem aparecer escritos nas telas. Se a cor da marca do aluno for igual a uma destas, ela sai da lista dele com um aviso.",
+  "cores": [
+    "#25d366", "#128c7e", "#075e54", "#34b7f1", "#dcf8c6", "#d9fdd3", "#111b21", "#667781", "#202c33", "#005c4b", "#00a884", "#21c063", "#144d37",
+    "#e1306c", "#c13584", "#833ab4", "#fd1d1d", "#f77737", "#fcaf45",
+    "#1877f2", "#0084ff", "#229ed9", "#0088cc",
+    "#10a37f", "#d97757", "#cc785c",
+    "#fe2c55", "#25f4ee",
+    "#820ad1", "#ea1d2c"
+  ],
+  "marcas": [
+    "WhatsApp", "Instagram", "Facebook", "Messenger", "Telegram", "Threads", "TikTok", "YouTube", "LinkedIn", "Pinterest", "Kwai",
+    "ChatGPT", "OpenAI", "Claude", "Anthropic", "Gemini", "Copilot", "Perplexity", "Midjourney",
+    "iPhone", "Android", "Gmail", "Outlook",
+    "Nubank", "iFood", "Mercado Livre", "Shopee", "Uber", "Netflix", "Spotify"
+  ]
+}

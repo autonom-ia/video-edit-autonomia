@@ -1,0 +1,8 @@
+{
+  "versao": 1,
+  "paletas": [
+    { "id": 1, "nome": "Areia e verde", "cores": { "papel": "#F3EEE4", "tinta": "#1C1B19", "principal": "#2F5D50", "destaque": "#E9C46A", "fundo": "#12100E" } },
+    { "id": 2, "nome": "Branco e coral", "cores": { "papel": "#FFFFFF", "tinta": "#1A1A1A", "principal": "#E76F51", "destaque": "#2A9D8F", "fundo": "#111111" } },
+    { "id": 3, "nome": "Creme e vinho", "cores": { "papel": "#FBF7F0", "tinta": "#221A1A", "principal": "#7A2E3A", "destaque": "#D9A441", "fundo": "#140F10" } }
+  ]
+}

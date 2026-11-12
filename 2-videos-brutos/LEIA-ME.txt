@@ -1,0 +1,9 @@
+2-VIDEOS-BRUTOS
+
+Ponha aqui o vídeo que você gravou, do jeito que saiu do celular.
+
+- Não precisa cortar nem editar.
+- iPhone e Mac: mande pelo AirDrop. O vídeo cai em Downloads e o assistente acha ele lá.
+- Android ou Windows: passe pelo cabo do carregador (app Fotos, Importar) ou pelo Google Drive.
+- Nunca pelo WhatsApp normal nem por e-mail: estraga a qualidade.
+- Depois, escreva para o assistente: faz meu vídeo

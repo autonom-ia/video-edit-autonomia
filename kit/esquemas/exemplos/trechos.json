@@ -1,0 +1,15 @@
+{
+  "fonte": "bruto",
+  "trechos": [
+    {
+      "inicio": 1.2,
+      "fim": 3.8,
+      "motivo": "tomada 3 do bloco 1"
+    },
+    {
+      "inicio": 5.0,
+      "fim": 10.5,
+      "motivo": "bloco 2 inteiro"
+    }
+  ]
+}

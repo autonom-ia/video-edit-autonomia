@@ -1,0 +1,17 @@
+#!/bin/bash
+# Estúdio de Reels: ponto de entrada do kit (Mac e Git Bash no Windows).
+# Uso: ./estudio <comando> [argumentos]
+# Acha o Node da pasta de ferramentas, prepara o ambiente e roda kit/scripts/estudio.mjs.
+# A última linha da saída é sempre um JSON numa linha só.
+
+ESTUDIO_REPO="$(cd "$(dirname "$0")" && pwd)"
+export ESTUDIO_REPO
+# shellcheck source=instalar/ambiente.sh
+. "$ESTUDIO_REPO/instalar/ambiente.sh"
+
+if [ ! -f "$(_estudio_posix "$ESTUDIO_NODE")" ]; then
+  printf '{"ok":false,"comando":"%s","arquivos":{},"resumo":"O estudio ainda nao terminou de instalar: falta o Node.","avisos":[],"codigo":"ESTUDIO_NAO_INSTALADO","dados":{}}\n' "${1:-}"
+  exit 1
+fi
+
+exec "$(_estudio_posix "$ESTUDIO_NODE")" "$ESTUDIO_REPO/kit/scripts/estudio.mjs" "$@"

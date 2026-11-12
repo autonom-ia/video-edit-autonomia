@@ -1,0 +1,10 @@
+[
+  {
+    "efeito": "impacto-forte",
+    "arquivo": "assets/sfx/impacto-forte.wav",
+    "inicio": 0.0,
+    "volume": 1.0,
+    "duracao": 1.205,
+    "motivo": "abertura"
+  }
+]

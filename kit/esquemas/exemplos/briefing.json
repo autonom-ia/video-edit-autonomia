@@ -1,0 +1,75 @@
+{
+  "versao": 1,
+  "atualizado_em": "2026-11-12T10:00:00.000Z",
+  "marca": {
+    "nome": "Ateliê Exemplo",
+    "arroba": "@atelie.exemplo",
+    "logo": null,
+    "cores": {
+      "principal": "",
+      "destaque": "",
+      "papel": "",
+      "tinta": "",
+      "fundo": ""
+    },
+    "paleta_escolhida": 1,
+    "fontes": {
+      "titulo": "",
+      "leitura": ""
+    },
+    "par_de_fontes_escolhido": 1
+  },
+  "nicho": {
+    "descricao": "Faço bolos de festa por encomenda, na minha cozinha."
+  },
+  "publico": {
+    "quem": "Mãe de 28 a 40 anos organizando o aniversário do filho.",
+    "dores": [
+      "Encomendo o bolo e chega diferente da foto.",
+      "Não sei quantas fatias pedir."
+    ]
+  },
+  "oferta": "bolo de festa por encomenda",
+  "cta": {
+    "tipo": "comentar_palavra",
+    "palavra": "FATIAS",
+    "entrega": "Uma tabela de quantas fatias pedir por número de convidados."
+  },
+  "provas": [
+    {
+      "valor": "mais de 300 bolos entregues",
+      "origem": "caderno de pedidos do ateliê"
+    }
+  ],
+  "tom": "calmo",
+  "palavras_proibidas": [
+    "garantido",
+    "perfeito"
+  ],
+  "termos_obrigatorios": [
+    {
+      "evitar": "bolo caseiro",
+      "usar": "bolo artesanal"
+    }
+  ],
+  "cuidados_do_nicho": [
+    "resultado de cliente",
+    "preço",
+    "depoimento",
+    "prazo"
+  ],
+  "marcas_proibidas": [],
+  "rosto": "sim",
+  "gravacao": {
+    "local": "Na cozinha, perto da janela.",
+    "microfone": "lapela"
+  },
+  "musica": {
+    "preferencia": "quando_combinar"
+  },
+  "duracao_alvo": "medio",
+  "referencias": [],
+  "padroes_usados": [
+    "marcas_proibidas"
+  ]
+}

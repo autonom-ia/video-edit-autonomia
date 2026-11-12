@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "correcoes.schema.json",
+  "title": "Correções de escuta (projetos/<P>/correcoes.json)",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "inicio",
+      "de",
+      "para"
+    ],
+    "properties": {
+      "inicio": {
+        "type": "number",
+        "minimum": 0
+      },
+      "de": {
+        "type": "string"
+      },
+      "para": {
+        "type": "string"
+      }
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "idioma": "pt",
+  "modelo": "large-v3-turbo",
+  "duracao_s": 3.1,
+  "palavras": [
+    {
+      "texto": "O",
+      "inicio": 0.12,
+      "fim": 0.2,
+      "prob": 0.98
+    },
+    {
+      "texto": "bolo",
+      "inicio": 0.2,
+      "fim": 0.55,
+      "prob": 0.97
+    },
+    {
+      "texto": "chegou.",
+      "inicio": 0.55,
+      "fim": 1.0,
+      "prob": 0.96
+    }
+  ],
+  "segmentos": [
+    {
+      "texto": "O bolo chegou.",
+      "inicio": 0.12,
+      "fim": 1.0
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+SONS DO ESTÚDIO
+
+Estes 14 sons tocam nos movimentos do vídeo: entrada de tela, troca de faixa,
+zoom, golpe da virada e pedido final. O estúdio escolhe sozinho. Não precisa mexer.
+
+Origem: SFX Kit da Wyzowl (https://huggingface.co/datasets/wyzowl/sfx-kit).
+Licença: CC0 1.0 (domínio público). Pode usar em vídeo comercial, sem dar crédito.
+Texto integral da licença: licencas/CC0-wyzowl-sfx-kit.txt
+
+Os arquivos foram só renomeados para português. O som é o original.
+
+Nome no estúdio          Nome original na Wyzowl
+impacto-forte.wav        impact-deep-hard
+impacto-medio.wav        impact-medium-firm
+whoosh-rapido.wav        whoosh-fast-soft
+whoosh-medio.wav         whoosh-medium-soft
+swish.wav                swish-medium
+pop.wav                  pop-small-in
+zip.wav                  zip-in-medium
+teclado.wav              keyboard-typing-quick-short
+brilho.wav               appear-burst
+notificacao-saida.wav    notification-message-out-soft
+notificacao-sucesso.wav  notification-success-soft
+vibrar.wav               phone-vibrate-table
+subida.wav               riser-2s-strong
+cintilar.wav             shimmer-medium-bright

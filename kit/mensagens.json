@@ -1,0 +1,286 @@
+{
+  "AMOSTRA_SEM_ROSTO": {
+    "texto": "Nas imagens de exemplo, o seu rosto aparece como uma silhueta cinza. No vídeo é você.",
+    "acao": "Só avise junto das amostras."
+  },
+  "ARGUMENTO_FALTANDO": {
+    "texto": "Esqueci uma informação. Vou tentar de novo.",
+    "acao": "Veja dados.argumento e rode o comando de novo com ele."
+  },
+  "ARGUMENTO_INVALIDO": {
+    "texto": "Passei uma informação errada. Vou corrigir.",
+    "acao": "Veja dados.argumento, dados.valor e dados.opcoes e rode de novo."
+  },
+  "ARQUIVO_INVALIDO": {
+    "texto": "Um arquivo de trabalho ficou com defeito. Vou refazer.",
+    "acao": "Veja dados.arquivo e dados.problemas e reescreva o arquivo no formato certo."
+  },
+  "ARQUIVO_NAO_ACHADO": {
+    "texto": "Falta um arquivo para seguir.",
+    "acao": "Veja dados.arquivo. Se é um arquivo seu (roteiro, cenas, trechos), escreva-o; se é do kit, rode o passo anterior."
+  },
+  "BRIEFING_INCOMPLETO": {
+    "texto": "Faltam algumas respostas sobre o seu negócio para eu montar a sua marca.",
+    "acao": "Veja dados.faltando, faça só essas perguntas do briefing (skill minha-marca) e rode ./estudio marca de novo."
+  },
+  "CENAS_INVALIDAS": {
+    "texto": "O plano das cenas tem um problema. Vou corrigir antes de mostrar.",
+    "acao": "Leia dados.problemas, corrija cenas.json pela causa e rode ./estudio telas de novo. Não mostre ao aluno."
+  },
+  "CENA_APROXIMADA": {
+    "texto": "Acertei o tempo de uma cena só pela metade.",
+    "acao": "Confira a cena em dados.cena na folha de quadros."
+  },
+  "CENA_SEM_CASAMENTO": {
+    "texto": "Uma fala do plano não apareceu no vídeo.",
+    "acao": "Compare a fala da cena com a transcrição; ajuste a fala da cena ao que foi dito e rode alinhar de novo."
+  },
+  "CHROME_NAO_ABRIU": {
+    "texto": "O navegador escondido que desenha o vídeo não abriu.",
+    "acao": "Tente de novo uma vez. No Codex, peça para rodar fora da área protegida. Se falhar, rode a skill consertar (passo montador)."
+  },
+  "COMANDO_DESCONHECIDO": {
+    "texto": "Pedi ao estúdio uma coisa que ele não sabe fazer. Vou corrigir.",
+    "acao": "Confira o nome do comando na lista dados.disponiveis."
+  },
+  "CORRECAO_NAO_CASOU": {
+    "texto": "Uma correção da legenda não encontrou a palavra.",
+    "acao": "Confira inicio e de em correcoes.json contra transcricao-take.json."
+  },
+  "CORTE_FALHOU": {
+    "texto": "Não consegui cortar o vídeo.",
+    "acao": "Confira trechos.json e tente de novo. Se falhar, rode a skill consertar."
+  },
+  "COR_DE_APP_FAMOSO": {
+    "texto": "Uma das suas cores é igual à de um aplicativo famoso. Pode usar, só não vou usar telas desse aplicativo.",
+    "acao": "Só avise. A cor foi tirada da lista de proibidos da marca."
+  },
+  "CREDITO_FALHOU": {
+    "texto": "Não consegui gravar o crédito da música no arquivo.",
+    "acao": "Tente de novo uma vez; se falhar, rode a skill consertar."
+  },
+  "CTA_SEM_CASAMENTO": {
+    "texto": "Não achei na fala o momento do pedido.",
+    "acao": "Confira cta.em em cenas.json pelo tempo da transcrição."
+  },
+  "DESCONHECIDO": {
+    "texto": "Algo deu errado e eu não entendi o motivo. Vou tentar de novo.",
+    "acao": "Tente uma vez. Se falhar de novo, rode a skill consertar com o detalhe em dados."
+  },
+  "DISTRIBUICAO_INCOMPLETA": {
+    "texto": "O estúdio ainda não está pronto para ser distribuído.",
+    "acao": "Só para quem publica o estúdio: corrija cada item de dados.problemas e rode npm run conferir-distribuicao de novo."
+  },
+  "DOWNLOADS_SEM_PERMISSAO": {
+    "texto": "O computador não deixou eu olhar a pasta Downloads. Tudo bem, seguimos pela pasta do estúdio.",
+    "acao": "Siga como SEM_VIDEO: mostre F-01c e abra a pasta 2-videos-brutos. No Mac, se quiser, ofereça liberar em Ajustes > Privacidade e Segurança > Arquivos e Pastas."
+  },
+  "DOWNLOAD_REFERENCIA_FALHOU": {
+    "texto": "Não consegui baixar um dos vídeos de exemplo.",
+    "acao": "Diga em uma frase e siga com os outros exemplos. Se nenhum baixou, siga com a régua do playbook; não prenda o aluno nisso."
+  },
+  "DURACAO_FORA_DO_ALVO": {
+    "texto": "O roteiro ficou mais longo ou mais curto que o tamanho escolhido.",
+    "acao": "Ajuste o roteiro em silêncio antes de mostrar."
+  },
+  "ENFASE_SEM_CASAMENTO": {
+    "texto": "Uma palavra de destaque não foi dita no vídeo.",
+    "acao": "Troque a ênfase da cena por uma palavra que foi dita e rode alinhar de novo."
+  },
+  "ESPELHO_DIFERENTE": {
+    "texto": "As instruções do assistente ficaram diferentes entre as duas cópias.",
+    "acao": "Não edite à mão. Rode a skill consertar; se persistir, reinstale o estúdio com a ação atualizar do instalador."
+  },
+  "FERRAMENTA_FALTANDO": {
+    "texto": "Falta um programa do estúdio neste computador.",
+    "acao": "Rode a skill consertar: verificar e o passo do instalador do programa em dados.ferramenta."
+  },
+  "FFMPEG_FALHOU": {
+    "texto": "A tesoura de vídeo parou no meio.",
+    "acao": "Tente de novo uma vez. Se falhar, rode a skill consertar com o detalhe em dados."
+  },
+  "FONTE_NAO_ACHADA": {
+    "texto": "Não achei essa letra entre as letras grátis.",
+    "acao": "Peça o nome exato da letra ou ofereça um dos 3 pares prontos."
+  },
+  "GANCHO_LONGO": {
+    "texto": "O começo do vídeo ficou longo demais.",
+    "acao": "Encurte o primeiro bloco para no máximo 3 segundos de fala."
+  },
+  "GUIA_FALTA": {
+    "texto": "Falta o guia de gravação.",
+    "acao": "A folha saiu sem o guia. Confira guias/guia-de-gravacao.md."
+  },
+  "HASHTAGS_DEMAIS": {
+    "texto": "Tem hashtag demais no texto do post.",
+    "acao": "Use no máximo 5 hashtags."
+  },
+  "HDR_SEM_ZSCALE": {
+    "texto": "O seu vídeo está num formato de cor especial e a tesoura não tem a peça para converter.",
+    "acao": "Rode o passo ffmpeg do instalador de novo (consertar). Se continuar, peça para gravar com HDR desligado na câmera."
+  },
+  "IMAGENS_DE_REFERENCIA_FALTARAM": {
+    "texto": "Não consegui fazer as imagens de exemplo das cenas. A página mostra só a fala e o texto da tela.",
+    "acao": "Siga com a página assim. Se quiser as imagens, rode ./estudio amostras --tipo estilo --projeto P e depois a página de novo."
+  },
+  "KIT_INCOMPLETO": {
+    "texto": "Uma parte do estúdio não está funcionando.",
+    "acao": "Veja dados.itens com ok falso e rode o passo do instalador correspondente (skill consertar)."
+  },
+  "LEGENDA_REPROVADA": {
+    "texto": "O texto do post precisa de um ajuste.",
+    "acao": "Veja dados.problemas e corrija postagem.txt pelos guias/postagem.md."
+  },
+  "LIMITE_OPENVERSE": {
+    "texto": "O site de músicas grátis pediu uma pausa. Volto a tentar em alguns minutos.",
+    "acao": "Espere uns 5 minutos e tente de novo, ou ofereça seguir sem música."
+  },
+  "LINK_NA_LEGENDA": {
+    "texto": "Link no texto do post não funciona no Instagram.",
+    "acao": "Troque o link por 'link na bio' ou pela palavra do pedido."
+  },
+  "LOGO_SEM_CORES": {
+    "texto": "Não consegui tirar as cores desse logo.",
+    "acao": "Ofereça as 3 paletas prontas ou peça as cores da marca."
+  },
+  "MARCA_REPROVADA": {
+    "texto": "Apareceu no vídeo um nome, cor ou palavra que não pode. Vou trocar.",
+    "acao": "Leia dados.problemas. Troque a cor pela da marca; se for palavra falada na legenda, corrija com correcoes.json (ex.: um app famoso vira 'o aplicativo'). Monte e rode de novo."
+  },
+  "MEMORIA_POUCA_FALA": {
+    "texto": "Seu computador tem pouca memória. Vou usar um ouvido de texto menor e conferir a legenda palavra por palavra.",
+    "acao": "Avise com o texto POUCA_MEMORIA do instalador e confira a transcrição com mais cuidado."
+  },
+  "MIXAGEM_FALHOU": {
+    "texto": "Não consegui acertar o som do vídeo.",
+    "acao": "Tente de novo uma vez; se falhar, rode ./estudio mixar --sem-musica e avise o aluno."
+  },
+  "MODELO_FALA_FALTA": {
+    "texto": "O ouvido de texto ainda não está pronto.",
+    "acao": "Rode ./estudio preparar-fala --modelo auto avisando que leva alguns minutos."
+  },
+  "MOLDE_INCOMPLETO": {
+    "texto": "O molde do vídeo veio com defeito.",
+    "acao": "Reinstale o estúdio com a ação atualizar do instalador."
+  },
+  "MONTADOR_FALTANDO": {
+    "texto": "O montador de vídeo não está instalado.",
+    "acao": "Rode o passo montador do instalador, avisando antes com o texto I-04."
+  },
+  "NUMERO_SEM_ORIGEM": {
+    "texto": "Tem um número sem a origem anotada. Preciso saber de onde ele vem.",
+    "acao": "Pergunte: De onde vem esse número? Só eu vou saber. Anote em origem e rode de novo. Nunca invente a origem."
+  },
+  "OUVIDO_INDISPONIVEL": {
+    "texto": "O ouvido de som não está disponível agora. O vídeo sai igual.",
+    "acao": "Siga sem a segunda opinião do som. Confira pelo QA e pelo teste de celular."
+  },
+  "PACOTE_INCOMPLETO": {
+    "texto": "Faltou uma peça no pacote do avaliador.",
+    "acao": "Veja dados.falta e gere a peça antes de chamar o avaliador."
+  },
+  "PALAVRA_DO_PEDIDO_FALTA": {
+    "texto": "O texto do post não tem a palavra que a pessoa deve comentar.",
+    "acao": "Inclua a palavra do pedido no texto do post."
+  },
+  "PEDE_LOGIN": {
+    "texto": "Esse vídeo de exemplo precisa de login para baixar. Pulei ele.",
+    "acao": "Nunca peça senha. Diga em uma frase que esse exemplo não abriu e siga com os outros ou com a régua do playbook. Nunca prenda o aluno nisso."
+  },
+  "POUCAS_MUSICAS": {
+    "texto": "Achei menos músicas do que eu queria.",
+    "acao": "Mostre as que vieram. Para ter mais sem perder estas, rode ./estudio musica --acrescentar com outra busca."
+  },
+  "POUCAS_MUSICAS_APROVADAS": {
+    "texto": "Menos de 3 músicas passaram no teste do celular.",
+    "acao": "Mostre as que passaram. Para ter mais, rode ./estudio musica --acrescentar com outra busca e depois ./estudio variantes de novo (as boas ficam)."
+  },
+  "POUCO_ESPACO_RENDER": {
+    "texto": "Seu computador está com pouco espaço para montar o vídeo.",
+    "acao": "Rode ./estudio limpar --projeto P em projetos antigos e peça para esvaziar a Lixeira."
+  },
+  "PREVIA_NAO_APROVADA": {
+    "texto": "Antes do vídeo final, você precisa aprovar a prévia.",
+    "acao": "Mostre a prévia (F-05) e espere a aprovação antes de rodar render."
+  },
+  "PRIMEIRA_LINHA_LONGA": {
+    "texto": "A primeira linha do texto do post está longa.",
+    "acao": "Deixe a primeira linha com até 125 caracteres."
+  },
+  "PROJETO_NAO_ACHADO": {
+    "texto": "Não achei esse vídeo na pasta de projetos.",
+    "acao": "Liste projetos/ e use o nome certo, ou crie com ./estudio novo-projeto."
+  },
+  "QA_REPROVADO": {
+    "texto": "A conferência final achou um problema. Vou corrigir.",
+    "acao": "Leia dados.reprovados, corrija pela causa (volume: mixar de novo; tela sem som: montar de novo; formato: render de novo) e rode qa de novo."
+  },
+  "REDE_FALHOU": {
+    "texto": "Não consegui falar com a internet.",
+    "acao": "No Codex, peça antes a liberação de internet e tente de novo (a caixa do Codex corta a internet). Só depois peça para conferir o Wi-Fi."
+  },
+  "RENDER_FALHOU": {
+    "texto": "A montagem do vídeo parou no meio.",
+    "acao": "Rode ./estudio espaco. Tente de novo uma vez. Se falhar, rode a skill consertar."
+  },
+  "ROSTO_POUCO": {
+    "texto": "O seu rosto ficou pouco tempo na tela.",
+    "acao": "Diminua a faixa 100 e as telas cheias; o rosto é o que vende."
+  },
+  "ROTEIRO_SEM_FALA": {
+    "texto": "O roteiro está sem as falas marcadas.",
+    "acao": "Escreva a fala em linhas que começam com '> ' na seção Fala do roteiro."
+  },
+  "SEM_MUSICA_BOA": {
+    "texto": "Não achei uma música boa com essa busca.",
+    "acao": "Rode ./estudio musica com outra busca, em inglês, de uma ou duas palavras (ex.: calm, upbeat)."
+  },
+  "SEM_REFERENCIAS": {
+    "texto": "A pasta 1-referencias ainda não tem vídeos.",
+    "acao": "Pergunte se o aluno quer usar os exemplos que já vêm ou colar links."
+  },
+  "SEM_VIDEO": {
+    "texto": "Não achei o seu vídeo na pasta 2-videos-brutos.",
+    "acao": "O ./estudio receber já olha a pasta Downloads (últimas 24 h). Se não achou, mostre o texto F-01c, abra a pasta com ./estudio abrir 2-videos-brutos e espere o aluno dizer pronto."
+  },
+  "TELA_ESTOUROU": {
+    "texto": "Um texto ficou grande demais para a tela. Vou encurtar.",
+    "acao": "Abra a imagem de cada tela em dados.problemas, encurte o texto ou aumente a faixa, e rode ./estudio telas de novo."
+  },
+  "TELA_RAPIDA": {
+    "texto": "Uma tela some rápido demais para dar tempo de ler.",
+    "acao": "Dê pelo menos 0,3 s por palavra (mínimo 0,8 s) ou corte palavras."
+  },
+  "TRANSCRICAO_FALHOU": {
+    "texto": "Não consegui escrever a legenda da sua fala.",
+    "acao": "Tente uma vez de novo. Se falhar, rode a skill consertar (verificar e passo fala)."
+  },
+  "TRECHOS_INVALIDOS": {
+    "texto": "Errei na escolha dos trechos do vídeo. Vou corrigir.",
+    "acao": "Leia dados.problemas, corrija trechos.json e rode ./estudio cortar de novo. Não mostre isso ao aluno."
+  },
+  "TRECHO_PARADO": {
+    "texto": "Tem um trecho de mais de 2 segundos sem nada mudando na tela.",
+    "acao": "Ponha uma tela, um zoom, uma troca de faixa ou um destaque nesse trecho."
+  },
+  "VIDEO_DEITADO": {
+    "texto": "O vídeo foi gravado com o celular deitado. O Reel é em pé, então vou cortar as laterais.",
+    "acao": "Avise com o texto. Se o rosto puder ficar cortado, sugira regravar com o celular em pé."
+  },
+  "VIDEO_EM_DOWNLOADS": {
+    "texto": "Achei um vídeo novo na pasta Downloads. É ele?",
+    "acao": "Pergunte com dados.em_downloads (no máximo 3, o mais novo primeiro): '1. Sim ★ 2. Não'. Se sim, rode ./estudio receber --projeto P --trazer <arquivo>."
+  },
+  "VIDEO_LONGO": {
+    "texto": "O vídeo tem mais de 10 minutos. Vou demorar um pouco mais para escutar tudo.",
+    "acao": "Avise e siga. Dê uma estimativa de tempo."
+  },
+  "VIDEO_NAO_LIDO": {
+    "texto": "Não consegui abrir esse arquivo de vídeo.",
+    "acao": "Peça para o aluno mandar o vídeo de novo, direto do celular (sem passar por aplicativo de mensagem)."
+  },
+  "VIDEO_SEM_SOM": {
+    "texto": "O vídeo veio sem som. Sem a sua voz eu não consigo montar o Reel.",
+    "acao": "Peça para conferir se o microfone estava ligado e para mandar outro arquivo."
+  }
+}

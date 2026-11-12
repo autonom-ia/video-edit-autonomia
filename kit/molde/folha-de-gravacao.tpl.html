@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Folha de gravação · {{TITULO}}</title>
+    <style>
+{{FONTES}}
+      :root { {{TOKENS}} }
+      * { box-sizing: border-box; }
+      html { -webkit-text-size-adjust: 100%; }
+      body { margin: 0; background: var(--papel); color: var(--tinta); font: 500 20px/1.45 var(--fonte-leitura); }
+      main { max-width: 720px; margin: 0 auto; padding: 24px 18px 48px; }
+      h1 { font: var(--peso-titulo) 34px/1.1 var(--fonte-titulo); margin: 4px 0 6px; }
+      .sub { color: color-mix(in srgb, var(--tinta) 60%, var(--papel)); margin: 0 0 22px; }
+      h2 { font: var(--peso-titulo) 24px/1.2 var(--fonte-titulo); margin: 30px 0 12px; color: var(--principal); }
+      h3 { font: 700 21px/1.2 var(--fonte-leitura); margin: 22px 0 8px; }
+      .importante { background: var(--principal); color: var(--papel); border-radius: 18px; padding: 16px 20px; }
+      .importante h2 { color: var(--papel); margin-top: 0; }
+      ul.marcar { list-style: none; padding: 0; margin: 0; }
+      ul.marcar li { display: flex; gap: 12px; align-items: flex-start; padding: 8px 0; }
+      ul.marcar input { width: 26px; height: 26px; flex: none; margin-top: 2px; accent-color: var(--destaque); }
+      .bloco { background: #ffffff; border: 2px solid color-mix(in srgb, var(--tinta) 12%, transparent); border-radius: 18px; padding: 16px 18px; margin: 14px 0; page-break-inside: avoid; }
+      .bloco .n { font: 800 15px/1 var(--fonte-leitura); letter-spacing: .12em; text-transform: uppercase; color: var(--principal); }
+      .bloco .fala { font: 600 27px/1.35 var(--fonte-leitura); margin: 8px 0 6px; }
+      .bloco .dica { font: 500 17px/1.35 var(--fonte-leitura); color: color-mix(in srgb, var(--tinta) 60%, var(--papel)); }
+      .bloco.gancho { border-color: var(--destaque); border-width: 4px; }
+      .guia p, .guia li { font-size: 19px; }
+      @page { size: A4; margin: 14mm; }
+      @media print { body { background: #ffffff; } main { max-width: none; padding: 0; } }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>{{TITULO}}</h1>
+      <p class="sub">Sua folha de gravação. Leia em voz alta antes de gravar. Uns {{SEGUNDOS}} segundos de fala.</p>
+
+      <section class="importante">
+        <h2>O mais importante</h2>
+        <ul class="marcar">
+          <li><input type="checkbox" /><span>Fique de frente para uma janela.</span></li>
+          <li><input type="checkbox" /><span>Celular em pé, na altura dos olhos.</span></li>
+          <li><input type="checkbox" /><span>Comece a falar logo, sem "oi".</span></li>
+          <li><input type="checkbox" /><span>Errou? Fique 2 segundos quieto e comece o bloco de novo.</span></li>
+          <li><input type="checkbox" /><span>Grave a primeira frase 3 vezes.</span></li>
+        </ul>
+      </section>
+
+      <h2>O que você vai falar</h2>
+{{BLOCOS}}
+
+      <h2>Antes de apertar o botão</h2>
+      <ul class="marcar">
+{{CHECKLIST}}
+      </ul>
+
+      <section class="guia">
+{{GUIA}}
+      </section>
+    </main>
+  </body>
+</html>

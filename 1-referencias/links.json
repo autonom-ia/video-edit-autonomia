@@ -1,0 +1,37 @@
+{
+  "versao": 1,
+  "exemplos": [
+    {
+      "slug": "exemplos-opus-5-5/17-vertical-app-update",
+      "url": "https://cdn.claudeimagine.com/uploads/opus-5-5-video/17-vertical-app-update.mp4",
+      "o_que_observar": "uma frase curta por tela com a prova embaixo; palavra-chave em outra cor; algo muda a cada 2 a 3 segundos; o fim repete a imagem do começo",
+      "duracao_s": 15,
+      "credito": "lumian2015/opus-5-5-video-templates (MIT)",
+      "regua": "1-referencias/exemplos-opus-5-5/17-vertical-app-update/REGUA.md"
+    },
+    {
+      "slug": "exemplos-opus-5-5/25-ugc-product-reel",
+      "url": "https://cdn.claudeimagine.com/uploads/opus-5-5-video/25-ugc-product-reel.mp4",
+      "o_que_observar": "corte a cada 1 a 1,5 segundo; a ordem das cenas conta a história sem palavras; zoom leve e tremidinho de mão em foto parada; mesma luz em tudo",
+      "duracao_s": 10,
+      "credito": "lumian2015/opus-5-5-video-templates (MIT)",
+      "regua": "1-referencias/exemplos-opus-5-5/25-ugc-product-reel/REGUA.md"
+    },
+    {
+      "slug": "exemplos-opus-5-5/23-caption-app-promo",
+      "url": "https://cdn.claudeimagine.com/uploads/opus-5-5-video/23-caption-app-promo.mp4",
+      "o_que_observar": "antes e depois lado a lado no começo; etapas em cartões iguais que acendem uma por vez; legenda grande com uma palavra de destaque",
+      "duracao_s": 15,
+      "credito": "lumian2015/opus-5-5-video-templates (MIT)",
+      "regua": "1-referencias/exemplos-opus-5-5/23-caption-app-promo/REGUA.md"
+    },
+    {
+      "slug": "exemplos-opus-5-5/07-i-make-things-move",
+      "url": "https://cdn.claudeimagine.com/uploads/opus-5-5-video/07-i-make-things-move.mp4",
+      "o_que_observar": "texto enorme como imagem; movimento que acelera, freia e passa do ponto; anotações à mão; troca de fundo claro e escuro marca o capítulo",
+      "duracao_s": 15,
+      "credito": "lumian2015/opus-5-5-video-templates (MIT)",
+      "regua": "1-referencias/exemplos-opus-5-5/07-i-make-things-move/REGUA.md"
+    }
+  ]
+}

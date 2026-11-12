@@ -1,0 +1,14 @@
+{
+  "ok": false,
+  "checks": [
+    { "name": "Version", "ok": false, "detail": "0.9.20 (nova versão disponível)" },
+    { "name": "Node.js", "ok": true, "detail": "v24.22.3" },
+    { "name": "FFmpeg", "ok": true, "detail": "8.0.1" },
+    { "name": "FFprobe", "ok": true, "detail": "8.0.1" },
+    { "name": "Chrome", "ok": true, "detail": "chrome-headless-shell" },
+    { "name": "Docker", "ok": false, "detail": "não encontrado" },
+    { "name": "Docker running", "ok": false, "detail": "não encontrado" },
+    { "name": "TTS (Kokoro)", "ok": false, "detail": "não instalado" },
+    { "name": "BGM (MusicGen)", "ok": false, "detail": "não instalado" }
+  ]
+}

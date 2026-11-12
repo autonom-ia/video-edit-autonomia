@@ -1,0 +1,140 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "estado.schema.json",
+  "title": "Estado do projeto (projetos/<P>/estado.json)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "versao",
+    "projeto",
+    "titulo",
+    "caminho",
+    "etapa",
+    "gates",
+    "rodadas",
+    "notas",
+    "atualizado_em"
+  ],
+  "properties": {
+    "versao": {
+      "const": 1
+    },
+    "projeto": {
+      "type": "string"
+    },
+    "titulo": {
+      "type": "string"
+    },
+    "caminho": {
+      "enum": [
+        "A",
+        "B"
+      ]
+    },
+    "etapa": {
+      "enum": [
+        "pauta",
+        "gancho",
+        "roteiro",
+        "cenas",
+        "gravacao",
+        "recebido",
+        "corte",
+        "transcricao",
+        "alinhamento",
+        "telas",
+        "montagem",
+        "previa",
+        "trilha",
+        "qa",
+        "revisao",
+        "final",
+        "postagem",
+        "medicao",
+        "concluido"
+      ]
+    },
+    "gates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pauta",
+        "gancho",
+        "cenas",
+        "previa",
+        "trilha"
+      ],
+      "properties": {
+        "pauta": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "gancho": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "cenas": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "previa": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "trilha": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "rodadas": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "roteiro",
+        "video"
+      ],
+      "properties": {
+        "roteiro": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "video": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "notas": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "quando",
+          "texto"
+        ],
+        "properties": {
+          "quando": {
+            "type": "string"
+          },
+          "texto": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "atualizado_em": {
+      "type": "string"
+    }
+  }
+}

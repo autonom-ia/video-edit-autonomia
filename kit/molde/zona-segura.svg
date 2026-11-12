@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920">
+  <!-- Zonas onde texto não deve ficar: em cima (0-250), embaixo (1500-1920),
+       60 px da esquerda e 230 px da direita. Genérico, sem desenho de app nenhum. -->
+  <g fill="#ff2a2a" fill-opacity="0.22">
+    <rect x="0" y="0" width="1080" height="250" />
+    <rect x="0" y="1500" width="1080" height="420" />
+    <rect x="0" y="250" width="60" height="1250" />
+    <rect x="850" y="250" width="230" height="1250" />
+  </g>
+  <rect x="60" y="250" width="790" height="1250" fill="none" stroke="#ff2a2a" stroke-opacity="0.8" stroke-width="4" stroke-dasharray="18 12" />
+</svg>

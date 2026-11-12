@@ -1,0 +1,114 @@
+# O método das 5 camadas
+
+> Adaptado de "bolo-de-camadas", sob a licença MIT.
+> Copyright (c) 2026 Cauhi (cauhi.com). Texto integral da licença em `licencas/MIT-bolo-de-camadas.txt`.
+> Mudanças: português do Brasil, motor HyperFrames, sobrescritas do estúdio marcadas com "Aqui no estúdio", e o guia de `cenas.json`.
+
+Um Reel falado bem editado é um bolo de 5 camadas, uma em cima da outra. O aluno só grava a fala. O resto é o molde do kit, guiado pela tabela de cenas que você escreve.
+
+1. **O take**: a fala gravada, cortada.
+2. **A legenda**: palavra por palavra, no tempo da fala.
+3. **O rosto**: o take, grande, que muda de formato quando o assunto muda.
+4. **A tela**: em cima, algo que mostra o que está sendo falado, entrando na palavra.
+5. **Zoom e som**: zoom no rosto na ênfase e um som em cada movimento.
+
+## Camada 1: o take
+
+- É a base. O corte é feito pelo kit (`./estudio cortar`) a partir do `trechos.json` que você escreve: melhor tomada de cada bloco, sem respiro maior que 0,4 s, sem muleta e sem silêncio no fim.
+- A cor não é mexida, a não ser o ajuste automático de vídeo HDR do iPhone para cor normal.
+- Aqui no estúdio: se a gravação estiver ruim de luz ou de som, isso é dito ao aluno como pedido de regravar o trecho (texto F-03), não escondido com filtro.
+
+## Camada 2: a legenda
+
+- 1 a 3 palavras por vez, até 22 caracteres, no tempo de cada palavra (transcrição com tempo por palavra).
+- A palavra de ênfase troca de fonte: fonte de título, caixa alta, marca-texto na cor de destaque. No máximo uma por cena.
+- Aqui no estúdio: a legenda nunca fica sobre a boca. Com o rosto cheio, fica no peito. Com faixa, acompanha a faixa e troca de cor. O kit faz isso sozinho a partir de `faixa` e `enfase`.
+
+## Camada 3: o rosto
+
+- Aqui no estúdio, a regra mais importante: **o rosto é grande ou não aparece.** Só dois formatos:
+  - `cheio`: o rosto ocupa a tela toda;
+  - `dividido`: a faixa cor de papel em cima e o rosto embaixo, de ponta a ponta, sem moldura.
+- Bolha, janela, quadrado pequeno e cartão com borda **não existem** aqui. Eles reduzem quem vende a um enfeite.
+- `nenhum`: só enquanto uma tela prova algo, por 1,5 a 4 s, e o rosto volta inteiro.
+- Troque o formato quando o assunto muda, uns a cada 5 s, para não cansar.
+
+## Camada 4: a tela
+
+- Uma tela nova a cada 2 a 4 s, entrando na palavra que a nomeia (o kit adianta uns 4 quadros).
+- Um sistema de cartões só, nas cores e fontes da marca do aluno.
+- Cada tela fica no ar no máximo 4 s.
+- Aqui no estúdio: **sem selo de "simulação"** e sem etiqueta de "fictício". A tela parece real, mas o conteúdo é inventado por nós: nome comum, nada de cliente real. **Sem logo, nome ou cor de app famoso.** A conversa usa as cores da marca do aluno num desenho genérico.
+- Aqui no estúdio: número na tela só com prova, redondo, com a origem anotada no campo `origem`, que nunca aparece.
+
+## Camada 5: zoom e som
+
+- Zoom de abertura no começo, punch-in na palavra de ênfase, zoom lento em fala longa. Os valores estão no kit e em `guias/regras-de-producao.md` (regra 34).
+- Um efeito em cada batida visual: whoosh na troca, pop no que chega, subida e impacto na revelação, teclado só enquanto um texto se digita (e só se a pessoa não estiver falando o texto).
+- Aqui no estúdio: só os 14 efeitos livres que vêm em `kit/sfx/`. Nunca som de marca.
+- Aqui no estúdio: voz em cerca de −20 LUFS antes do ganho final; efeitos de 3 a 6 LU abaixo da voz; trilha 14 dB abaixo da voz; final em −14 LUFS, estéreo.
+
+---
+
+## Como a tabela de cenas vira `cenas.json`
+
+Você escreve `projetos/<P>/cenas.json` e, ao lado, `cenas.md` (a mesma coisa em tabela legível, pelo molde `modelos/cenas.md`). O kit valida com `./estudio telas --projeto <P>`. Qualquer chave fora das listadas abaixo reprova.
+
+### O topo do arquivo
+
+| Campo | O que é |
+|---|---|
+| `versao` | Sempre `1`. |
+| `duracao_alvo_s` | Duração esperada em segundos (médio: 30 a 45; curto: até 30). |
+| `direcao_de_arte` | Lista de trechos `{"de", "ate", "domina", "porque"}`: o que domina a tela em cada trecho e por quê. Escreva antes das cenas. |
+| `titulo_gancho` | `{"texto", "publico"}`: o gancho escrito do quadro 0 (até 10 palavras) e, se quiser, quem é o público (até 12 palavras ou `""`). Obrigatório. |
+| `cenas` | A lista de cenas, em ordem. |
+| `telas` | A lista de telas que aparecem por cima. |
+| `cta` | `{"palavra", "em"}`: a palavra do pedido (uma só, sem espaço) e o segundo em que ela aparece. |
+
+### Cada cena
+
+| Campo | Valores |
+|---|---|
+| `id` | `c01`, `c02`... |
+| `fala` | O texto falado naquela cena, igual ao que foi gravado. |
+| `inicio`, `fim` | Segundos no take. A primeira cena começa em `0`. Cada cena começa onde a anterior terminou (buraco de no máximo 0,05 s). Antes de gravar, são estimativas; o `./estudio alinhar` acerta depois. |
+| `rosto` | `cheio`, `dividido` ou `nenhum`. |
+| `faixa` | `0`, `35`, `50` ou `100`. `100` só com tela e por até 3,5 s. |
+| `zoom` | `abertura` (só na primeira cena), `punch` (na ênfase), `lento` (fala longa) ou `nenhum`. |
+| `tela` | O `id` de uma tela da lista `telas`, ou `null`. |
+| `enfase` | No máximo 1: `[{"palavra", "inicio"}]`. A palavra tem que estar na `fala`. O `inicio` é preenchido pelo `alinhar`. |
+| `sons` | `[{"efeito", "em", "volume"}]`. `efeito` é um dos 14 nomes abaixo. `volume` 1,4 nas viradas, 0,6 a 1,0 nos demais. |
+| `virada` | `true` quando a cena muda o rumo da fala. Leva golpe de som. |
+| `reconstrucao` | `true` quando a cena foi remontada a partir de outra tomada ou fora da ordem gravada. |
+
+Efeitos: `impacto-forte`, `impacto-medio`, `whoosh-rapido`, `whoosh-medio`, `swish`, `pop`, `zip`, `teclado`, `brilho`, `notificacao-saida`, `notificacao-sucesso`, `vibrar`, `subida`, `cintilar`.
+
+### Cada tela
+
+`{"id": "t01", "tipo": "...", "campos": {...}, "entra": 2.3, "sai": 5.8}`. `sai` menos `entra` é no máximo 4 s. Toda troca de tela precisa de um som a até 0,15 s dela.
+
+Palavras contadas por espaço:
+
+| Tipo | Campos | Limites |
+|---|---|---|
+| `card` | `texto` | até 6 palavras |
+| `frase` | `texto`, `apoio` (opcional) | até 8 · até 6 |
+| `numero` | `numero`, `apoio`, `origem` | até 4 · até 6 · `origem` obrigatória, nunca exibida |
+| `lista` | `titulo` (opcional), `itens` | título até 10 · de 2 a 4 itens de até 7 |
+| `passos` | `itens`, `atual` | de 2 a 5 itens de até 7 · `atual` é a posição do passo da vez (tem barra de progresso que soma) |
+| `conversa` | `nome`, `status`, `mensagens` | `nome` comum de até 3 palavras · `status` = "online" · de 1 a 5 mensagens `{"de": "outro" ou "eu", "texto"}` de até 35 |
+| `prompt` | `prompt`, `resposta` | até 40 · até 25 (tela de IA genérica, sem marca) |
+| `notificacao` | `app`, `texto` | `app` é "Mensagens", "E-mail" ou "Agenda" · até 35 |
+| `cta` | `palavra`, `frase` | 1 palavra · até 8 |
+
+Nunca use a chave `etiqueta`. Ela existia para escrever "simulação" na tela e foi proibida.
+
+### Como pensar a tabela (o que deu nota alta)
+
+1. **0 a 3 s:** rosto cheio e gancho escrito, zoom de abertura, palavra-soco com `impacto-forte` antes de 2,5 s.
+2. **Dor:** rosto cheio ou dividido com faixa 35 e um cartão curto. Nada parado mais de 2 s.
+3. **Prova:** a faixa sobe para 50 ou 100 enquanto a tela mostra acontecendo (lista entrando, passos somando, conversa chegando). Rosto `nenhum` por no máximo 4 s, depois volta.
+4. **Fala longa sem tela:** zoom `lento` e um som curto a cada linha nova.
+5. **Pedido:** tela `cta` com a palavra, rosto dividido, e a última fala voltando ao gancho.
+6. **Fio que soma:** quando der, um número ou uma lista que cresce ao longo do vídeo (passo 1 de 4, 2 de 4...). Dá motivo para ficar até o fim.

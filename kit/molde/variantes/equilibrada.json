@@ -1,0 +1,9 @@
+{
+  "nome": "equilibrada",
+  "descricao": "Trilha contínua por baixo da voz; só para um instante antes de cada golpe.",
+  "lowpass_fixo_min_hz": 900,
+  "abafar_antes_virada": { "ativo": false, "hz": 420, "volume": 0.8, "janela_s": 2.0 },
+  "queda_antes_golpe_s": 0.3,
+  "para_nas_pausas": false,
+  "fade_final_s": 3.5
+}

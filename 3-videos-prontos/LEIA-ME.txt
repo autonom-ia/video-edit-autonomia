@@ -1,0 +1,12 @@
+3-VIDEOS-PRONTOS
+
+Aqui aparece o seu Reel pronto para postar.
+
+Para cada vídeo, são 3 arquivos:
+- o vídeo (.mp4)
+- a capa (-capa.jpg)
+- o texto para colar no post (-legenda.txt)
+
+Mande o vídeo e a capa para o seu celular pelo AirDrop (iPhone e Mac) ou pelo Google Drive.
+Nunca pelo WhatsApp normal: estraga a qualidade. O texto da legenda o assistente também mostra na conversa.
+Poste pelo Instagram. Quem posta é você.

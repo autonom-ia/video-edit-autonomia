@@ -1,0 +1,181 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "marca.schema.json",
+  "title": "Marca gerada (minha-marca/marca.json)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "versao",
+    "nome",
+    "arroba",
+    "logo",
+    "cores",
+    "fontes",
+    "tom",
+    "termos_obrigatorios",
+    "proibidos"
+  ],
+  "properties": {
+    "versao": {
+      "const": 1
+    },
+    "nome": {
+      "type": "string",
+      "minLength": 1
+    },
+    "arroba": {
+      "type": "string"
+    },
+    "logo": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "cores": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "principal",
+        "destaque",
+        "papel",
+        "tinta",
+        "fundo"
+      ],
+      "properties": {
+        "principal": {
+          "type": "string",
+          "format": "cor-hex"
+        },
+        "destaque": {
+          "type": "string",
+          "format": "cor-hex"
+        },
+        "papel": {
+          "type": "string",
+          "format": "cor-hex"
+        },
+        "tinta": {
+          "type": "string",
+          "format": "cor-hex"
+        },
+        "fundo": {
+          "type": "string",
+          "format": "cor-hex"
+        }
+      }
+    },
+    "fontes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "titulo",
+        "leitura"
+      ],
+      "properties": {
+        "titulo": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "familia",
+            "arquivo",
+            "peso"
+          ],
+          "properties": {
+            "familia": {
+              "type": "string",
+              "minLength": 1
+            },
+            "arquivo": {
+              "type": "string"
+            },
+            "peso": {
+              "type": "integer",
+              "minimum": 100,
+              "maximum": 900
+            }
+          }
+        },
+        "leitura": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "familia",
+            "arquivo",
+            "peso"
+          ],
+          "properties": {
+            "familia": {
+              "type": "string",
+              "minLength": 1
+            },
+            "arquivo": {
+              "type": "string"
+            },
+            "peso": {
+              "type": "integer",
+              "minimum": 100,
+              "maximum": 900
+            }
+          }
+        }
+      }
+    },
+    "tom": {
+      "enum": [
+        "calmo",
+        "animado",
+        "divertido",
+        "direto"
+      ]
+    },
+    "termos_obrigatorios": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "evitar",
+          "usar"
+        ],
+        "properties": {
+          "evitar": {
+            "type": "string"
+          },
+          "usar": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "proibidos": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "palavras",
+        "marcas",
+        "cores"
+      ],
+      "properties": {
+        "palavras": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "marcas": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "cores": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "cor-hex"
+          }
+        }
+      }
+    }
+  }
+}

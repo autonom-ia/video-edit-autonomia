@@ -1,0 +1,52 @@
+{
+  "versao": 1,
+  "atualizado_em": "",
+  "marca": {
+    "nome": "",
+    "arroba": "",
+    "logo": null,
+    "cores": {
+      "principal": "",
+      "destaque": "",
+      "papel": "",
+      "tinta": "",
+      "fundo": ""
+    },
+    "paleta_escolhida": null,
+    "fontes": {
+      "titulo": "",
+      "leitura": ""
+    },
+    "par_de_fontes_escolhido": null
+  },
+  "nicho": {
+    "descricao": ""
+  },
+  "publico": {
+    "quem": "",
+    "dores": []
+  },
+  "oferta": "",
+  "cta": {
+    "tipo": "",
+    "palavra": "",
+    "entrega": ""
+  },
+  "provas": [],
+  "tom": "",
+  "palavras_proibidas": [],
+  "termos_obrigatorios": [],
+  "cuidados_do_nicho": [],
+  "marcas_proibidas": [],
+  "rosto": "",
+  "gravacao": {
+    "local": "",
+    "microfone": ""
+  },
+  "musica": {
+    "preferencia": ""
+  },
+  "duracao_alvo": "",
+  "referencias": [],
+  "padroes_usados": []
+}

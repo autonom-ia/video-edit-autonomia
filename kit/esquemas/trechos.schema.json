@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "trechos.schema.json",
+  "title": "Trechos escolhidos do bruto (projetos/<P>/trechos.json)",
+  "description": "A ordem da lista é a ordem final do vídeo.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "fonte",
+    "trechos"
+  ],
+  "properties": {
+    "fonte": {
+      "const": "bruto"
+    },
+    "trechos": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "inicio",
+          "fim"
+        ],
+        "properties": {
+          "inicio": {
+            "type": "number",
+            "minimum": 0
+          },
+          "fim": {
+            "type": "number",
+            "minimum": 0
+          },
+          "motivo": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

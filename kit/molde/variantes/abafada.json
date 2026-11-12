@@ -1,0 +1,9 @@
+{
+  "nome": "abafada",
+  "descricao": "A trilha fica abafada nos 2 segundos antes de cada virada e volta cheia no golpe.",
+  "lowpass_fixo_min_hz": 900,
+  "abafar_antes_virada": { "ativo": true, "hz": 420, "volume": 0.8, "janela_s": 2.0 },
+  "queda_antes_golpe_s": 0.3,
+  "para_nas_pausas": false,
+  "fade_final_s": 3.5
+}

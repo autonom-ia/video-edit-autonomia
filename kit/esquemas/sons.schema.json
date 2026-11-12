@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "sons.schema.json",
+  "title": "Sons da composição (projetos/<P>/comp/sons.json)",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": [
+      "efeito",
+      "arquivo",
+      "inicio",
+      "volume",
+      "duracao"
+    ],
+    "properties": {
+      "efeito": {
+        "type": "string"
+      },
+      "arquivo": {
+        "type": "string"
+      },
+      "inicio": {
+        "type": "number",
+        "minimum": 0
+      },
+      "volume": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 3.98
+      },
+      "duracao": {
+        "type": "number",
+        "minimum": 0
+      },
+      "motivo": {
+        "type": "string"
+      }
+    }
+  }
+}

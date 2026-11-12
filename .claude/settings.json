@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./estudio:*)",
+      "Bash(./estudio.cmd:*)",
+      "Bash(.\\estudio.cmd:*)",
+      "PowerShell(.\\estudio.cmd *)",
+      "PowerShell(./estudio.cmd *)",
+      "Edit(./projetos/**)",
+      "Write(./projetos/**)",
+      "Edit(./minha-marca/**)",
+      "Write(./minha-marca/**)",
+      "Edit(./1-referencias/**)",
+      "Write(./1-referencias/**)"
+    ],
+    "deny": [
+      "Bash(rm -rf:*)",
+      "Bash(git push:*)"
+    ]
+  }
+}

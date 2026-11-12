@@ -1,0 +1,21 @@
+{
+  "name": "estudio-de-reels",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Estúdio de Reels: do vídeo gravado no celular ao Reel pronto, guiado por um assistente de IA.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "hyperframes": "0.9.20",
+    "gsap": "3.14.2"
+  },
+  "scripts": {
+    "test": "node --test \"kit/testes/*.test.mjs\"",
+    "testar": "node --test \"kit/testes/*.test.mjs\"",
+    "conferir": "node kit/testes/conferir-espelhos.mjs && node --test \"kit/testes/*.test.mjs\"",
+    "conferir-distribuicao": "node kit/scripts/comandos/conferir-distribuicao.mjs"
+  }
+}
