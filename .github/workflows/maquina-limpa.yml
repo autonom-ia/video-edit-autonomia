@@ -4,7 +4,7 @@ name: maquina-limpa
 
 on:
   push:
-    branches: ['ci/**']
+    branches: ['ci/**', 'release/**']
   workflow_dispatch:
 
 jobs:

@@ -63,7 +63,7 @@ Estes dois vêm antes dos programas: se a janela fechar no meio, a pessoa volta 
 1. `passo pasta`. Sem contador: diga só "Pronto: pasta do estúdio criada."
 2. Diga o I-11 e rode `passo atalho`. Ele cria, na Área de Trabalho, o "Abrir o Estúdio" (abre o assistente já na pasta certa) e o "Estúdio de Reels" (abre a pasta dos vídeos). O caminho do programa é descoberto pelo próprio instalador, dentro desta sessão.
    - `ATALHO_NEGADO_PELO_MAC`: o Mac barrou a Área de Trabalho. Diga o texto (ele mostra o caminho Ajustes > Privacidade e Segurança > Arquivos e Pastas > Terminal > Mesa) com as opções "Tentar de novo ★" e "Seguir sem atalho". "Tentar de novo": rode `passo atalho` de novo. "Seguir sem atalho": siga e, no fim, ensine a voltar do jeito que abriu hoje.
-3. Na mesma mensagem do I-11, diga: "Se a janela fechar sem querer, clique em Abrir o Estúdio ou cole o mesmo texto de novo: eu continuo de onde parou."
+3. Na mesma mensagem do I-11, diga: "Se a janela fechar sem querer, abra o programa do mesmo jeito e cole o mesmo texto de novo: eu continuo de onde parou."
 
 ### 4. Os programas, um de cada vez
 Na ordem: `python`, `node`, `ffmpeg`, `baixador`, `montador`.
@@ -99,7 +99,7 @@ Leia `.ferramentas/estado/fala.json` e `.ferramentas/estado/ouvido.json`. Se alg
 
 ### 9. Verificação final
 1. Rode a verificação final (`verificar.sh` ou `verificar.ps1`).
-2. `ok:true`: diga o I-14 com `prontos` e `total` e, na mesma mensagem, o aviso da tela de confiança (CLAUDE.md, seção 5): "Amanhã, na primeira vez, o programa pergunta em inglês se você confia na pasta. Aperte Enter na opção 1, que começa com Yes. Se escolher No, ele fecha."
+2. `ok:true`: diga o I-14 com `prontos` e `total`, trocando `{{linha_voltar}}` pela linha do seu programa (`linha_voltar_codex` ou `linha_voltar_claude`). Ela ensina a abrir o programa direto na pasta do estúdio, uma vez só: no app, um projeto (Codex) ou sessão (Claude) na pasta `estudio-de-reels`; no Terminal, o atalho "Abrir o Estúdio". Sem isso, amanhã o programa abre na pasta pessoal e não lê estas instruções.
 3. `ok:false`: diga o I-15, listando em palavras simples os itens com `ok:false`. "Tentar de novo": rode `passo <id>` de cada item que falhou (com I-04 ou I-05) e verifique de novo.
 
 ## Desinstalar
