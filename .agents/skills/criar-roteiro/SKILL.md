@@ -34,12 +34,15 @@ Rode `./estudio novo-projeto --titulo "<assunto em poucas palavras>" --caminho A
 6. Rode `./estudio estado --projeto P --etapa gancho --gate pauta=<A|B|C>`.
 
 ### 3. Os ganchos
-1. Escolha 3 fórmulas diferentes de `guias/ganchos.md` que caibam na pauta. Fórmula de número só com prova.
-2. Para cada uma: fala de até 8 palavras e escrito de até 10, frases diferentes.
-3. Diga o P-03. Recomende (★) o que abre mais direto pelo problema de quem assiste.
-4. Rode `./estudio estado --projeto P --etapa roteiro --gate gancho=<n>`.
+1. Escreva pelo menos 6 ganchos, cada um de uma fórmula diferente de `guias/ganchos.md` que caiba na pauta. Fórmula de número só com prova. Resultado visível? Prefira fórmulas que o mostram no quadro 0, como a 6, a 13 e a 18.
+2. Em silêncio, descarte os que falham no teste do dedo, falam só de quem grava, exageram ou passam de 8 palavras (regras 11 e 16). Nunca mude a frase só para passar numa medida.
+3. Para os 3 melhores: fala de até 8 palavras e escrito de até 10, frases diferentes.
+4. Diga o P-03. Recomende (★) o que faz quem não conhece quem fala parar de rolar. Na dúvida, o que mostra o resultado no quadro 0.
+5. Rode `./estudio estado --projeto P --etapa roteiro --gate gancho=<n>`.
 
 ### 4. O roteiro (em silêncio)
+O gancho escolhido vira o fio do roteiro e volta no fecho.
+
 1. Escreva `projetos/P/roteiro.md` pelo molde `modelos/roteiro.md`. Só a seção "Fala" usa linhas começadas por `> `, um bloco por linha.
 2. Aplique `guias/naturalidade.md` em cada linha.
 3. Rode `./estudio tempo-de-fala --arquivo projetos/P/roteiro.md` e confira:
