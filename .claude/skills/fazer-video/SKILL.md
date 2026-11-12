@@ -60,7 +60,7 @@ Só quando o vídeo foi gravado sem roteiro nosso (`caminho` = `B`).
 3. Escreva `cenas.json` (com os tempos do take) e `cenas.md`, pelo guia de `guias/camadas.md`. Ao escrever o gancho escrito (`titulo_gancho`), antes do F-04, siga as regras 11 e 16: pelo menos 6 candidatos, o teste do dedo e, quando der, o resultado no quadro 0. Depois do F-04 aprovado, ele não muda.
 4. `./estudio telas --projeto P` até passar. `./estudio amostras --tipo estilo --projeto P`. Depois `./estudio pagina-de-aprovacao --projeto P` (abre a página do vídeo no papel). Nunca abra `roteiro.md` nem `cenas.md` para o aluno.
 5. F-04. Mudança pedida: aplique e mostre só o que mudou. "Trocar o estilo": `amostras` de novo.
-6. `./estudio estado --projeto P --gate cenas=aprovado`.
+6. Com o "Aprovar" do aluno: `./estudio estado --projeto P --gate cenas=aprovado --resposta "<palavras do aluno>"`. Sem resposta dele, não há aprovação: um pedido geral como "faz o vídeo completo" não conta.
 
 ### 6. Alinhar
 `./estudio alinhar --projeto P`. Ele acerta os tempos das cenas e das ênfases pela fala real. Para cada aviso de cena sem casamento, ajuste a `fala` da cena em `cenas.json` ao que foi dito e rode de novo. Atualize `cenas.md` se mudou algo que o aluno viu.
@@ -83,7 +83,7 @@ Antes da prévia, corrija em silêncio tudo o que já se sabe que mexe na imagem
 1. `./estudio previa --projeto P`. Ele roda a checagem de marca antes. `MARCA_REPROVADA`: leia `projetos/P/checagem-marca.json`, corrija a causa (cor ou termo proibido) e rode de novo. `POUCO_ESPACO_RENDER`: rode `./estudio espaco` e siga a skill `consertar`.
 2. Diga o F-05.
 3. "Quero mudar uma coisa": aplique, volte ao passo 7 e mostre a nova prévia.
-4. "Aprovar": `./estudio estado --projeto P --etapa trilha --gate previa=aprovado`. A partir daqui, **a imagem está congelada**. Se a imagem precisar mudar depois (avaliador, QA), junte todas as mudanças e mostre **uma única** nova prévia (F-05, com "É a última prévia"). Nunca reabra a prévia mais de uma vez depois da aprovação.
+4. "Aprovar": `./estudio estado --projeto P --etapa trilha --gate previa=aprovado --resposta "<palavras do aluno>"`. A partir daqui, **a imagem está congelada**. Se a imagem precisar mudar depois (avaliador, QA), junte todas as mudanças e mostre **uma única** nova prévia (F-05, com "É a última prévia"). Nunca reabra a prévia mais de uma vez depois da aprovação.
 
 ### 9. Render sem música
 `./estudio render --projeto P`. Gera `sem-trilha.mp4`. `PREVIA_NAO_APROVADA`: volte ao passo 8.
@@ -94,8 +94,9 @@ Antes da prévia, corrija em silêncio tudo o que já se sabe que mexe na imagem
 3. `./estudio variantes --projeto P`. Ele testa cada música no celular e copia só as aprovadas para `projetos/P/escolha-da-musica/musica-1..3.mp4`, abre essa pasta e grava `escolha-da-musica/escolhas.json` (`musica`, `opcao`, `esquema`, `descricao`). Nunca abra a pasta `trilha`.
 4. Se sobrarem menos de 3: `./estudio musica --projeto P --busca "<outros termos>" --quantas 3 --acrescentar` (não apaga as boas) e `./estudio variantes --projeto P` de novo. No máximo 2 vezes. Com 1 ou 2, mostre as que houver.
 5. Diga o F-06 com a `descricao` de cada uma, sem inventar como ela soa, e logo depois o F-00 no sentido do computador para o celular. Recomende (★) a primeira da lista, salvo se o título dela brigar com o `tom`.
-6. Escolha "música N": pegue em `escolhas.json` a linha com `musica` = N e rode `./estudio mixar --projeto P --opcao <opcao> --esquema <esquema>`. "Sem música": `./estudio mixar --projeto P --sem-musica`.
-7. Se `musica.preferencia` = `nunca`: `./estudio mixar --projeto P --sem-musica` direto, sem perguntar.
+6. Escolha "música N": pegue em `escolhas.json` a linha com `musica` = N e rode `./estudio mixar --projeto P --opcao <opcao> --esquema <esquema> --resposta "<palavras do aluno>"`. "Sem música": `./estudio mixar --projeto P --sem-musica --resposta "<palavras do aluno>"`. Nunca escolha a música no lugar dele.
+7. Se `musica.preferencia` = `nunca`: `./estudio mixar --projeto P --sem-musica --resposta "preferência do briefing: nunca"` direto, sem perguntar.
+8. `MIXAGEM_FORA_DO_ALVO`: siga a ação do código. Nunca acerte o volume por fora do estúdio.
 
 ### 11. Conferência técnica
 `./estudio qa --projeto P`. Item reprovado: leia `projetos/P/qa/relatorio.json`, corrija pela causa (som: mixar de novo; imagem: só com novo F-05) e rode de novo. Nunca entregue com QA reprovado.
@@ -103,14 +104,14 @@ Antes da prévia, corrija em silêncio tudo o que já se sabe que mexe na imagem
 ### 12. O avaliador do vídeo
 1. Rode a skill `avaliar`, tipo `video`, rodada 1.
 2. Abaixo de 8,5 ou "parece cópia" = sim: confira cada problema, corrija e rode a rodada seguinte. Lembre: mexer só em som e texto não passa de uns 8. Para passar de 8,5, mexa na imagem (gancho, trecho parado, zoom). Junte todas as correções de imagem das rodadas e mostre uma única nova prévia (F-05) antes de entregar, não uma por rodada. Aprovada essa prévia, rode `render` e `mixar` de novo com a mesma música e o mesmo esquema já escolhidos, sem perguntar, e o `qa`.
-3. No máximo 3 rodadas. Abaixo de 8,5 na terceira: F-07. "Regravar o trecho": diga o que falar, em uma frase, e volte ao passo 2 quando o vídeo novo chegar. "Trocar o assunto": rode a skill `criar-roteiro`. "Postar assim": siga.
+3. No máximo 3 rodadas. Abaixo de 8,5 na terceira: F-07, sempre, mesmo que o aluno tenha pedido antes para você decidir tudo. "Regravar o trecho": diga o que falar, em uma frase, e volte ao passo 2 quando o vídeo novo chegar. "Trocar o assunto": rode a skill `criar-roteiro`. "Postar assim": `./estudio estado --projeto P --gate postar_assim=sim --resposta "<palavras do aluno>"` e siga.
 
 ### 13. Entrega
 1. `./estudio creditar --projeto P`.
 2. Escreva `projetos/P/postagem.txt` seguindo `guias/postagem.md` (com o crédito da música CC BY, se houver).
 3. `./estudio contar-legenda --arquivo projetos/P/postagem.txt`. Corrija cada item de `problemas` e rode de novo.
 4. `./estudio qa --projeto P --arquivo final.mp4`.
-5. `./estudio entregar --projeto P`.
+5. `./estudio entregar --projeto P`. `NOTA_ABAIXO_DO_MINIMO`, `AVALIACAO_FALTANDO` ou `PREVIA_NAO_APROVADA`: volte ao passo que o código indica. Nunca diga que o vídeo está pronto sem contar a nota do avaliador.
 6. Diga o F-08, com o texto de `postagem.txt` inteiro na conversa, pronto para copiar. Logo depois, o F-00 no sentido do computador para o celular.
 
 ## O que você nunca pergunta

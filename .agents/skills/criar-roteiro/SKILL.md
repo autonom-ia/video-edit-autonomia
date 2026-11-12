@@ -31,14 +31,14 @@ Rode `./estudio novo-projeto --titulo "<assunto em poucas palavras>" --caminho A
 3. Rode a skill `avaliar`, tipo `premissa`, com as que sobraram. Descarte as que caírem. Ajuste as "de pé com ajuste".
 4. Mostre as 3 melhores no P-02. A recomendada (★) é a que tem prova. Se nenhuma tiver prova no briefing (o comum logo depois da instalação, quando `provas[]` está vazio), a ★ vai para a de premissa mais segura, sempre com a linha "Para ser verdade". Pauta sem prova no briefing leva no cartão a linha "Para ser verdade: {{premissa}}. É assim com os seus clientes?". Escolher essa pauta é confirmar a premissa. "Não é bem assim": volte às outras pautas. Assunto próprio ("ou me diga o seu assunto"): gere 3 pautas sobre ele, passe pelos passos 2 e 3 e mostre o P-02 de novo.
 5. Grave `projetos/P/pauta.md` pelo molde `modelos/pauta.md`.
-6. Rode `./estudio estado --projeto P --etapa gancho --gate pauta=<A|B|C>`.
+6. Rode `./estudio estado --projeto P --etapa gancho --gate pauta=<A|B|C> --resposta "<palavras do aluno>"`.
 
 ### 3. Os ganchos
 1. Escreva pelo menos 6 ganchos, cada um de uma fórmula diferente de `guias/ganchos.md` que caiba na pauta. Fórmula de número só com prova. Resultado visível? Prefira fórmulas que o mostram no quadro 0, como a 6, a 13 e a 18.
 2. Em silêncio, descarte os que falham no teste do dedo, falam só de quem grava, exageram ou passam de 8 palavras (regras 11 e 16). Nunca mude a frase só para passar numa medida.
 3. Para os 3 melhores: fala de até 8 palavras e escrito de até 10, frases diferentes.
 4. Diga o P-03. Recomende (★) o que faz quem não conhece quem fala parar de rolar. Na dúvida, o que mostra o resultado no quadro 0.
-5. Rode `./estudio estado --projeto P --etapa roteiro --gate gancho=<n>`.
+5. Rode `./estudio estado --projeto P --etapa roteiro --gate gancho=<n> --resposta "<palavras do aluno>"`.
 
 ### 4. O roteiro (em silêncio)
 O gancho escolhido vira o fio do roteiro e volta no fecho.
@@ -72,7 +72,7 @@ O gancho escolhido vira o fio do roteiro e volta no fecho.
 2. Diga o P-04.
 3. "Quero mudar uma coisa": aplique a mudança, rode de novo só o que foi afetado (`tempo-de-fala`, `telas`, `amostras`) e depois `pagina-de-aprovacao` de novo, contando em uma frase o que mudou. Mudança de texto na fala que mexe no sentido: nova rodada do avaliador de roteiro, em silêncio.
 4. "Trocar o estilo": rode `./estudio amostras --tipo estilo --projeto P` de novo e mostre.
-5. "Aprovar": `./estudio estado --projeto P --gate cenas=aprovado`.
+5. "Aprovar": `./estudio estado --projeto P --gate cenas=aprovado --resposta "<palavras do aluno>"`.
 
 ### 8. A folha de gravação
 1. Rode `./estudio folha --projeto P`. Ele gera o HTML e o PDF e abre o PDF.

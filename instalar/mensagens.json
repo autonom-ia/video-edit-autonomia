@@ -454,6 +454,12 @@
       "opcoes": [],
       "acao_automatica": "tentar_de_novo"
     },
+    "AREA_PROTEGIDA": {
+      "texto": "O {{nome}} não abre dentro da área protegida do Codex. Vou pedir para rodar esse passo fora dela. Pode aprovar.",
+      "opcoes": [],
+      "acao_automatica": "tentar_de_novo",
+      "depois": "Rode o passo de novo com sandbox_permissions \"require_escalated\" no próprio comando (request_permissions não serve: só libera pasta e internet). Se falhar de novo ou o aluno negar, diga: \"No Codex, clique em Solicitar aprovação, embaixo da caixa de texto, e escolha Acesso completo. Depois me diga 'pronto'.\" e rode o passo de novo."
+    },
     "FFMPEG_INCOMPLETO": {
       "texto": "A tesoura de vídeo veio sem uma peça que eu preciso. Vou baixar outra versão.",
       "opcoes": [],

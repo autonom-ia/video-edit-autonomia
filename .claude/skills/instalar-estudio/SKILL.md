@@ -101,6 +101,7 @@ Leia `.ferramentas/estado/fala.json` e `.ferramentas/estado/ouvido.json`. Se alg
 ### 9. Verificação final
 1. Rode a verificação final (`verificar.sh` ou `verificar.ps1`).
 2. `ok:true`: diga o I-14 com `prontos` e `total`, trocando `{{linha_voltar}}` pela linha do seu programa (`linha_voltar_codex` ou `linha_voltar_claude`). Ela ensina a abrir o programa direto na pasta do estúdio, uma vez só: no app, um projeto (Codex) ou sessão (Claude) na pasta `estudio-de-reels`; no Terminal, o atalho "Abrir o Estúdio". Sem isso, amanhã o programa abre na pasta pessoal e não lê estas instruções.
+   Se, mesmo assim, o aluno seguir nesta conversa e pedir um vídeo, diga a linha mais uma vez, em uma frase. Se ele continuar aqui, leia o `CLAUDE.md` do estúdio inteiro (no Codex, o `AGENTS.md`) antes de qualquer outro passo e siga como se a conversa tivesse sido aberta na pasta. Foi o que faltou no teste de 12/11/2026: sem essas instruções, o agente pulou as decisões do aluno.
 3. `ok:false`: diga o I-15, listando em palavras simples os itens com `ok:false`. "Tentar de novo": rode `passo <id>` de cada item que falhou (com I-04 ou I-05) e verifique de novo.
 
 ## Atualizar

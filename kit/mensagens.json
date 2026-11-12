@@ -3,6 +3,10 @@
     "texto": "Nas imagens de exemplo, o seu rosto aparece como uma silhueta cinza. No vídeo é você.",
     "acao": "Só avise junto das amostras."
   },
+  "AREA_PROTEGIDA": {
+    "texto": "O {{programa}} não abre dentro da área protegida do seu programa. Vou pedir para rodar fora dela.",
+    "acao": "Rode o mesmo comando de novo fora da área protegida. No Codex: no próprio comando, sandbox_permissions \"require_escalated\" com uma justificativa curta. request_permissions não serve, porque só libera pasta e internet. No Claude Code: rodar sem a proteção (sandbox) só neste comando. Se o programa não oferecer isso ou o aluno negar, diga: \"No Codex, clique em Solicitar aprovação, embaixo da caixa de texto, e escolha Acesso completo. Depois me diga 'pronto'.\""
+  },
   "ARGUMENTO_FALTANDO": {
     "texto": "Esqueci uma informação. Vou tentar de novo.",
     "acao": "Veja dados.argumento e rode o comando de novo com ele."
@@ -19,6 +23,10 @@
     "texto": "Falta um arquivo para seguir.",
     "acao": "Veja dados.arquivo. Se é um arquivo seu (roteiro, cenas, trechos), escreva-o; se é do kit, rode o passo anterior."
   },
+  "AVALIACAO_FALTANDO": {
+    "texto": "Antes de entregar, o vídeo passa pelo avaliador independente.",
+    "acao": "Rode a skill avaliar, tipo video, e grave a nota com estado --nota-revisor <nota> --parece-copia sim|nao."
+  },
   "BRIEFING_INCOMPLETO": {
     "texto": "Faltam algumas respostas sobre o seu negócio para eu montar a sua marca.",
     "acao": "Veja dados.faltando, faça só essas perguntas do briefing (skill minha-marca) e rode ./estudio marca de novo."
@@ -26,6 +34,10 @@
   "CENAS_INVALIDAS": {
     "texto": "O plano das cenas tem um problema. Vou corrigir antes de mostrar.",
     "acao": "Leia dados.problemas, corrija cenas.json pela causa e rode ./estudio telas de novo. Não mostre ao aluno."
+  },
+  "CENAS_NAO_APROVADAS": {
+    "texto": "Antes da prévia, você precisa aprovar o vídeo no papel.",
+    "acao": "Rode pagina-de-aprovacao, diga o F-04 (ou o P-04) e espere a aprovação, com estado --gate cenas=aprovado --resposta."
   },
   "CENA_APROXIMADA": {
     "texto": "Acertei o tempo de uma cena só pela metade.",
@@ -37,7 +49,7 @@
   },
   "CHROME_NAO_ABRIU": {
     "texto": "O navegador escondido que desenha o vídeo não abriu.",
-    "acao": "Tente de novo uma vez. No Codex, peça para rodar fora da área protegida. Se falhar, rode a skill consertar (passo montador)."
+    "acao": "Tente de novo uma vez. No Codex, rode de novo com sandbox_permissions \"require_escalated\" no próprio comando (request_permissions não serve). Se falhar, rode a skill consertar (passo montador)."
   },
   "COMANDO_DESCONHECIDO": {
     "texto": "Pedi ao estúdio uma coisa que ele não sabe fazer. Vou corrigir.",
@@ -107,6 +119,10 @@
     "texto": "O começo do vídeo ficou longo demais.",
     "acao": "Encurte o primeiro bloco para no máximo 3 segundos de fala."
   },
+  "GATE_SEM_RESPOSTA": {
+    "texto": "Essa decisão é sua. Preciso da sua resposta antes de seguir.",
+    "acao": "Mostre a pergunta do gate (dados.gate) ao aluno e espere. Depois rode estado --gate de novo com --resposta e as palavras dele, sem resumir. Nunca invente a resposta nem trate um pedido geral (\"faz o vídeo completo\") como aprovação."
+  },
   "GUIA_FALTA": {
     "texto": "Falta o guia de gravação.",
     "acao": "A folha saiu sem o guia. Confira guias/guia-de-gravacao.md."
@@ -155,6 +171,10 @@
     "texto": "Não consegui acertar o som do vídeo.",
     "acao": "Tente de novo uma vez; se falhar, rode ./estudio mixar --sem-musica e avise o aluno."
   },
+  "MIXAGEM_FORA_DO_ALVO": {
+    "texto": "O som do vídeo não ficou no volume certo para o Instagram. Vou tentar de novo.",
+    "acao": "Rode mixar de novo uma vez. Se falhar de novo, rode a skill consertar com dados.lufs e dados.pico_dbtp. Nunca corrija o som por fora do estúdio."
+  },
   "MODELO_FALA_FALTA": {
     "texto": "O ouvido de texto ainda não está pronto.",
     "acao": "Rode ./estudio preparar-fala --modelo auto avisando que leva alguns minutos."
@@ -166,6 +186,14 @@
   "MONTADOR_FALTANDO": {
     "texto": "O montador de vídeo não está instalado.",
     "acao": "Rode o passo montador do instalador, avisando antes com o texto I-04."
+  },
+  "MUSICA_NAO_ESCOLHIDA": {
+    "texto": "A música é escolha sua. Vou te mostrar as opções.",
+    "acao": "Rode variantes e diga o F-06. Com a escolha, rode mixar de novo com --resposta e as palavras do aluno. Se a preferência do briefing for nunca, use --sem-musica --resposta \"preferência do briefing: nunca\"."
+  },
+  "NOTA_ABAIXO_DO_MINIMO": {
+    "texto": "O avaliador deu {{nota}} de 10. O mínimo para entregar é 8,5.",
+    "acao": "Se ainda não fez 3 rodadas, corrija pela imagem e avalie de novo. Na terceira, diga o F-07 e espere. Só com \"Postar assim\": estado --gate postar_assim=sim --resposta com as palavras do aluno, e entregar de novo. Nunca entregue dizendo que está pronto sem contar a nota."
   },
   "NUMERO_SEM_ORIGEM": {
     "texto": "Tem um número sem a origem anotada. Preciso saber de onde ele vem.",

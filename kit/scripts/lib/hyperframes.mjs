@@ -5,6 +5,7 @@ import { RAIZ } from './caminhos.mjs';
 import { rodar, ultimasLinhas } from './executar.mjs';
 import { ambienteFilhos } from './ambiente.mjs';
 import { falha } from './saida.mjs';
+import { exigirForaDaArea, codigoDoNavegador } from './area-protegida.mjs';
 
 export const BIN_HYPERFRAMES = path.join(RAIZ, 'node_modules', 'hyperframes', 'bin', 'hyperframes.mjs');
 
@@ -59,23 +60,29 @@ export async function caminhoDoNavegador() {
 
 // Render local. qualidade: draft (prévia) ou delivery (entrega).
 export async function renderizar(pastaComp, saida, qualidade) {
+  exigirForaDaArea('o navegador escondido que desenha o vídeo');
   const args = ['render', pastaComp, '--output', saida, '--quality', qualidade, '--fps', '30', '--format', 'mp4', '--sdr', '--quiet'];
   const r = await hyperframes(args, { cwd: pastaComp, timeoutMs: 2 * 60 * 60 * 1000 });
   if (r.codigo !== 0 || !fs.existsSync(saida)) {
     const detalhe = ultimasLinhas(`${r.saida}\n${r.erro}`, 10);
     const semNavegador = detalhe.toLowerCase().includes('browser') || detalhe.toLowerCase().includes('chrome');
-    falha(semNavegador ? 'CHROME_NAO_ABRIU' : 'RENDER_FALHOU', { detalhe });
+    const codigo = codigoDoNavegador(detalhe);
+    falha(codigo === 'AREA_PROTEGIDA' || semNavegador ? codigo : 'RENDER_FALHOU', { detalhe });
   }
   return saida;
 }
 
 // Fotografa a composição em instantes exatos (sem render completo).
 export async function fotografar(pastaComp, tempos, pastaSaida) {
+  exigirForaDaArea('o navegador escondido que desenha o vídeo');
   const at = tempos.map((t) => String(Math.round(t * 1000) / 1000)).join(',');
   const r = await hyperframes(['snapshot', pastaComp, '--at', at, '--output', pastaSaida, '--keep', '--no-end'], {
     cwd: pastaComp,
     timeoutMs: 20 * 60 * 1000,
   });
-  if (r.codigo !== 0) falha('CHROME_NAO_ABRIU', { detalhe: ultimasLinhas(`${r.saida}\n${r.erro}`, 8) });
+  if (r.codigo !== 0) {
+    const detalhe = ultimasLinhas(`${r.saida}\n${r.erro}`, 8);
+    falha(codigoDoNavegador(detalhe), { detalhe });
+  }
   return fs.readdirSync(pastaSaida).filter((n) => n.toLowerCase().endsWith('.png')).map((n) => path.join(pastaSaida, n));
 }

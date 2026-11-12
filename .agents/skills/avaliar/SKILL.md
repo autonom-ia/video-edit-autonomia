@@ -56,7 +56,7 @@ Avaliador também erra fato. Para cada correção:
 - aplique só o que conferiu.
 
 ### 6. Gravar
-Escreva `projetos/P/revisao-<tipo>-N.md` pelo molde `modelos/revisao.md`, com o que foi conferido e o que foi aplicado.
+Escreva `projetos/P/revisao-<tipo>-N.md` pelo molde `modelos/revisao.md`, com o que foi conferido e o que foi aplicado. Nos tipos `roteiro` e `video`, grave também a nota: `./estudio estado --projeto P --tipo <roteiro|video> --nota-revisor <nota> --parece-copia <sim|nao>`. O `entregar` lê essa nota.
 
 ### 7. Devolver para a skill que chamou
 Uma linha: passou ou não, a nota, e os 2 maiores problemas.

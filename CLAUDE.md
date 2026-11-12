@@ -100,6 +100,7 @@ Se o aluno não aprovar, diga o que deixa de acontecer sem aquele passo e pergun
 - **Kit que baixa:** `musica`, `referencias`, `baixar-fonte`. Frase: "O Codex vai pedir para usar a internet. Pode aprovar: é para baixar {{o quê}}."
 - **Kit que abre janela ou o navegador escondido:** `abrir`, `amostras`, `telas`, `quadros`, `montar`, `folha`, `pagina-de-aprovacao`, `previa`, `render`, `variantes`, `entregar`, `pacote-revisor`, `referencias`. Frase: "O Codex vai pedir para eu rodar fora da área protegida. É para abrir o navegador escondido que desenha o vídeo, ou uma janela para você ver. Pode aprovar."
 - O resto do kit (`receber`, `transcrever`, `cortar`, `alinhar`, `estado`, `marca` e os outros) roda dentro da área, sem pedido extra.
+- **Como pedir.** No próprio comando, com `sandbox_permissions: "require_escalated"` e uma justificativa curta. `request_permissions` não serve para isso: ele libera pasta e internet, mas o navegador escondido e o baixador continuam sem abrir. Se um comando devolver `AREA_PROTEGIDA`, siga a ação desse código.
 
 ## 6. Formato de toda pergunta
 
@@ -191,5 +192,7 @@ O molde do vídeo já traz o ritmo, o zoom, a faixa, a legenda e o som que levar
 - Rosto grande ou nada: cheio ou dividido, sem moldura.
 - Nada parado mais de 2 segundos. Todo movimento tem som.
 - Trilha 14 dB abaixo da voz, audível no celular, final em −14 LUFS, estéreo.
-- Ninguém dá nota ao próprio trabalho: o avaliador independente roda sempre, até 8,5. "Parece cópia?" reprova.
+- Ninguém dá nota ao próprio trabalho: o avaliador independente roda sempre, até 8,5. "Parece cópia?" reprova. Toda nota fica gravada (`estado --nota-revisor`), e o `entregar` não entrega abaixo de 8,5 sem o "Postar assim" do aluno.
+- As decisões são do aluno: pauta, gancho, papel, prévia, música e "postar assim". Cada gate só fecha com `--resposta` e as palavras dele, sem resumir. Um pedido geral ("faz o vídeo completo", "capricha", "pode seguir") não aprova nenhuma delas: mostre a pergunta e espere.
+- Todo o trabalho passa pelo `./estudio`. Nunca escreva script próprio para mexer na composição, no áudio ou no vídeo. Se um comando falhar, siga o código de erro ou a skill `consertar`.
 - Prévia aprovada congela a imagem. Mudança de imagem só com nova aprovação.

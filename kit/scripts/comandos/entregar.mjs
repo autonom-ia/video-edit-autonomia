@@ -1,9 +1,11 @@
 // Entrega os 3 arquivos em 3-videos-prontos: vídeo, capa (quadro 0) e texto do post.
+// Só entrega com a prévia aprovada pelo aluno e a nota mínima do avaliador (ou o "postar assim" dele).
 import fs from 'node:fs';
 import path from 'node:path';
 import { PASTAS, relativoARaiz } from '../lib/caminhos.mjs';
 import { abrirProjeto, lerEstado, exigirArquivo, mudarEtapa } from '../lib/projeto.mjs';
-import { reprovado } from '../lib/saida.mjs';
+import { reprovado, falha } from '../lib/saida.mjs';
+import { conferirEntrega } from '../lib/decisoes.mjs';
 import { ffmpegOk } from '../lib/ffmpeg.mjs';
 import { conferirMp4, salvarRelatorio } from '../lib/qa.mjs';
 import { lerJson } from '../lib/json.mjs';
@@ -23,6 +25,9 @@ async function qaDoFinal(projeto, final) {
 
 export default async function entregar({ opcoes }) {
   const projeto = abrirProjeto(opcoes);
+  const bloqueio = conferirEntrega(lerEstado(projeto));
+  if (bloqueio && bloqueio.codigo === 'NOTA_ABAIXO_DO_MINIMO') reprovado(bloqueio.codigo, bloqueio.dados);
+  if (bloqueio) falha(bloqueio.codigo, bloqueio.dados);
   const final = exigirArquivo(projeto.arq('final.mp4'));
   const legenda = exigirArquivo(projeto.arq('postagem.txt'));
   const rel = await qaDoFinal(projeto, final);
