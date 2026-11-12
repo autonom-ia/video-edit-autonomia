@@ -20,23 +20,31 @@ Funciona melhor em Mac com chip Apple ou Windows x64. Em Mac Intel e Windows 11 
 
 ## Instalar (um texto só)
 
-1. Abra o Terminal (Mac: Cmd+Espaço, digite "Terminal", Enter) ou o PowerShell (Windows: menu Iniciar, digite "PowerShell", Enter).
-2. Digite `claude` (ou `codex`) e aperte Enter. Vai aparecer uma pergunta em inglês sobre confiar na pasta: aperte **Enter** na opção **1. Yes**.
-3. Cole o texto abaixo e aperte Enter.
+**No app do Codex** (Mac ou Windows):
+
+1. Abra o app do Codex.
+2. Embaixo da caixa de escrever, clique no modo de licença e escolha **Solicitar aprovação**.
+3. Clique em **Escolher projeto** e depois em **Novo projeto**. Escreva o nome **Instalação** e clique em **Adicionar**.
+4. Na coluna da esquerda, clique na **casinha com o seu nome** e depois em **Abrir**. Clique em **Criar projeto** e em **Confiar na pasta**.
+5. Cole o texto abaixo e aperte Enter.
+
+**No app do Claude** (Mac ou Windows): na aba **Code**, comece uma sessão nova, escolha a **casinha com o seu nome** como pasta, cole o texto abaixo e aperte Enter.
+
+**Pelo Terminal** (quem preferir): abra o Terminal (Mac) ou o PowerShell (Windows), digite `claude` ou `codex` e aperte Enter. Na pergunta em inglês sobre confiar na pasta, aperte **Enter** na opção **1. Yes**. Cole o texto abaixo e aperte Enter.
 
 ```
 Quero instalar o Estúdio de Reels no meu computador.
 
-0. Antes de rodar qualquer coisa, me diga em uma frase qual opção apertar nas caixinhas em inglês que vão aparecer (a opção 1, que começa com Yes).
+0. Antes de rodar qualquer coisa, me diga em uma frase como aprovar as caixinhas de licença que vão aparecer: no app, o botão de aprovar; no Terminal, a opção 1, que começa com Yes.
 1. Descubra se este computador é Mac ou Windows, e se você está rodando no PowerShell ou no Git Bash.
 2. Se já existir a pasta "estudio-de-reels" na minha pasta pessoal, não apague nada e pule para o passo 4.
 3. Baixe e descompacte o estúdio na minha pasta pessoal, com o nome "estudio-de-reels":
    - Mac (Terminal):
-     cd ~ && curl -fL -o estudio.zip "https://github.com/autonom-ia/video-edit-autonomia/archive/refs/tags/v1.0.0.zip" && ditto -x -k estudio.zip .estudio-baixando && mv .estudio-baixando/video-edit-autonomia-1.0.0 estudio-de-reels && rm -rf .estudio-baixando estudio.zip
+     cd ~ && curl -fL -o estudio.zip "https://github.com/autonom-ia/video-edit-autonomia/archive/refs/tags/v1.0.1.zip" && ditto -x -k estudio.zip .estudio-baixando && mv .estudio-baixando/video-edit-autonomia-1.0.1 estudio-de-reels && rm -rf .estudio-baixando estudio.zip
    - Windows (PowerShell):
-     $ProgressPreference="SilentlyContinue"; cd $HOME; curl.exe -fL -o estudio.zip "https://github.com/autonom-ia/video-edit-autonomia/archive/refs/tags/v1.0.0.zip"; tar.exe -xf estudio.zip; Rename-Item video-edit-autonomia-1.0.0 estudio-de-reels; Remove-Item estudio.zip
+     $ProgressPreference="SilentlyContinue"; cd $HOME; curl.exe -fL -o estudio.zip "https://github.com/autonom-ia/video-edit-autonomia/archive/refs/tags/v1.0.1.zip"; tar.exe -xf estudio.zip; Rename-Item video-edit-autonomia-1.0.1 estudio-de-reels; Remove-Item estudio.zip
    - Windows (Git Bash):
-     cd ~ && curl -fL -o estudio.zip "https://github.com/autonom-ia/video-edit-autonomia/archive/refs/tags/v1.0.0.zip" && /c/Windows/System32/tar.exe -xf estudio.zip && mv video-edit-autonomia-1.0.0 estudio-de-reels && rm estudio.zip
+     cd ~ && curl -fL -o estudio.zip "https://github.com/autonom-ia/video-edit-autonomia/archive/refs/tags/v1.0.1.zip" && /c/Windows/System32/tar.exe -xf estudio.zip && mv video-edit-autonomia-1.0.1 estudio-de-reels && rm estudio.zip
 4. Leia o arquivo estudio-de-reels/AGENTS.md inteiro e siga o que ele manda, começando pela instalação.
 
 Fale comigo em português simples, um passo por vez. Antes de instalar qualquer coisa, me explique o que é e me peça licença.
@@ -44,13 +52,13 @@ Fale comigo em português simples, um passo por vez. Antes de instalar qualquer 
 
 O assistente explica cada programa e pede licença antes de instalar. A caixinha de aprovação do Claude Code ou do Codex sempre aparece: é a sua segurança. Leva uns 30 minutos.
 
-**Se fechar sem querer**, clique em **Abrir o Estúdio** (na Área de Trabalho) ou cole o mesmo texto de novo: eu continuo de onde parou.
+**Se fechar sem querer**, abra o app do mesmo jeito e cole o mesmo texto de novo: eu continuo de onde parou.
 
 Outras formas de instalar (repositório fechado ou zip da plataforma do curso): [instalar/comandos-unicos.md](instalar/comandos-unicos.md).
 
-## As caixinhas em inglês
+## As caixinhas de licença
 
-O Claude Code e o Codex perguntam em inglês. Aperte sempre a opção de aprovar:
+No app do Codex elas vêm em português: clique no botão de aprovar. No app do Claude, clique no botão de aprovar da caixinha. Pelo Terminal, elas vêm em inglês:
 
 | Quando aparece | Claude Code | Codex |
 |---|---|---|
@@ -62,8 +70,13 @@ Se escolher "No" na primeira pergunta, o programa fecha. É só abrir de novo.
 
 ## Como usar amanhã
 
-1. Clique duas vezes em **Abrir o Estúdio**, na Área de Trabalho.
-2. Escreva **quero gravar um vídeo**.
+No fim da instalação, o assistente ensina um passo que se faz uma vez só: abrir o app direto na pasta do estúdio.
+
+- **App do Codex:** **Escolher projeto**, depois **Novo projeto**, com o nome **Estúdio de Reels**. Em **Adicionar**, clique na casinha com o seu nome, depois na pasta **estudio-de-reels**, e em **Abrir**. Clique em **Criar projeto** e em **Confiar na pasta**.
+- **App do Claude:** aba **Code**, sessão nova, pasta **estudio-de-reels** (dentro da casinha com o seu nome).
+- **Terminal:** clique duas vezes em **Abrir o Estúdio**, na Área de Trabalho.
+
+Daí em diante, abra o projeto **Estúdio de Reels** e escreva **quero gravar um vídeo**.
 
 Já gravou? Clique duas vezes em **Estúdio de Reels**, na Área de Trabalho, ponha o vídeo na pasta **2-videos-brutos** e escreva **faz meu vídeo**. O Reel pronto aparece na pasta **3-videos-prontos**.
 

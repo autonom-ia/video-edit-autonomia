@@ -25,8 +25,8 @@
     "I-01": {
       "quando": "logo depois de ler o AGENTS.md, antes de qualquer comando",
       "texto": "Oi! Vou montar o seu Estúdio de Reels. Vai ser assim:\n1. Eu olho se o seu computador tem espaço.\n2. Instalo os programas. Você aprova.\n3. Faço umas perguntas sobre o seu negócio.\n4. Abro três pastas para você.\n\nLeva uns 30 minutos. Você não precisa digitar nada difícil.\n\nUm aviso: toda vez que eu for mexer no computador, o {{agente}} mostra uma caixinha pedindo licença. É normal. É para a sua segurança. Quando for coisa nossa, eu aviso antes, e você pode aprovar.\n{{linha_caixinha}}\n\nSe a janela fechar sem querer, abra o {{agente}} do mesmo jeito e cole o mesmo texto de novo: eu continuo de onde parou.\n\nPrimeiro vou só olhar o computador, sem instalar nada. Posso olhar?",
-      "linha_caixinha_claude": "A caixinha vem em inglês. Para aprovar, aperte Enter na opção **1. Yes**. Quando eu for gravar um arquivo, escolha uma vez a opção **Yes, allow all edits during this session**: aí ele para de perguntar isso.",
-      "linha_caixinha_codex": "A caixinha vem em inglês. Para aprovar, aperte Enter na primeira opção, a que começa com **Yes**.",
+      "linha_caixinha_claude": "No app do Claude, a caixinha tem um botão para aprovar: clique nele. Se você abriu pelo Terminal, ela vem em inglês: aperte Enter na opção **1. Yes**. Quando eu for gravar um arquivo, escolha uma vez a opção que libera as edições durante a sessão (no Terminal: **Yes, allow all edits during this session**). Aí ele para de perguntar isso.",
+      "linha_caixinha_codex": "No app do Codex, a caixinha vem em português: clique no botão de aprovar. Se você abriu pelo Terminal, ela vem em inglês: aperte Enter na primeira opção, a que começa com **Yes**.",
       "opcoes": [
         "Pode olhar ★",
         "Agora não"
@@ -111,7 +111,7 @@
     },
     "I-11": {
       "quando": "logo depois de \"passo pasta\", antes de \"passo atalho\". Sem pergunta.",
-      "texto": "Vou pôr dois atalhos na sua Área de Trabalho: **Abrir o Estúdio**, que abre o {{agente}} já na pasta certa, e **Estúdio de Reels**, que abre a pasta dos seus vídeos. Se a janela fechar sem querer, é só clicar em Abrir o Estúdio: eu continuo de onde parou.",
+      "texto": "Vou pôr dois atalhos na sua Área de Trabalho: **Estúdio de Reels**, que abre a pasta dos seus vídeos, e **Abrir o Estúdio**, para quem usa o {{agente}} pelo Terminal. Se a janela fechar sem querer, abra o {{agente}} do mesmo jeito e cole o mesmo texto de novo: eu continuo de onde parou.",
       "texto_mac": "O Mac pode perguntar se o Terminal pode mexer na sua Mesa. Clique em **Permitir**."
     },
     "I-12": {
@@ -128,9 +128,9 @@
     },
     "I-14": {
       "quando": "\"verificar\" com ok=true",
-      "texto": "Tudo pronto: {{ok}} de {{total}}.\n\nPara fazer um vídeo:\n1. Clique duas vezes em **Abrir o Estúdio**, na Área de Trabalho.\n2. Escreva: **quero gravar um vídeo**\n\nEu monto o roteiro com você. Você grava, põe o vídeo na pasta 2-videos-brutos e escreve: **faz meu vídeo**. Para achar essa pasta, clique duas vezes em **Estúdio de Reels**, na Área de Trabalho.\n\nJá tem um vídeo gravado? Ponha na pasta 2-videos-brutos e escreva: **faz meu vídeo**.\n\nAmanhã, na primeira vez, o {{agente}} pergunta em inglês se confia na pasta. {{linha_confianca}}",
-      "linha_confianca_claude": "A pergunta é **Do you trust the files in this folder?** Aperte Enter na opção **1. Yes, proceed**. Se escolher No, ele fecha.",
-      "linha_confianca_codex": "Escolha a primeira opção, a que começa com **Yes**. Se escolher No, ele fecha."
+      "texto": "Tudo pronto: {{ok}} de {{total}}.\n\nFalta um passo, só desta vez: abrir o {{agente}} direto na pasta do estúdio. É nela que eu sei fazer os seus vídeos.\n{{linha_voltar}}\n\nDepois, para fazer um vídeo, escreva: **quero gravar um vídeo**. Eu monto o roteiro com você. Você grava, põe o vídeo na pasta 2-videos-brutos e escreve: **faz meu vídeo**. Para achar essa pasta, clique duas vezes em **Estúdio de Reels**, na Área de Trabalho.\n\nJá tem um vídeo gravado? Ponha na pasta 2-videos-brutos e escreva: **faz meu vídeo**.",
+      "linha_voltar_codex": "No app do Codex: clique em **Escolher projeto** e depois em **Novo projeto**. Escreva o nome **Estúdio de Reels** e clique em **Adicionar**. Na coluna da esquerda, clique na casinha com o seu nome, depois na pasta **estudio-de-reels**, e em **Abrir**. Clique em **Criar projeto** e em **Confiar na pasta**. Se você usa pelo Terminal: clique duas vezes em **Abrir o Estúdio** e escolha a primeira opção, a que começa com **Yes**.",
+      "linha_voltar_claude": "No app do Claude, na aba Code: comece uma sessão nova e escolha a pasta **estudio-de-reels**, que fica dentro da casinha com o seu nome. Se ele perguntar se você confia na pasta, aprove. Se você usa pelo Terminal: clique duas vezes em **Abrir o Estúdio** e, na pergunta em inglês, aperte Enter em **1. Yes, proceed**."
     },
     "I-15": {
       "quando": "\"verificar\" com ok=false",
@@ -360,17 +360,17 @@
     "atalho": {
       "nome": "Atalhos na Área de Trabalho",
       "artigo": "os",
-      "frase": "Abrir o Estúdio, por onde você volta amanhã, e Estúdio de Reels, que abre a pasta dos seus vídeos",
+      "frase": "Estúdio de Reels, que abre a pasta dos seus vídeos, e Abrir o Estúdio, para quem usa pelo Terminal",
       "tamanho": "quase nada",
       "tamanho_mb": 0,
-      "consequencia": "você volta pelo programa, do jeito que abriu hoje",
+      "consequencia": "você acha a pasta dos vídeos pela casinha com o seu nome, na pasta estudio-de-reels",
       "obrigatorio": false,
       "segundo_plano": false,
       "precisa_internet": false,
       "fora_da_area_codex": true,
       "anuncio": "Agora: **atalhos na Área de Trabalho**. O {{agente}} vai pedir licença para mexer no computador. Pode aprovar.",
-      "pedido": "Posso pôr dois atalhos na sua Área de Trabalho? **Abrir o Estúdio** é por onde você volta amanhã. **Estúdio de Reels** abre a pasta dos seus vídeos.",
-      "recusa": "Tudo bem. Sem os atalhos, você volta pelo programa, do jeito que abriu hoje. Quer os atalhos mesmo assim?",
+      "pedido": "Posso pôr dois atalhos na sua Área de Trabalho? **Estúdio de Reels** abre a pasta dos seus vídeos. **Abrir o Estúdio** é para quem usa o assistente pelo Terminal.",
+      "recusa": "Tudo bem. Sem os atalhos, você acha a pasta dos vídeos pela casinha com o seu nome, na pasta estudio-de-reels. Quer os atalhos mesmo assim?",
       "pronto": "Pronto: atalhos \"Abrir o Estúdio\" e \"Estúdio de Reels\" na sua Área de Trabalho.",
       "anuncio_codex": "Agora: **atalhos na Área de Trabalho**. O Codex vai pedir para eu rodar fora da área protegida. É para pôr os atalhos na sua Área de Trabalho. Pode aprovar."
     },

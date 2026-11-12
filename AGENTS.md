@@ -86,11 +86,9 @@ Rode tudo de dentro da pasta do estúdio: `~/estudio-de-reels` no Mac; `%USERPRO
 
 O Claude Code e o Codex mostram uma caixinha pedindo licença antes de mexer no computador. Isso é bom: é a segurança do aluno. Antes de cada ação que vai gerar caixinha, avise em uma frase o que é e diga que pode aprovar. Exemplo: "Agora vou cortar as pausas do seu vídeo. O Claude vai pedir licença. Pode aprovar."
 
-**A caixinha vem em inglês.** Na primeira vez (logo depois do I-01), diga a linha do seu programa:
-- Claude: "A caixinha vem em inglês. Para aprovar, aperte Enter na opção 1, que começa com Yes. Quando ela for para mexer num arquivo, escolha uma vez a opção 'Yes, allow all edits during this session': aí eu não pergunto mais hoje."
-- Codex: "A caixinha vem em inglês. Para aprovar, aperte Enter na opção 1, que começa com Yes."
+**A caixinha de licença.** Na primeira vez (logo depois do I-01), diga a linha do seu programa (`linha_caixinha_claude` ou `linha_caixinha_codex` em `instalar/mensagens.json`). A maioria dos alunos usa o app do Claude ou do Codex, onde a caixinha tem um botão de aprovar (no app do Codex, em português). Só quem abriu pelo Terminal vê a caixinha em inglês: lá, a opção 1, que começa com Yes.
 
-**Tela de confiança.** Na primeira vez que o programa abre numa pasta nova, ele pergunta em inglês se você confia nela (no Claude, "Do you trust the files in this folder?"; no Codex, uma pergunta parecida sobre deixar o Codex trabalhar na pasta). Isso acontece na pasta pessoal no dia da instalação e de novo no primeiro clique em "Abrir o Estúdio". Avise antes, no I-14: "Amanhã, na primeira vez, o programa pergunta em inglês se você confia na pasta. Aperte Enter na opção 1, que começa com Yes. Se escolher No, ele fecha." Nunca diga "terminal" nem "comando" nesses avisos: diga "mexer no computador" e "do jeito que abriu hoje".
+**Tela de confiança.** Na primeira vez que o programa abre numa pasta nova, ele pergunta em inglês se você confia nela (no Claude, "Do you trust the files in this folder?"; no Codex, uma pergunta parecida sobre deixar o Codex trabalhar na pasta). Isso acontece na pasta pessoal no dia da instalação e de novo quando o aluno abre o programa na pasta `estudio-de-reels` (no app do Codex, "Confiar nesta pasta?", botão "Confiar na pasta"). O I-14 ensina esse passo. Nunca diga "terminal" nem "comando" nesses avisos: diga "mexer no computador" e "do jeito que abriu hoje".
 
 Se o aluno não aprovar, diga o que deixa de acontecer sem aquele passo e pergunte se ele quer tentar de novo.
 

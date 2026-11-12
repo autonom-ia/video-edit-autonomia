@@ -1,0 +1,78 @@
+# Instala o estúdio do zero numa máquina limpa (Mac e Windows) e confere tudo.
+# Roda quando alguém empurra para uma branch ci/** ou pelo botão "Run workflow".
+name: maquina-limpa
+
+on:
+  push:
+    branches: ['ci/**', 'release/**']
+  workflow_dispatch:
+
+jobs:
+  windows:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, windows-11-arm]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+      - name: Instalar passo a passo (Windows PowerShell 5.1)
+        shell: powershell
+        run: |
+          $falhas = @()
+          $inst = 'instalar/instalar.ps1'
+          $r = powershell.exe -NoProfile -ExecutionPolicy Bypass -File $inst checar --agente codex
+          Write-Output "checar => $($r | Select-Object -Last 1)"
+          foreach ($p in @('pasta','atalho','python','node','ffmpeg','baixador','montador','fala','ouvido','referencias','pastas')) {
+            $saida = powershell.exe -NoProfile -ExecutionPolicy Bypass -File $inst passo $p --agente codex --modo tudo
+            $ultima = $saida | Select-Object -Last 1
+            Write-Output "passo $p => $ultima"
+            if ($ultima -notlike '*"ok":true*') { $falhas += $p }
+          }
+          $v = powershell.exe -NoProfile -ExecutionPolicy Bypass -File instalar/verificar.ps1
+          Write-Output "verificar => $($v | Select-Object -Last 1)"
+          if ($falhas.Count -gt 0) { Write-Output "FALHARAM: $($falhas -join ', ')"; exit 1 }
+      - name: Testes do kit
+        if: always()
+        shell: cmd
+        run: .\estudio.cmd conferir-kit
+      - name: Guardar logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: logs-${{ matrix.os }}
+          path: .ferramentas/logs
+          if-no-files-found: ignore
+
+  mac:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, macos-13]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+      - name: Instalar passo a passo
+        shell: bash
+        run: |
+          falhas=""
+          echo "checar => $(bash instalar/instalar.sh checar --agente codex | tail -1)"
+          for p in pasta atalho python node ffmpeg baixador montador fala ouvido referencias pastas; do
+            ultima="$(bash instalar/instalar.sh passo "$p" --agente codex --modo tudo | tail -1)"
+            echo "passo $p => $ultima"
+            case "$ultima" in *'"ok":true'*) ;; *) falhas="$falhas $p" ;; esac
+          done
+          echo "verificar => $(bash instalar/verificar.sh | tail -1)"
+          if [ -n "$falhas" ]; then echo "FALHARAM:$falhas"; exit 1; fi
+      - name: Testes do kit
+        if: always()
+        run: ./estudio conferir-kit
+      - name: Guardar logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: logs-${{ matrix.os }}
+          path: .ferramentas/logs
+          if-no-files-found: ignore
