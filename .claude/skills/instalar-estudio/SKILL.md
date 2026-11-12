@@ -111,7 +111,7 @@ Quando o aluno pedir "atualizar o estúdio" (ou pela seção "Lugar da pasta", c
 3. Leia a última linha:
    - `ok:true` com `codigo` `JA_ATUALIZADO`: diga o texto de `JA_ATUALIZADO`.
    - `ok:true`: leia de novo o `AGENTS.md` (ele pode ter mudado) e diga o U-02.
-   - `ok:false`: diga o texto do código em `erros` e siga as opções.
+   - `ok:false`: veja o `codigo` em `erros` (com `dados`), diga o texto e siga as opções. Em "Tentar de novo", rode `atualizar` outra vez.
 4. Depois, rode `verificar`. Se faltar algo, rode o `passo` do item que faltou, como na instalação.
 
 O `atualizar` nunca mexe em `.ferramentas/`, `minha-marca/`, `projetos/`, `1-referencias/`, `2-videos-brutos/` nem `3-videos-prontos/`. A versão de antes fica guardada dentro de `.ferramentas`.

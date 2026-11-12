@@ -1474,32 +1474,45 @@ function Invoke-AcaoAtualizar([string]$Origem) {
     # Troca item por item. VERSAO vai por ultimo: se algo falhar no meio, a versao
     # instalada continua a antiga e tudo o que ja tinha sido trocado volta do backup.
     $trocados = New-Object System.Collections.ArrayList
+    $falhouEm = ''
     $itens = @(Get-ChildItem -LiteralPath $novo -Force | Where-Object { $_.Name -ne 'VERSAO' }) + @(Get-Item -LiteralPath $versaoArq.FullName)
     try {
         foreach ($item in $itens) {
             $nome = $item.Name
             if ($nuncaTocar -contains $nome) { continue }
+            $falhouEm = $nome
             $atual = Join-Path $script:Repo $nome
             if (Test-Path -LiteralPath $atual) { Move-Item -LiteralPath $atual -Destination (Join-Path $antigo $nome) }
             [void]$trocados.Add($nome)
             Copy-Item -LiteralPath $item.FullName -Destination $atual -Recurse -Force
         }
+        $falhouEm = '.claude\settings.local.json'
         $local = Join-Path $antigo '.claude\settings.local.json'
         if (Test-Path -LiteralPath $local) {
             New-Item -ItemType Directory -Force -Path (Join-Path $script:Repo '.claude') | Out-Null
             Copy-Item -LiteralPath $local -Destination (Join-Path $script:Repo '.claude\settings.local.json') -Force
         }
     } catch {
-        Write-Log ('troca falhou: ' + $_.Exception.Message)
-        foreach ($nome in $trocados) {
-            $atual = Join-Path $script:Repo $nome
-            try { if (Test-Path -LiteralPath $atual) { Remove-Item -LiteralPath $atual -Recurse -Force } } catch { }
-            $guardado = Join-Path $antigo $nome
-            try { if (Test-Path -LiteralPath $guardado) { Move-Item -LiteralPath $guardado -Destination $atual } } catch { }
+        Write-Log ('troca falhou em ' + $falhouEm + ': ' + $_.Exception.Message)
+        $voltou = $true
+        foreach ($n in $trocados) {
+            $atual = Join-Path $script:Repo $n
+            # So devolve se o novo saiu: mover uma pasta para cima de outra que ficou
+            # a colocaria dentro dela, e o estudio pareceria restaurado sem estar.
+            try { if (Test-Path -LiteralPath $atual) { Remove-Item -LiteralPath $atual -Recurse -Force } } catch { $voltou = $false; Write-Log ('nao apaguei ' + $n + ': ' + $_.Exception.Message); continue }
+            $guardado = Join-Path $antigo $n
+            try { if (Test-Path -LiteralPath $guardado) { Move-Item -LiteralPath $guardado -Destination $atual } } catch { $voltou = $false; Write-Log ('nao devolvi ' + $n + ': ' + $_.Exception.Message) }
         }
-        Diga 'Nao consegui trocar os arquivos do estudio. Voltei tudo como estava.'
         Remove-Tmp
-        Sair ([ordered]@{ acao = 'atualizar'; ok = $false; codigo = 'ATUALIZACAO_FALHOU'; de = $de; para = $para; dados = @{ arquivo = ($trocados | Select-Object -Last 1) } }) 1
+        # Com tudo de volta, a pasta da copia fica vazia e sai. Se ficasse, contaria
+        # como copia anterior e empurraria uma copia de verdade para fora da fila.
+        if ($voltou -and @(Get-ChildItem -LiteralPath $antigo -Force).Count -eq 0) {
+            Remove-Item -LiteralPath $antigo -Force
+            Diga 'Nao consegui trocar os arquivos do estudio. Voltei tudo como estava.'
+            Sair ([ordered]@{ acao = 'atualizar'; ok = $false; codigo = 'ATUALIZACAO_FALHOU'; de = $de; para = $para; dados = @{ arquivo = $falhouEm } }) 1
+        }
+        Diga ('Nao consegui trocar os arquivos do estudio, e alguns nao voltaram sozinhos. Eles estao guardados em ' + $antigo + '.')
+        Sair ([ordered]@{ acao = 'atualizar'; ok = $false; codigo = 'ATUALIZACAO_INCOMPLETA'; de = $de; para = $para; dados = @{ arquivo = $falhouEm; copia_anterior = $antigo } }) 1
     }
     Remove-VersoesAntigas
     if ($pkgMudou) {
@@ -1510,6 +1523,8 @@ function Invoke-AcaoAtualizar([string]$Origem) {
     }
     if ($falaMudou -and (Test-Path -LiteralPath (Join-Path $script:Estado 'fala.json'))) {
         Diga 'O ouvido de texto mudou na versao nova. Vou atualizar.'
+        # Sem apagar o estado, o passo ve "pronto" com o modelo no lugar e nao refaz nada.
+        $x = Join-Path $script:Estado 'fala.json'; if (Test-Path -LiteralPath $x) { Remove-Item -LiteralPath $x -Force }
         $ps = (Get-Process -Id $PID).Path
         $null = Invoke-Nativo -Exe $ps -Argumentos @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', (Join-Path $script:Repo 'instalar\instalar.ps1'), 'passo', 'fala') -Pasta $script:Repo
     }
