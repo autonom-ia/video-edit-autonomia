@@ -1,11 +1,21 @@
-# Instala o estúdio do zero numa máquina limpa (Mac e Windows) e confere tudo.
-# Roda quando alguém empurra para uma branch ci/** ou pelo botão "Run workflow".
+# Instala o estúdio do zero numa máquina limpa (Mac e Windows) seguindo a jornada do aluno
+# pelo Terminal: o zip cai em Downloads (como faria o assistente ao baixar o link), o
+# instalador põe a pasta no lugar de sempre, instala tudo, confere, e depois simula o aluno
+# colando o link de novo com o estúdio já instalado.
+# Roda quando alguém empurra para uma branch ci/** ou release/**, ou pelo botão "Run workflow".
 name: maquina-limpa
 
 on:
   push:
     branches: ['ci/**', 'release/**']
   workflow_dispatch:
+
+concurrency:
+  group: maquina-limpa-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  LINK_DO_ALUNO: https://github.com/autonom-ia/video-edit-autonomia/releases/latest/download/estudio-de-reels.zip
 
 jobs:
   windows:
@@ -17,62 +27,140 @@ jobs:
     timeout-minutes: 75
     steps:
       - uses: actions/checkout@v4
-      - name: Instalar passo a passo (Windows PowerShell 5.1)
+      - name: Jornada do aluno (Windows PowerShell 5.1)
         shell: powershell
         run: |
+          $ErrorActionPreference = 'Continue'
           $falhas = @()
+          $Z = Join-Path $env:RUNNER_TEMP 'estudio-de-reels.zip'
+          # O zip do release tem uma pasta so, chamada estudio-de-reels; este e igual, feito deste commit.
+          git archive --format=zip --prefix=estudio-de-reels/ -o $Z HEAD
+          $codigo = curl.exe -sIL -o NUL -w "%{http_code}" $env:LINK_DO_ALUNO
+          Write-Output "link do aluno responde => $codigo"
+          if ($codigo -ne '200') { $falhas += 'link' }
+
+          # 1. O assistente baixa e descompacta em Downloads, fora do lugar de sempre.
+          $dl = Join-Path $env:USERPROFILE 'Downloads'
+          New-Item -ItemType Directory -Force $dl | Out-Null
+          tar.exe -xf $Z -C $dl
+          Set-Location (Join-Path $dl 'estudio-de-reels')
+          $r = powershell.exe -NoProfile -ExecutionPolicy Bypass -File instalar/instalar.ps1 mudar-pasta --agente codex | Select-Object -Last 1
+          Write-Output "mudar-pasta (de Downloads) => $r"
+          if ($r -notlike '*"codigo":"INSTALADO"*') { $falhas += 'mudar-pasta' }
+          $casa = Join-Path $env:USERPROFILE 'estudio-de-reels'
+          if (-not (Test-Path (Join-Path $casa 'AGENTS.md'))) { $falhas += 'pasta-no-lugar' }
+
+          # 2. Instala tudo a partir do lugar de sempre.
+          Set-Location $casa
           $inst = 'instalar/instalar.ps1'
-          $r = powershell.exe -NoProfile -ExecutionPolicy Bypass -File $inst checar --agente codex
-          Write-Output "checar => $($r | Select-Object -Last 1)"
+          $r = powershell.exe -NoProfile -ExecutionPolicy Bypass -File $inst checar --agente codex | Select-Object -Last 1
+          Write-Output "checar => $r"
           foreach ($p in @('pasta','atalho','python','node','ffmpeg','baixador','montador','fala','ouvido','referencias','pastas')) {
-            $saida = powershell.exe -NoProfile -ExecutionPolicy Bypass -File $inst passo $p --agente codex --modo tudo
-            $ultima = $saida | Select-Object -Last 1
+            $ultima = powershell.exe -NoProfile -ExecutionPolicy Bypass -File $inst passo $p --agente codex --modo tudo | Select-Object -Last 1
             Write-Output "passo $p => $ultima"
             if ($ultima -notlike '*"ok":true*') { $falhas += $p }
           }
-          $v = powershell.exe -NoProfile -ExecutionPolicy Bypass -File instalar/verificar.ps1
-          Write-Output "verificar => $($v | Select-Object -Last 1)"
+          $v = powershell.exe -NoProfile -ExecutionPolicy Bypass -File instalar/verificar.ps1 | Select-Object -Last 1
+          Write-Output "verificar => $v"
+          if ($v -notlike '*"ok":true*') { $falhas += 'verificar' }
+
+          # 3. O aluno fecha e cola o link de novo: baixa outra copia, e o estudio instalado continua.
+          $denovo = Join-Path $dl 'de-novo'
+          New-Item -ItemType Directory -Force $denovo | Out-Null
+          tar.exe -xf $Z -C $denovo
+          Set-Location (Join-Path $denovo 'estudio-de-reels')
+          $r = powershell.exe -NoProfile -ExecutionPolicy Bypass -File instalar/instalar.ps1 mudar-pasta --agente codex | Select-Object -Last 1
+          Write-Output "mudar-pasta (colou de novo) => $r"
+          if ($r -notlike '*"codigo":"PASTA_DESTINO_EXISTE"*') { $falhas += 'colar-de-novo' }
+          Set-Location $casa
+          $r = powershell.exe -NoProfile -ExecutionPolicy Bypass -File $inst plano --agente codex | Select-Object -Last 1
+          Write-Output "plano (depois de colar de novo) => $r"
+
           if ($falhas.Count -gt 0) { Write-Output "FALHARAM: $($falhas -join ', ')"; exit 1 }
+          Write-Output "TUDO OK"
       - name: Testes do kit
         if: always()
         shell: cmd
-        run: .\estudio.cmd conferir-kit
+        run: cd /d "%USERPROFILE%\estudio-de-reels" && .\estudio.cmd conferir-kit
+      - name: Juntar logs
+        if: always()
+        shell: powershell
+        run: |
+          $l = Join-Path $env:USERPROFILE 'estudio-de-reels\.ferramentas\logs'
+          if (Test-Path $l) { Copy-Item -Recurse $l (Join-Path $env:GITHUB_WORKSPACE 'logs-estudio') }
       - name: Guardar logs
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: logs-${{ matrix.os }}
-          path: .ferramentas/logs
+          path: logs-estudio
           if-no-files-found: ignore
 
   mac:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-latest, macos-13]
+        # macos-15-intel: Mac Intel (o macos-13 foi aposentado pelo GitHub).
+        os: [macos-latest, macos-15-intel]
     runs-on: ${{ matrix.os }}
     timeout-minutes: 75
     steps:
       - uses: actions/checkout@v4
-      - name: Instalar passo a passo
+      - name: Jornada do aluno (Terminal)
         shell: bash
         run: |
           falhas=""
+          Z="$RUNNER_TEMP/estudio-de-reels.zip"
+          # O zip do release tem uma pasta só, chamada estudio-de-reels; este é igual, feito deste commit.
+          git archive --format=zip --prefix=estudio-de-reels/ -o "$Z" HEAD
+          codigo="$(curl -sIL -o /dev/null -w '%{http_code}' "$LINK_DO_ALUNO")"
+          echo "link do aluno responde => $codigo"
+          [ "$codigo" = "200" ] || falhas="$falhas link"
+
+          # 1. O assistente baixa e descompacta em Downloads, fora do lugar de sempre.
+          mkdir -p "$HOME/Downloads"
+          cd "$HOME/Downloads" && unzip -q "$Z"
+          cd "$HOME/Downloads/estudio-de-reels"
+          r="$(bash instalar/instalar.sh mudar-pasta --agente codex | tail -1)"
+          echo "mudar-pasta (de Downloads) => $r"
+          case "$r" in *'"codigo":"INSTALADO"'*) ;; *) falhas="$falhas mudar-pasta" ;; esac
+          [ -f "$HOME/estudio-de-reels/AGENTS.md" ] || falhas="$falhas pasta-no-lugar"
+          [ -e "$HOME/Downloads/estudio-de-reels" ] && falhas="$falhas sobrou-em-downloads"
+
+          # 2. Instala tudo a partir do lugar de sempre.
+          cd "$HOME/estudio-de-reels"
           echo "checar => $(bash instalar/instalar.sh checar --agente codex | tail -1)"
           for p in pasta atalho python node ffmpeg baixador montador fala ouvido referencias pastas; do
             ultima="$(bash instalar/instalar.sh passo "$p" --agente codex --modo tudo | tail -1)"
             echo "passo $p => $ultima"
             case "$ultima" in *'"ok":true'*) ;; *) falhas="$falhas $p" ;; esac
           done
-          echo "verificar => $(bash instalar/verificar.sh | tail -1)"
+          v="$(bash instalar/verificar.sh | tail -1)"
+          echo "verificar => $v"
+          case "$v" in *'"ok":true'*) ;; *) falhas="$falhas verificar" ;; esac
+
+          # 3. O aluno fecha e cola o link de novo: baixa outra cópia, e o estúdio instalado continua.
+          mkdir -p "$HOME/Downloads/de-novo" && cd "$HOME/Downloads/de-novo" && unzip -q "$Z"
+          cd "$HOME/Downloads/de-novo/estudio-de-reels"
+          r="$(bash instalar/instalar.sh mudar-pasta --agente codex | tail -1)"
+          echo "mudar-pasta (colou de novo) => $r"
+          case "$r" in *'"codigo":"PASTA_DESTINO_EXISTE"'*) ;; *) falhas="$falhas colar-de-novo" ;; esac
+          cd "$HOME/estudio-de-reels"
+          echo "plano (depois de colar de novo) => $(bash instalar/instalar.sh plano --agente codex | tail -1)"
+
           if [ -n "$falhas" ]; then echo "FALHARAM:$falhas"; exit 1; fi
+          echo "TUDO OK"
       - name: Testes do kit
         if: always()
-        run: ./estudio conferir-kit
+        run: cd "$HOME/estudio-de-reels" && ./estudio conferir-kit
+      - name: Juntar logs
+        if: always()
+        run: |
+          [ -d "$HOME/estudio-de-reels/.ferramentas/logs" ] && cp -R "$HOME/estudio-de-reels/.ferramentas/logs" "$GITHUB_WORKSPACE/logs-estudio" || true
       - name: Guardar logs
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: logs-${{ matrix.os }}
-          path: .ferramentas/logs
+          path: logs-estudio
           if-no-files-found: ignore
