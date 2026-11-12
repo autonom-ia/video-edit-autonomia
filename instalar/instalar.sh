@@ -1284,7 +1284,7 @@ acao_mudar_pasta() {
     printf '{"acao":"mudar-pasta","ok":false,"codigo":"PASTA_DESTINO_EXISTE","de":%s,"para":%s,"dados":{"pasta":%s}}\n' "$(js "$REPO")" "$(js "$destino")" "$(js "$destino")"
     exit 1
   fi
-  diga "Vou mudar o estúdio para $destino, fora da nuvem. Nada é apagado."
+  diga "Vou mudar o estúdio para $destino, o lugar de sempre. Nada é apagado."
   if mv "$REPO" "$destino" 2>/dev/null; then
     chmod 755 "$destino/estudio" "$destino"/instalar/*.sh 2>/dev/null
     printf '{"acao":"mudar-pasta","ok":true,"codigo":"INSTALADO","de":%s,"para":%s}\n' "$(js "$REPO")" "$(js "$destino")"

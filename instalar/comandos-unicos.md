@@ -4,7 +4,7 @@ O aluno cola **um** destes textos no Claude Code ou no Codex, aberto na pasta pe
 
 Endereço do estúdio no GitHub: conta **autonom-ia**, repositório **video-edit-autonomia**: <https://github.com/autonom-ia/video-edit-autonomia>.
 
-A pasta na máquina do aluno continua se chamando `estudio-de-reels`, e o produto continua sendo o Estúdio de Reels. O zip de uma tag do GitHub descompacta numa pasta chamada `video-edit-autonomia-<versão sem o v>` (para a tag `v1.0.2`: `video-edit-autonomia-1.0.2`); os comandos abaixo trocam esse nome por `estudio-de-reels`. Se a tag mudar, troque `v1.0.2` e `1.0.2` em todos os textos (aqui e no `README.md`).
+A pasta na máquina do aluno continua se chamando `estudio-de-reels`, e o produto continua sendo o Estúdio de Reels. O zip de uma tag do GitHub descompacta numa pasta chamada `video-edit-autonomia-<versão sem o v>` (para a tag `v1.0.2`: `video-edit-autonomia-1.0.2`); os comandos abaixo trocam esse nome por `estudio-de-reels`. Se a tag mudar, troque `v1.0.2` e `1.0.2` em todos os textos (aqui; o `README.md` usa o link `latest` e não tem versão).
 
 Use só uma das três versões, de acordo com a forma de acesso escolhida.
 
@@ -90,7 +90,7 @@ Na V3, o zip da plataforma precisa ter uma única pasta dentro (qualquer nome: `
 ## Publicar uma versão (para quem mantém o estúdio)
 
 1. Rode `npm run conferir-distribuicao`. Ele falha se sobrar o marcador antigo da conta (a palavra em maiúsculas que ficava no lugar de `autonom-ia`) no `README.md`, neste arquivo ou em `instalar/versoes.env`, ou se faltar `package-lock.json` ou `uv.lock`.
-2. Atualize `VERSAO`, crie a tag (`v1.0.0`, `v1.0.2`...) e publique um release no GitHub `autonom-ia/video-edit-autonomia` com dois anexos:
+2. Atualize `VERSAO`, crie a tag (`v1.0.1`, `v1.0.2`...) e publique um release no GitHub `autonom-ia/video-edit-autonomia` com dois anexos:
    - `estudio-de-reels.zip`: o estúdio inteiro, com uma única pasta dentro, com os bits de execução de `estudio` e `instalar/*.sh`;
    - `estudio-de-reels.zip.sha256`: o SHA256 do zip (`shasum -a 256 estudio-de-reels.zip > estudio-de-reels.zip.sha256`).
 3. O `atualizar` do aluno baixa `releases/latest/download/estudio-de-reels.zip` (ver `ESTUDIO_ATUALIZAR_URL` em `instalar/versoes.env`), confere pelo `.sha256` e só aceita endereço `https://github.com/autonom-ia/video-edit-autonomia/...`. O zip automático da tag não serve para o `atualizar`: precisa do anexo.
