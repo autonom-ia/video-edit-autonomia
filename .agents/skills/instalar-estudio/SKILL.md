@@ -1,6 +1,6 @@
 ---
 name: instalar-estudio
-description: Instala o Estúdio de Reels no Mac ou no Windows, um programa por vez, pedindo licença ao aluno com textos prontos e simples. Cria o atalho logo no começo, faz o briefing curto do negócio, baixa os vídeos de exemplo e abre as 3 pastas. Também desinstala, quando o aluno pede. Use no primeiro uso, quando faltar o arquivo .ferramentas/instalacao.json na pasta do estúdio, quando o aluno pedir para instalar, reinstalar ou desinstalar, ou quando a verificação apontar algo faltando.
+description: Instala o Estúdio de Reels no Mac ou no Windows, um programa por vez, pedindo licença ao aluno com textos prontos e simples. Cria o atalho logo no começo, faz o briefing curto do negócio, baixa os vídeos de exemplo e abre as 3 pastas. Também atualiza e desinstala, quando o aluno pede. Use no primeiro uso, quando faltar o arquivo .ferramentas/instalacao.json na pasta do estúdio, quando o aluno pedir para instalar, reinstalar, atualizar ou desinstalar, ou quando a verificação apontar algo faltando.
 ---
 
 # Instalar o estúdio
@@ -12,7 +12,7 @@ O aluno é leigo. Ele não lê o que aparece na tela técnica, não digita nada 
 - Textos: todos os textos desta skill (I-01 a I-15, os itens e os erros) estão em `instalar/mensagens.json`. Use-os **literalmente**, trocando só o que está entre `{{ }}`. `{{agente}}` é "Claude" ou "Codex", conforme quem você é.
 - Pasta: rode tudo de dentro da pasta do estúdio (`~/estudio-de-reels` no Mac; `%USERPROFILE%\estudio-de-reels` ou `C:\EstudioDeReels\estudio-de-reels` no Windows). Os programas ficam em `.ferramentas`, dentro dela.
 - Sistema: descubra se é Mac, Windows com PowerShell ou Windows com Git Bash antes do primeiro comando.
-- Lugar da pasta: se a pessoa colou o link do zip e você descompactou o estúdio fora do lugar de sempre (em Downloads, dentro de outra pasta ou com outro nome), rode `mudar-pasta` de dentro da pasta descompactada, antes do `checar`. Não pergunte: é a cópia que você acabou de baixar, e nada é apagado. No Codex, peça para sair da área protegida com o texto `CODEX-FORA-DA-AREA-MUDAR-PASTA`. Continue da pasta do campo `para`. Se vier `PASTA_DESTINO_EXISTE`, olhe a pasta do campo `para`. Se ela tem `AGENTS.md` e `instalar/instalar.sh`, é o estúdio baixado antes: siga nela sem perguntar, que retoma de onde parou, e diga em uma frase que a cópia nova ficou na pasta do campo `de` e pode ir para a Lixeira. Se não tem, mostre o texto de `PASTA_DESTINO_EXISTE`; em "Deixar como está", pare a instalação e diga que, para instalar, a pasta com esse nome precisa sair da pasta pessoal. Nunca apague nenhuma das duas.
+- Lugar da pasta: se a pessoa colou o link do zip e você descompactou o estúdio fora do lugar de sempre (em Downloads, dentro de outra pasta ou com outro nome), rode `mudar-pasta` de dentro da pasta descompactada, antes do `checar`. Não pergunte: é a cópia que você acabou de baixar, e nada é apagado. No Codex, peça para sair da área protegida com o texto `CODEX-FORA-DA-AREA-MUDAR-PASTA`. Continue da pasta do campo `para`. Se vier `PASTA_DESTINO_EXISTE`, olhe a pasta do campo `para`. Se ela tem `AGENTS.md` e `instalar/instalar.sh`, é o estúdio baixado antes: compare o arquivo `VERSAO` dela com o da cópia nova. Se a dela for mais antiga, siga a seção "Atualizar" a partir da pasta `para`. Se não, siga nela sem perguntar, que retoma de onde parou, e diga em uma frase que a cópia nova ficou na pasta do campo `de` e pode ir para a Lixeira. Se não tem, mostre o texto de `PASTA_DESTINO_EXISTE`; em "Deixar como está", pare a instalação e diga que, para instalar, a pasta com esse nome precisa sair da pasta pessoal. Nunca apague nenhuma das duas.
 - Saída: todo comando termina com uma linha JSON. Leia só ela. Nunca mostre nada técnico ao aluno.
 - Retomada: se a pessoa fechou a janela e voltou (pelo atalho ou colando o texto de novo), siga daqui mesmo. O `plano` mostra o que já está `pronto`; o briefing continua da primeira pergunta sem resposta. Nunca recomece do zero.
 
@@ -27,7 +27,7 @@ O aluno é leigo. Ele não lê o que aparece na tela técnica, não digita nada 
 - No Windows, escreva sempre `instalar/instalar.ps1` com barra normal.
 - `USE_O_INSTALADOR_DO_WINDOWS`: você rodou o `instalar.sh` no Windows. Sem falar nada, rode o mesmo pedido com a linha do Windows.
 
-Ações: `checar`, `mudar-pasta`, `plano`, `passo <id>`, `segundo-plano <id>`, `status <id>`, `desinstalar` (só na seção "Desinstalar"). A ação `atualizar` existe, mas **nunca** rode nesta skill.
+Ações: `checar`, `mudar-pasta`, `plano`, `passo <id>`, `segundo-plano <id>`, `status <id>`, `atualizar` (só na seção "Atualizar"), `desinstalar` (só na seção "Desinstalar").
 
 ### As caixinhas de permissão
 
@@ -103,6 +103,19 @@ Leia `.ferramentas/estado/fala.json` e `.ferramentas/estado/ouvido.json`. Se alg
 2. `ok:true`: diga o I-14 com `prontos` e `total`, trocando `{{linha_voltar}}` pela linha do seu programa (`linha_voltar_codex` ou `linha_voltar_claude`). Ela ensina a abrir o programa direto na pasta do estúdio, uma vez só: no app, um projeto (Codex) ou sessão (Claude) na pasta `estudio-de-reels`; no Terminal, o atalho "Abrir o Estúdio". Sem isso, amanhã o programa abre na pasta pessoal e não lê estas instruções.
 3. `ok:false`: diga o I-15, listando em palavras simples os itens com `ok:false`. "Tentar de novo": rode `passo <id>` de cada item que falhou (com I-04 ou I-05) e verifique de novo.
 
+## Atualizar
+
+Quando o aluno pedir "atualizar o estúdio" (ou pela seção "Lugar da pasta", com um estúdio mais antigo já instalado):
+1. Diga o U-01. Em "Agora não", diga que tudo bem e que é só escrever "atualizar o estúdio" quando quiser.
+2. Com o OK, rode `atualizar` de dentro da pasta do estúdio, sem endereço: ele baixa a versão mais nova do endereço oficial e confere o arquivo antes de trocar. No Codex, peça internet com o texto `CODEX-INTERNET`.
+3. Leia a última linha:
+   - `ok:true` com `codigo` `JA_ATUALIZADO`: diga o texto de `JA_ATUALIZADO`.
+   - `ok:true`: leia de novo o `AGENTS.md` (ele pode ter mudado) e diga o U-02.
+   - `ok:false`: diga o texto do código em `erros` e siga as opções.
+4. Depois, rode `verificar`. Se faltar algo, rode o `passo` do item que faltou, como na instalação.
+
+O `atualizar` nunca mexe em `.ferramentas/`, `minha-marca/`, `projetos/`, `1-referencias/`, `2-videos-brutos/` nem `3-videos-prontos/`. A versão de antes fica guardada dentro de `.ferramentas`.
+
 ## Desinstalar
 
 Quando o aluno pedir "desinstalar o estúdio":
@@ -115,7 +128,7 @@ Nunca apague a pasta do estúdio nem `minha-marca/`, `projetos/`, `1-referencias
 
 ## Regras
 
-- Nunca rode `atualizar`.
+- Só rode `atualizar` na seção "Atualizar", a pedido do aluno ou com um estúdio mais antigo já instalado.
 - Nunca apague `minha-marca/`, `projetos/`, `1-referencias/`, `2-videos-brutos/` nem `3-videos-prontos/`.
 - Nunca instale nada fora do instalador: nada de Homebrew, winget (a não ser o passo `git`), pip, npm ou download avulso.
 - Nunca peça senha. Nenhum passo precisa.
@@ -131,4 +144,4 @@ Nunca apague a pasta do estúdio nem `minha-marca/`, `projetos/`, `1-referencias
 
 ## Onde você para e pergunta
 
-I-01, I-03, I-05 e I-06 (modo um por um, ou recusa), I-09, I-10, as 10 perguntas do briefing, e os erros que têm opções. Na desinstalação, a confirmação. Nada mais.
+I-01, I-03, I-05 e I-06 (modo um por um, ou recusa), I-09, I-10, as 10 perguntas do briefing, e os erros que têm opções. Na atualização, o U-01. Na desinstalação, a confirmação. Nada mais.

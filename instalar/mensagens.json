@@ -157,6 +157,15 @@
       "quando": "no Codex, antes de mudar-pasta, quando o estúdio foi descompactado fora do lugar de sempre",
       "texto": "O Codex vai pedir para eu rodar fora da área protegida. É para pôr a pasta do estúdio na sua pasta pessoal, que é o lugar dela. Nada é apagado. Pode aprovar."
     },
+    "U-01": {
+      "quando": "o aluno pediu para atualizar, ou colou o link de instalação com um estúdio mais antigo já instalado",
+      "texto": "Vou trazer a versão nova do estúdio. O seu trabalho, a sua marca e os seus vídeos ficam como estão, e a versão de agora fica guardada. Leva uns minutos. Posso atualizar?",
+      "opcoes": ["Pode atualizar ★", "Agora não"]
+    },
+    "U-02": {
+      "quando": "\"atualizar\" com ok=true e sem codigo JA_ATUALIZADO",
+      "texto": "Pronto: o estúdio foi da versão {{de}} para a {{para}}. Pode continuar de onde parou."
+    },
     "CODEX-FORA-DA-AREA-PASTAS": {
       "quando": "no Codex, antes do passo pastas",
       "texto": "O Codex vai pedir para eu rodar fora da área protegida. É para abrir as suas pastas na tela. Pode aprovar."
@@ -575,6 +584,11 @@
       ],
       "acao_automatica": "nenhuma",
       "depois": "Se o aluno escolher a primeira, passe a usar a pasta de \"para\" e rode \"checar\" de novo. Nunca apague nenhuma das duas."
+    },
+    "JA_ATUALIZADO": {
+      "texto": "O seu estúdio já está na versão mais nova ({{de}}). Não precisei mudar nada.",
+      "opcoes": [],
+      "acao_automatica": "nenhuma"
     },
     "ESTUDIO_NAO_INSTALADO": {
       "texto": "O estúdio ainda não terminou de instalar. Vou terminar agora.",
