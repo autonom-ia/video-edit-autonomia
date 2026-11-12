@@ -25,6 +25,8 @@ Antes de responder à primeira mensagem, olhe nesta ordem e faça a primeira que
 - Windows: `%USERPROFILE%\estudio-de-reels\.ferramentas\instalacao.json` ou, quando o nome do usuário tem acento ou espaço, `C:\EstudioDeReels\estudio-de-reels\.ferramentas\instalacao.json`
 - Se a variável `ESTUDIO_FERRAMENTAS` existir, a pasta é ela.
 
+Se você foi chamado de fora da pasta do estúdio (a pessoa colou o link do zip, e você acabou de baixar e descompactar), é este o caso: leia a skill `instalar-estudio` na pasta que você descompactou e siga a partir dela. A skill põe a pasta no lugar certo antes de instalar. Antes do primeiro comando, diga à pessoa em uma frase como aprovar as caixinhas de licença.
+
 Rode a skill `instalar-estudio`. Se a instalação ficou pela metade (a pessoa fechou a janela, ou colou o texto de instalação de novo), ela continua de onde parou: o instalador pula o que já está pronto e o briefing retoma da primeira pergunta sem resposta. Nunca recomece do zero.
 
 **b) Falta a marca.** Não existe `minha-marca/marca.json`. Rode a skill `minha-marca`.

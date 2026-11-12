@@ -79,7 +79,7 @@ ler_versoes() {
 }
 ler_versoes
 
-VERSAO_ESTUDIO="1.0.1"
+VERSAO_ESTUDIO="1.0.2"
 if [ -f "$REPO/VERSAO" ]; then
   IFS= read -r VERSAO_ESTUDIO < "$REPO/VERSAO" || true
   VERSAO_ESTUDIO="${VERSAO_ESTUDIO%$'\r'}"
@@ -967,6 +967,8 @@ acao_checar() {
   local probs="" ok=1 livre mem net=1 nuvem prontos_mb=0 id necessario
   add_prob() { [ -n "$probs" ] && probs="$probs,"; probs="$probs{\"codigo\":\"$1\",\"tipo\":\"$2\",\"dados\":$3}"; }
   diga "Olhando o computador, sem instalar nada..."
+  # Se o zip foi descompactado por um programa que perde a marca de executável, devolve aqui.
+  chmod 755 "$REPO/estudio" "$REPO"/instalar/*.sh 2>/dev/null
 
   if [ -z "$MAC_MAIOR" ] || menor_que "$MAC_MAIOR.$(printf '%02d' "${MAC_MENOR:-0}" 2>/dev/null)" "$(minimo_mac_decimal)"; then
     add_prob SISTEMA_ANTIGO bloqueia "{\"versao\":$(js "macOS ${VERSAO_SO:-desconhecido}"),\"minimo\":$(js "macOS ${V_MAC_MINIMO:-13.5}")}"

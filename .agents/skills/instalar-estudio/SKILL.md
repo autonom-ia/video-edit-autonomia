@@ -12,6 +12,7 @@ O aluno é leigo. Ele não lê o que aparece na tela técnica, não digita nada 
 - Textos: todos os textos desta skill (I-01 a I-15, os itens e os erros) estão em `instalar/mensagens.json`. Use-os **literalmente**, trocando só o que está entre `{{ }}`. `{{agente}}` é "Claude" ou "Codex", conforme quem você é.
 - Pasta: rode tudo de dentro da pasta do estúdio (`~/estudio-de-reels` no Mac; `%USERPROFILE%\estudio-de-reels` ou `C:\EstudioDeReels\estudio-de-reels` no Windows). Os programas ficam em `.ferramentas`, dentro dela.
 - Sistema: descubra se é Mac, Windows com PowerShell ou Windows com Git Bash antes do primeiro comando.
+- Lugar da pasta: se a pessoa colou o link do zip e você descompactou o estúdio fora do lugar de sempre (em Downloads, dentro de outra pasta ou com outro nome), rode `mudar-pasta` de dentro da pasta descompactada, antes do `checar`. Não pergunte: é a cópia que você acabou de baixar, e nada é apagado. No Codex, peça para sair da área protegida com o texto `CODEX-FORA-DA-AREA-MUDAR-PASTA`. Continue da pasta do campo `para`. Se vier `PASTA_DESTINO_EXISTE`, o estúdio já tinha sido baixado: siga na pasta do campo `para`, que retoma de onde parou, e não apague nada.
 - Saída: todo comando termina com uma linha JSON. Leia só ela. Nunca mostre nada técnico ao aluno.
 - Retomada: se a pessoa fechou a janela e voltou (pelo atalho ou colando o texto de novo), siga daqui mesmo. O `plano` mostra o que já está `pronto`; o briefing continua da primeira pergunta sem resposta. Nunca recomece do zero.
 

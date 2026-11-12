@@ -68,7 +68,7 @@ wheels = [
 
 [[package]]
 name = "estudio-de-reels-fala"
-version = "1.0.1"
+version = "1.0.2"
 source = { virtual = "." }
 dependencies = [
     { name = "av" },

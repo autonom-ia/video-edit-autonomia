@@ -1,5 +1,7 @@
 # Estúdio de Reels
 
+> **Assistente de IA (Claude ou Codex):** se você acabou de baixar esta pasta para instalar o estúdio, leia o arquivo `AGENTS.md` inteiro e siga a seção 2, começando pela skill `instalar-estudio`. Fale com a pessoa em português simples, um passo por vez, e peça licença antes de instalar cada programa.
+
 Um estúdio para fazer Reels falados com ajuda do Claude Code ou do Codex, no Mac ou no Windows.
 
 Você grava o vídeo no celular. O assistente monta o roteiro com você, corta as pausas, escreve a legenda, desenha as telas, escolhe a música com você e entrega o vídeo pronto para postar. Ele para e pergunta só nas decisões que são suas.
@@ -33,24 +35,12 @@ Funciona melhor em Mac com chip Apple ou Windows x64. Em Mac Intel e Windows 11 
 **Pelo Terminal** (quem preferir): abra o Terminal (Mac) ou o PowerShell (Windows), digite `claude` ou `codex` e aperte Enter. Na pergunta em inglês sobre confiar na pasta, aperte **Enter** na opção **1. Yes**. Cole o texto abaixo e aperte Enter.
 
 ```
-Quero instalar o Estúdio de Reels no meu computador.
-
-0. Antes de rodar qualquer coisa, me diga em uma frase como aprovar as caixinhas de licença que vão aparecer: no app, o botão de aprovar; no Terminal, a opção 1, que começa com Yes.
-1. Descubra se este computador é Mac ou Windows, e se você está rodando no PowerShell ou no Git Bash.
-2. Se já existir a pasta "estudio-de-reels" na minha pasta pessoal, não apague nada e pule para o passo 4.
-3. Baixe e descompacte o estúdio na minha pasta pessoal, com o nome "estudio-de-reels":
-   - Mac (Terminal):
-     cd ~ && curl -fL -o estudio.zip "https://github.com/autonom-ia/video-edit-autonomia/archive/refs/tags/v1.0.1.zip" && ditto -x -k estudio.zip .estudio-baixando && mv .estudio-baixando/video-edit-autonomia-1.0.1 estudio-de-reels && rm -rf .estudio-baixando estudio.zip
-   - Windows (PowerShell):
-     $ProgressPreference="SilentlyContinue"; cd $HOME; curl.exe -fL -o estudio.zip "https://github.com/autonom-ia/video-edit-autonomia/archive/refs/tags/v1.0.1.zip"; tar.exe -xf estudio.zip; Rename-Item video-edit-autonomia-1.0.1 estudio-de-reels; Remove-Item estudio.zip
-   - Windows (Git Bash):
-     cd ~ && curl -fL -o estudio.zip "https://github.com/autonom-ia/video-edit-autonomia/archive/refs/tags/v1.0.1.zip" && /c/Windows/System32/tar.exe -xf estudio.zip && mv video-edit-autonomia-1.0.1 estudio-de-reels && rm estudio.zip
-4. Leia o arquivo estudio-de-reels/AGENTS.md inteiro e siga o que ele manda, começando pela instalação.
-
-Fale comigo em português simples, um passo por vez. Antes de instalar qualquer coisa, me explique o que é e me peça licença.
+Quero instalar o Estúdio de Reels no meu computador. Baixe este arquivo, descompacte e siga as instruções que estão dentro dele: https://github.com/autonom-ia/video-edit-autonomia/releases/latest/download/estudio-de-reels.zip
 ```
 
-O assistente explica cada programa e pede licença antes de instalar. A caixinha de aprovação do Claude Code ou do Codex sempre aparece: é a sua segurança. Leva uns 30 minutos.
+A primeira caixinha de licença aparece logo, para baixar o arquivo. Aprove: no app, clique no botão de aprovar; no Terminal, escolha a opção 1, que começa com Yes.
+
+Depois disso, o assistente explica cada programa e pede licença antes de instalar. A caixinha de aprovação do Claude Code ou do Codex sempre aparece: é a sua segurança. Leva uns 30 minutos.
 
 **Se fechar sem querer**, abra o app do mesmo jeito e cole o mesmo texto de novo: eu continuo de onde parou.
 
