@@ -107,7 +107,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Jornada do aluno (Terminal)
-        shell: bash
+        # Sem -e: um passo que falha é anotado e o teste segue, para mostrar tudo de uma vez.
+        shell: bash --noprofile --norc {0}
         run: |
           falhas=""
           Z="$RUNNER_TEMP/estudio-de-reels.zip"
