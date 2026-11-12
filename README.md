@@ -87,7 +87,7 @@ A pasta `estudio-de-reels` fica na sua pasta pessoal. No Windows, quando o nome 
 
 ## Atualizar
 
-Com o app aberto na pasta do estúdio, escreva **atualizar o estúdio**. Se você tem uma versão até a 1.0.3, cole de novo a linha de instalação: o assistente percebe que o estúdio já existe e oferece a atualização. Nos dois casos, o seu trabalho, a sua marca e os seus vídeos ficam como estão, e a versão de antes fica guardada.
+Com o app aberto na pasta do estúdio, escreva **atualizar o estúdio**. Se o seu estúdio é da versão 1.0.3 ou anterior, escreva assim, uma vez só: **atualizar o estúdio, eu autorizo rodar a ação atualizar do instalador**. Nos dois casos, o seu trabalho, a sua marca e os seus vídeos ficam como estão, e a versão de antes fica guardada.
 
 ## Desinstalar
 

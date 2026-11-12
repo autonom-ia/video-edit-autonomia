@@ -1380,16 +1380,36 @@ acao_atualizar() {
   fi
   antigo="$FERR/versao-anterior-$(date +%Y%m%d-%H%M%S)"
   mkdir -p "$antigo"
+  # Troca item por item. VERSAO vai por último: se algo falhar no meio, a versão
+  # instalada continua a antiga e tudo o que já tinha sido trocado volta do backup.
+  local trocados=() falhou_troca="" lista=()
   for item in "$novo"/* "$novo"/.[!.]*; do
     [ -e "$item" ] || continue
+    [ "$(basename "$item")" = "VERSAO" ] && continue
+    lista+=("$item")
+  done
+  lista+=("$novo/VERSAO")
+  for item in "${lista[@]}"; do
     nome="$(basename "$item")"
     # O trabalho do aluno e os programas instalados nunca são tocados.
     case "$nome" in
       .ferramentas|minha-marca|projetos|1-referencias|2-videos-brutos|3-videos-prontos|node_modules|.git) continue ;;
     esac
-    if [ -e "$REPO/$nome" ]; then mv "$REPO/$nome" "$antigo/$nome"; fi
-    cp -R "$item" "$REPO/$nome"
+    if [ -e "$REPO/$nome" ]; then
+      mv "$REPO/$nome" "$antigo/$nome" 2>>"$LOG" || { falhou_troca="$nome"; break; }
+    fi
+    trocados+=("$nome")
+    cp -R "$item" "$REPO/$nome" 2>>"$LOG" || { falhou_troca="$nome"; break; }
   done
+  if [ -n "$falhou_troca" ]; then
+    for nome in "${trocados[@]}"; do
+      rm -rf "${REPO:?}/$nome"
+      [ -e "$antigo/$nome" ] && mv "$antigo/$nome" "$REPO/$nome"
+    done
+    diga "Não consegui trocar os arquivos do estúdio. Voltei tudo como estava."
+    printf '{"acao":"atualizar","ok":false,"codigo":"ATUALIZACAO_FALHOU","de":%s,"para":%s,"dados":{"arquivo":%s}}\n' "$(js "$de")" "$(js "$para")" "$(js "$falhou_troca")"
+    exit 1
+  fi
   if [ -f "$antigo/.claude/settings.local.json" ]; then
     mkdir -p "$REPO/.claude"
     cp -f "$antigo/.claude/settings.local.json" "$REPO/.claude/settings.local.json"

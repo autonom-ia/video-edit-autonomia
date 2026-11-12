@@ -1471,12 +1471,17 @@ function Invoke-AcaoAtualizar([string]$Origem) {
     New-Item -ItemType Directory -Force -Path $antigo | Out-Null
     # O trabalho do aluno e os programas instalados nunca sao tocados.
     $nuncaTocar = @('.ferramentas', 'minha-marca', 'projetos', '1-referencias', '2-videos-brutos', '3-videos-prontos', 'node_modules', '.git')
+    # Troca item por item. VERSAO vai por ultimo: se algo falhar no meio, a versao
+    # instalada continua a antiga e tudo o que ja tinha sido trocado volta do backup.
+    $trocados = New-Object System.Collections.ArrayList
+    $itens = @(Get-ChildItem -LiteralPath $novo -Force | Where-Object { $_.Name -ne 'VERSAO' }) + @(Get-Item -LiteralPath $versaoArq.FullName)
     try {
-        foreach ($item in (Get-ChildItem -LiteralPath $novo -Force)) {
+        foreach ($item in $itens) {
             $nome = $item.Name
             if ($nuncaTocar -contains $nome) { continue }
             $atual = Join-Path $script:Repo $nome
             if (Test-Path -LiteralPath $atual) { Move-Item -LiteralPath $atual -Destination (Join-Path $antigo $nome) }
+            [void]$trocados.Add($nome)
             Copy-Item -LiteralPath $item.FullName -Destination $atual -Recurse -Force
         }
         $local = Join-Path $antigo '.claude\settings.local.json'
@@ -1485,9 +1490,16 @@ function Invoke-AcaoAtualizar([string]$Origem) {
             Copy-Item -LiteralPath $local -Destination (Join-Path $script:Repo '.claude\settings.local.json') -Force
         }
     } catch {
-        $cod = Get-CodigoExcecao $_
+        Write-Log ('troca falhou: ' + $_.Exception.Message)
+        foreach ($nome in $trocados) {
+            $atual = Join-Path $script:Repo $nome
+            try { if (Test-Path -LiteralPath $atual) { Remove-Item -LiteralPath $atual -Recurse -Force } } catch { }
+            $guardado = Join-Path $antigo $nome
+            try { if (Test-Path -LiteralPath $guardado) { Move-Item -LiteralPath $guardado -Destination $atual } } catch { }
+        }
+        Diga 'Nao consegui trocar os arquivos do estudio. Voltei tudo como estava.'
         Remove-Tmp
-        Sair ([ordered]@{ acao = 'atualizar'; ok = $false; codigo = $cod; de = $de; para = $para; copia_anterior = $antigo }) 1
+        Sair ([ordered]@{ acao = 'atualizar'; ok = $false; codigo = 'ATUALIZACAO_FALHOU'; de = $de; para = $para; dados = @{ arquivo = ($trocados | Select-Object -Last 1) } }) 1
     }
     Remove-VersoesAntigas
     if ($pkgMudou) {
