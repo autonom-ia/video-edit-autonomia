@@ -24,7 +24,8 @@ Referência é régua, não molde: nada daqui é desenho para copiar.
 
 ## Gancho
 
-- Quadro 0: o problema de quem assiste, escrito em até 10 palavras. Primeira virada até o segundo 3.
+- Quadro 0: o problema de quem assiste ou o resultado pronto, escrito em até 10 palavras. Primeira virada até o segundo 3.
+- Teste do dedo: quem não conhece quem fala para de rolar só com a primeira frase. Frase que fala só de quem grava não passa.
 
 ## Rosto e tela
 

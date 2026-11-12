@@ -57,7 +57,7 @@ Rode `./estudio receber --projeto P`. Ele olha a pasta 2-videos-brutos e também
 Só quando o vídeo foi gravado sem roteiro nosso (`caminho` = `B`).
 1. Escreva `projetos/P/roteiro.md` a partir da fala, pelo molde.
 2. Confira a verdade: toda afirmação tem prova no briefing? Se houver afirmação sobre o público, rode a skill `avaliar`, tipo `premissa`. Se cair, F-03 para regravar o trecho, ou tire o trecho.
-3. Escreva `cenas.json` (com os tempos do take) e `cenas.md`, pelo guia de `guias/camadas.md`.
+3. Escreva `cenas.json` (com os tempos do take) e `cenas.md`, pelo guia de `guias/camadas.md`. O gancho escrito (`titulo_gancho`) segue as regras 11 e 16: pelo menos 6 candidatos, o teste do dedo e, quando der, o resultado no quadro 0.
 4. `./estudio telas --projeto P` até passar. `./estudio amostras --tipo estilo --projeto P`. Depois `./estudio pagina-de-aprovacao --projeto P` (abre a página do vídeo no papel). Nunca abra `roteiro.md` nem `cenas.md` para o aluno.
 5. F-04. Mudança pedida: aplique e mostre só o que mudou. "Trocar o estilo": `amostras` de novo.
 6. `./estudio estado --projeto P --gate cenas=aprovado`.

@@ -7,7 +7,10 @@
 ## Como usar
 
 - Um Reel tem dois ganchos que disparam juntos e não são a mesma frase: **o falado** (cerca de 2 segundos) e **o escrito na tela** (cerca de 1 segundo, porque é lido antes de ser ouvido).
-- Para cada pauta, escolha **3 fórmulas diferentes** que caibam de verdade. Não escreva 3 versões da mesma fórmula.
+- Para cada pauta, escreva **pelo menos 6 ganchos, de 6 fórmulas diferentes**, descarte os fracos e mostre os **3 melhores**. Não escreva versões da mesma fórmula.
+- **Teste do dedo:** alguém que não conhece quem fala pararia de rolar ouvindo só a frase? Gancho que começa por "eu" ou "meu" só passa se a mesma frase já mostrar o que quem assiste ganha.
+- Resultado visível (vídeo pronto, tela, antes e depois)? Prefira as fórmulas 13, 18 e 24: o resultado aparece no quadro 0.
+- O gancho escolhido vira o fio do roteiro e volta no fecho.
 - Fala de até 8 palavras (3 segundos). Escrito de até 10 palavras.
 - Os exemplos abaixo mostram o jeito. Nunca use um exemplo como está: o gancho sai da dor do público do aluno, nas palavras dele.
 - Fórmulas que pedem número só servem se houver número em `provas[]`. Sem prova, escolha outra fórmula.

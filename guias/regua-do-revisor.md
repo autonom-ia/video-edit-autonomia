@@ -27,7 +27,7 @@ Cada critério leva uma nota de 0 a 10. A nota final é a soma de (nota × peso)
 |---|---|---|
 | Verdade | 3 | Toda afirmação tem prova no briefing. Número redondo, com origem. Nada além do que a prova mostra. Nada de `cuidados_do_nicho` inventado. A fala não afirma o que não aconteceu. |
 | Valor para quem assiste | 2 | Dá para dizer numa frase o que a pessoa leva. Passa no teste dos 30 segundos (ela não faria isso sozinha). Entrega concreta até o segundo 8. |
-| Gancho | 2 | Abre pelo problema de quem assiste. Fala de até 3 s. Gancho escrito diferente do falado. Nada de biografia ou apresentação. |
+| Gancho | 2 | Abre pelo problema de quem assiste ou pelo resultado na tela. Passa no teste do dedo: quem não conhece quem fala para de rolar só com a frase. Começar por "eu" ou "meu" sem dizer o ganho de quem assiste derruba a nota. Fala de até 3 s. Gancho escrito diferente do falado. Nada de biografia ou apresentação. |
 | Leigo e marca | 1,5 | Um leigo do público entende de primeira. Respeita `palavras_proibidas`, `termos_obrigatorios`, `marcas_proibidas` e o `tom`. |
 | Riscos | 1 | Nada que exponha o aluno: promessa exagerada, dado de cliente, marca de terceiro, problema com o conselho da profissão. |
 | Clareza | 0,5 | Uma ideia só. Frases curtas, faladas. Um pedido só, de pouco esforço, e o fim volta ao gancho. |
