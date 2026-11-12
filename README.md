@@ -35,7 +35,7 @@ Funciona melhor em Mac com chip Apple ou Windows x64. Em Mac Intel e Windows 11 
 **Pelo Terminal** (quem preferir): abra o Terminal (Mac) ou o PowerShell (Windows), digite `claude` ou `codex` e aperte Enter. Na pergunta em inglês sobre confiar na pasta, aperte **Enter** na opção **1. Yes**. Cole o texto abaixo e aperte Enter.
 
 ```
-Quero instalar o Estúdio de Reels no meu computador. Baixe este arquivo, descompacte e siga as instruções que estão dentro dele: https://github.com/autonom-ia/video-edit-autonomia/releases/latest/download/estudio-de-reels.zip
+instale: https://github.com/autonom-ia/video-edit-autonomia/releases/latest/download/estudio-de-reels.zip
 ```
 
 A primeira caixinha de licença aparece logo, para baixar o arquivo. Aprove: no app, clique no botão de aprovar; no Terminal, escolha a opção 1, que começa com Yes.
