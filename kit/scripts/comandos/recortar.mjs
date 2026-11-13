@@ -119,7 +119,12 @@ export default async function recortar({ opcoes }) {
     const lista = path.join(temp, 'lista.txt');
     fs.writeFileSync(lista, [...pedacos, ...soMedir].map((p) => `file '${path.basename(p.pequeno)}'`).join('\n'));
     const junto = path.join(temp, 'junto.mp4');
-    await ffmpegOk(['-y', '-f', 'concat', '-safe', '0', '-i', lista, '-c', 'copy', junto]);
+    // Reprocessa em vez de copiar: colar os pedaços deixa o tempo entre quadros irregular, e o modelo
+    // reamostra pelo tempo (devolvia quadros a mais e a máscara saía fora do tempo). Aqui cada quadro
+    // ganha o tempo n/30 exato, então a máscara tem um quadro para cada quadro dos pedaços.
+    await ffmpegOk(['-y', '-f', 'concat', '-safe', '0', '-i', lista, '-vf', `setpts=N/(${MASTER.fps}*TB)`, '-fps_mode', 'cfr', '-r', String(MASTER.fps), '-c:v', 'libx264', '-crf', '12', '-pix_fmt', 'yuv420p', '-an', junto]);
+    const noJunto = await contarQuadros(junto);
+    if (noJunto !== quadro) falha('RECORTE_DESALINHADO', { detalhe: `o vídeo de trabalho tem ${noJunto} quadros, esperado ${quadro}` });
     progresso(`Recortando a pessoa (${Math.round(quadro / MASTER.fps)} s de vídeo; leva alguns minutos)...`);
     const mascara = path.join(temp, 'junto.webm');
     const r = await hyperframes(['remove-background', junto, '-o', mascara, '--quality', 'fast'], { timeoutMs: 2 * 60 * 60 * 1000 });

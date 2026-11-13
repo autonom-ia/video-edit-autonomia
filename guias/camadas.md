@@ -130,7 +130,7 @@ Um efeito de cena muda o rosto inteiro por uma cena: capa de revista com o nome 
 
 1. **Escolha pelo sentido da fala, nunca por palavra.** Rode `./estudio efeitos` e leia a `funcao` de cada um. Pergunte: este trecho fica mais claro com este efeito? Se a resposta for "fica mais bonito", não use.
 2. **Escreva o `porque`**: o trecho da fala que o efeito ajuda a entender, em 4 palavras ou mais. O revisor confere se o efeito serve à fala.
-3. **Poucos.** No máximo 1 a cada 5 s, nunca o mesmo em seguida, nunca no gancho, nunca com tela por cima. Muitas vezes o melhor vídeo tem dois ou três.
+3. **Poucos.** No máximo 1 a cada 5 s, nunca o mesmo em seguida, nunca no gancho, nunca com tela por cima. Muitas vezes o melhor vídeo tem dois ou três. Efeito que bate na palavra forte (som em `golpe` na ficha: quebra, snap, cartão, fundo verde) precisa de `enfase` na cena, senão o golpe cai no começo (aviso `EFEITO_SEM_ENFASE`). O `atravessar` leva para a cena seguinte e não vai na última.
 4. **Recorte.** Efeito com `recorte: true` precisa da pessoa recortada do fundo. Rode `./estudio recortar --projeto <P>` depois de alinhar e antes de montar. Ele recorta só as cenas com esse efeito, leva alguns minutos (avise o aluno) e mede onde está a cabeça, para o efeito pôr o texto atrás dela. Mudou o tempo da cena ou o take: rode de novo (o `montar` reprova com `RECORTE_FALTANDO`). `--cenas c03,c05` recorta outras cenas para testar.
 5. **Confira nos quadros** (passo 7 da skill `fazer-video`): o texto atrás da cabeça está atrás mesmo? O rosto ficou livre? A saída é limpa antes da próxima cena?
 6. **Ao criar ou mudar um efeito**, estes limites do render do HyperFrames já custaram rodadas (testados na 0.9.20):
