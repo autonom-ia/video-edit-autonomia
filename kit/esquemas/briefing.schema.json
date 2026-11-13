@@ -186,6 +186,10 @@
         },
         "entrega": {
           "type": "string"
+        },
+        "por_video": {
+          "type": "boolean",
+          "description": "true quando o aluno diz que a palavra e o presente mudam a cada vídeo (ou que 'está no vídeo'): palavra e entrega ficam vazias no briefing e saem da fala de cada vídeo."
         }
       }
     },

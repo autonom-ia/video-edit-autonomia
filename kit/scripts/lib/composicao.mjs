@@ -3,7 +3,7 @@
 // Portado do molde que levou o primeiro vídeo à nota 8,7, sem nada específico de marca.
 import { FAIXA, ZOOM, RITMO, SFX, SOM } from './regras.mjs';
 import { gruposDeLegenda, tempoDosGrupos, legendaY, corDaLegenda } from './legenda.mjs';
-import { htmlDaTela, itensDaTela } from './telas.mjs';
+import { htmlDaTela, htmlDaMidia, itensDaTela } from './telas.mjs';
 import { faixaNoInstante, tamanhoPorFaixa } from './cenas.mjs';
 import { normalizar, escaparHtml, palavras as separar, arred } from './texto.mjs';
 
@@ -140,16 +140,31 @@ const SOM_DE_ENTRADA = {
   prompt: [['swish', 0.45], ['teclado', 0.45]],
   notificacao: [['vibrar', 0.7], ['notificacao-sucesso', 0.85]],
   cta: [['impacto-medio', 0.8], ['brilho', 0.55]],
+  livre: [['swish', 0.55]],
+  midia: [['whoosh-medio', 0.6]],
 };
 
-export function montarTelas(dados, marca) {
+// Lane do Studio para os vídeos de mídia (não muda o tempo; só organiza a linha do tempo).
+const TRILHA_MIDIA = 100;
+// O vídeo de mídia continua tocando durante a saída da tela (0,35 s).
+const MIDIA_SOBRA_S = 0.4;
+
+// livres: { id: HTML da tela livre }. midias: { id: { src, tipo: 'video' | 'imagem' } }.
+export function montarTelas(dados, marca, { livres = {}, midias = {}, duracao = Infinity } = {}) {
   const htmls = [];
+  const htmlsMidia = [];
   const info = [];
-  for (const tela of dados.telas || []) {
+  (dados.telas || []).forEach((tela, k) => {
     const faixa = faixaNoInstante(dados.cenas, tela.entra + 0.2);
     const tamanho = tamanhoPorFaixa(faixa);
-    htmls.push(htmlDaTela(tela, { tamanho, solta: faixa === 0, marca }));
     const entrada = Math.max(0, tela.entra - RITMO.antecipacaoCardS);
+    if (tela.tipo === 'midia') {
+      const m = midias[tela.id] || { src: '', tipo: 'imagem' };
+      const video = m.tipo === 'video' ? { inicio: r3(entrada), duracao: r3(Math.min(tela.sai - entrada + MIDIA_SOBRA_S, duracao - entrada)), trilha: TRILHA_MIDIA + k } : null;
+      htmlsMidia.push(htmlDaMidia(tela, { alturaPx: faixa === 0 ? 1920 : FAIXA.alturaPx[faixa], src: m.src, video }));
+    } else {
+      htmls.push(htmlDaTela(tela, { tamanho, solta: faixa === 0, marca, fragmento: livres[tela.id] || '' }));
+    }
     const n = itensDaTela(tela);
     const folga = Math.max(0.3, tela.sai - entrada - 0.9);
     const passo = n ? Math.min(tela.tipo === 'conversa' ? 0.6 : 0.4, folga / n) : 0;
@@ -160,9 +175,10 @@ export function montarTelas(dados, marca) {
       const total = (tela.campos.itens || []).length || 1;
       barra = { sel: `#${tela.id}-barra`, de: Math.round((tela.campos.atual / total) * 100), para: Math.round(((tela.campos.atual + 1) / total) * 100), t: r3(entrada + 0.3) };
     }
-    info.push({ id: tela.id, sel: `#tela-${tela.id}`, tipo: tela.tipo, entrada: r3(entrada), entra: r3(tela.entra), sai: r3(tela.sai), itens, barra, faixa });
-  }
-  return { html: htmls.join('\n'), info };
+    const entradaPropria = tela.tipo === 'livre' && (tela.campos || {}).entrada === 'propria';
+    info.push({ id: tela.id, sel: `#tela-${tela.id}`, tipo: tela.tipo, entrada: r3(entrada), entra: r3(tela.entra), sai: r3(tela.sai), itens, barra, faixa, entradaPropria });
+  });
+  return { html: htmls.join('\n'), htmlMidias: htmlsMidia.join('\n'), info };
 }
 
 export function montarCta(dados, telasInfo) {
@@ -241,12 +257,12 @@ export function jsonParaScript(objeto) {
 }
 
 // Junta tudo: dados para o animacao.js, pedaços de HTML e os arquivos sons.json e legendas.json.
-export function montarComposicao({ dados, transcricao, marca, duracao }) {
+export function montarComposicao({ dados, transcricao, marca, duracao, livres = {}, midias = {} }) {
   const eventosFaixa = eventosDeFaixa(dados.cenas, marca);
   const zoomEv = eventosDeZoom(dados.cenas, eventosFaixa);
   const legendas = montarLegendas(transcricao.palavras || [], dados.cenas);
   const gancho = montarGancho(dados);
-  const telas = montarTelas(dados, marca);
+  const telas = montarTelas(dados, marca, { livres, midias, duracao });
   const cta = montarCta(dados, telas.info);
   const sons = planejarSons({ dados, eventosFaixa, telasInfo: telas.info, zoomEv, cta: cta.dados, duracao });
   const dadosReel = {

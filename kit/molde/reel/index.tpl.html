@@ -6,6 +6,7 @@
     <title>{{TITULO}}</title>
     <!-- Gerado pelo estúdio (./estudio montar) a partir de kit/molde/reel. Não edite à mão: mude a tabela de cenas e monte de novo. -->
     <script src="assets/gsap.min.js"></script>
+{{PLUGINS}}
     <link rel="stylesheet" href="estilo.css" />
   </head>
   <body>
@@ -26,6 +27,10 @@
 
       <div id="telas" class="clip" data-start="0" data-duration="{{DURACAO}}" data-track-index="3" data-track-kind="graphics" data-layout-allow-overlap data-layout-allow-overflow>
         {{TELAS}}
+      </div>
+
+      <div id="midias">
+        {{MIDIAS}}
       </div>
 
       {{CTA}}

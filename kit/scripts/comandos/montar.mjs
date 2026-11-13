@@ -4,12 +4,80 @@ import path from 'node:path';
 import { RAIZ, KIT, daRaiz } from '../lib/caminhos.mjs';
 import { abrirProjeto, exigirArquivo, lerMarca, mudarEtapa, lerEstado } from '../lib/projeto.mjs';
 import { lerJson, escreverJson, escreverTexto } from '../lib/json.mjs';
-import { falha } from '../lib/saida.mjs';
+import { falha, reprovado } from '../lib/saida.mjs';
 import { sondar, resumoDoVideo } from '../lib/ffmpeg.mjs';
 import { montarComposicao, htmlDosSons, jsonParaScript } from '../lib/composicao.mjs';
 import { estiloCss } from '../lib/amostra.mjs';
 import { escaparHtml, preencher } from '../lib/texto.mjs';
 import { conferirTabela } from './telas.mjs';
+import { lerTelaDeArquivo, pluginsCitados, tipoDeMidia } from '../lib/telas-livres.mjs';
+import { MIDIA, RITMO } from '../lib/regras.mjs';
+
+// Tela que passa do fim do vídeo, ou gravação mais curta que o tempo da tela (congelaria).
+export function conferirDuracoes(telas, duracaoVideo, duracaoDasMidias) {
+  const depoisDoFim = telas.filter((t) => t.sai > duracaoVideo + 0.05).map((t) => ({ tela: t.id, sai: t.sai, fim_do_video: duracaoVideo }));
+  const curtas = [];
+  for (const t of telas) {
+    const duracao = duracaoDasMidias[t.id];
+    if (duracao === undefined) continue;
+    const precisa = t.sai - Math.max(0, t.entra - RITMO.antecipacaoCardS);
+    if (duracao < precisa - 0.1) curtas.push({ tela: t.id, gravacao_s: duracao, tela_s: Math.round(precisa * 100) / 100 });
+  }
+  return { depoisDoFim, curtas };
+}
+
+// Nomes entre {{ }} no molde.
+export function marcadoresDoMolde(molde) {
+  const nomes = [];
+  let i = molde.indexOf('{{');
+  while (i !== -1) {
+    const fim = molde.indexOf('}}', i + 2);
+    if (fim === -1) break;
+    nomes.push(molde.slice(i + 2, fim));
+    i = molde.indexOf('{{', fim + 2);
+  }
+  return nomes;
+}
+
+// Copia a pasta midia do projeto para comp/assets/midia (a tela livre usa assets/midia/<nome>).
+function copiarMidias(projeto, assets) {
+  const origem = projeto.arq(MIDIA.pasta);
+  if (!fs.existsSync(origem)) return;
+  const destino = path.join(assets, 'midia');
+  fs.rmSync(destino, { recursive: true, force: true });
+  const copiar = (de, para) => {
+    fs.mkdirSync(para, { recursive: true });
+    for (const nome of fs.readdirSync(de)) {
+      const c = path.join(de, nome);
+      const st = fs.lstatSync(c);
+      if (st.isSymbolicLink()) continue;
+      if (st.isDirectory()) copiar(c, path.join(para, nome));
+      else copiarOuLigar(c, path.join(para, nome));
+    }
+  };
+  copiar(origem, destino);
+}
+
+// Lê as telas livres e as mídias da tabela. Devolve o HTML de cada tela livre, o endereço de
+// cada mídia dentro da composição e os plugins do GSAP citados.
+function telasDeArquivo(dados, projeto) {
+  const livres = {};
+  const midias = {};
+  const plugins = new Set();
+  for (const tela of dados.telas || []) {
+    if (tela.tipo !== 'livre' && tela.tipo !== 'midia') continue;
+    const lido = lerTelaDeArquivo(tela, projeto.pasta);
+    if (tela.tipo === 'livre') {
+      livres[tela.id] = lido.conteudo || '';
+      pluginsCitados(livres[tela.id]).forEach((nome) => plugins.add(nome));
+    } else {
+      const relativo = path.relative(projeto.arq(MIDIA.pasta), lido.caminho).split(path.sep).join('/');
+      const dentroDaMidia = !relativo.startsWith('..');
+      midias[tela.id] = { src: dentroDaMidia ? `assets/midia/${relativo}` : '', tipo: tipoDeMidia(lido.caminho), fora: !dentroDaMidia, arquivo: tela.campos.arquivo };
+    }
+  }
+  return { livres, midias, plugins: [...plugins] };
+}
 
 function copiarOuLigar(origem, destino) {
   fs.mkdirSync(path.dirname(destino), { recursive: true });
@@ -49,7 +117,28 @@ export default async function montar({ opcoes }) {
     fontesUsadas.set(f.arquivo, `assets/fontes/${nome}`);
   }
 
-  const montagem = montarComposicao({ dados, transcricao, marca, duracao: info.duracao });
+  const deArquivo = telasDeArquivo(dados, projeto);
+  const foraDaMidia = Object.values(deArquivo.midias).filter((m) => m.fora);
+  if (foraDaMidia.length) falha('MIDIA_FORA_DA_PASTA', { arquivos: foraDaMidia.map((m) => m.arquivo) });
+  const duracaoDasMidias = {};
+  for (const tela of dados.telas || []) {
+    const m = deArquivo.midias[tela.id];
+    if (m && m.tipo === 'video') duracaoDasMidias[tela.id] = resumoDoVideo(await sondar(lerTelaDeArquivo(tela, projeto.pasta).caminho)).duracao;
+  }
+  const duracoes = conferirDuracoes(dados.telas || [], info.duracao, duracaoDasMidias);
+  if (duracoes.depoisDoFim.length) reprovado('TELA_DEPOIS_DO_FIM', { problemas: duracoes.depoisDoFim });
+  if (duracoes.curtas.length) reprovado('MIDIA_CURTA', { problemas: duracoes.curtas });
+  copiarMidias(projeto, assets);
+  const scriptsDePlugin = [];
+  for (const nome of deArquivo.plugins) {
+    const arquivo = path.join(RAIZ, 'node_modules', 'gsap', 'dist', `${nome}.min.js`);
+    if (!fs.existsSync(arquivo)) falha('MONTADOR_FALTANDO', { detalhe: `gsap ${nome}` });
+    fs.mkdirSync(path.join(assets, 'gsap'), { recursive: true });
+    fs.copyFileSync(arquivo, path.join(assets, 'gsap', `${nome}.min.js`));
+    scriptsDePlugin.push(`    <script src="assets/gsap/${nome}.min.js"></script>`);
+  }
+
+  const montagem = montarComposicao({ dados, transcricao, marca, duracao: info.duracao, livres: deArquivo.livres, midias: deArquivo.midias });
   for (const efeito of new Set(montagem.sons.map((s) => s.efeito))) {
     fs.copyFileSync(path.join(KIT, 'sfx', `${efeito}.wav`), path.join(assets, 'sfx', `${efeito}.wav`));
   }
@@ -58,18 +147,24 @@ export default async function montar({ opcoes }) {
   fs.copyFileSync(path.join(KIT, 'molde', 'reel', 'animacao.js'), path.join(comp, 'animacao.js'));
   fs.copyFileSync(path.join(KIT, 'molde', 'reel', 'hyperframes.json'), path.join(comp, 'hyperframes.json'));
   const molde = fs.readFileSync(path.join(KIT, 'molde', 'reel', 'index.tpl.html'), 'utf8');
-  const html = preencher(molde, {
+  // As telas entram por último: o HTML delas é do assistente e pode ter "{{" no meio.
+  const trocas = {
     TITULO: escaparHtml(lerEstado(projeto).titulo || projeto.nome),
     DURACAO: String(montagem.dadosReel.duracao),
     GANCHO_FIM: String(montagem.gancho.fim),
     GANCHO: montagem.gancho.html,
-    TELAS: montagem.telas.html,
     CTA: montagem.cta.html,
     LEGENDAS: montagem.legendas.html,
     SONS: htmlDosSons(montagem.sons),
     DADOS: jsonParaScript(montagem.dadosReel),
-  });
-  if (html.includes('{{')) falha('MOLDE_INCOMPLETO', {});
+    PLUGINS: scriptsDePlugin.join('\n'),
+    MIDIAS: montagem.telas.htmlMidias,
+    TELAS: montagem.telas.html,
+  };
+  const faltando = Object.keys(trocas).filter((chave) => !molde.includes(`{{${chave}}}`));
+  const semTroca = marcadoresDoMolde(molde).filter((chave) => trocas[chave] === undefined);
+  if (faltando.length || semTroca.length) falha('MOLDE_INCOMPLETO', { faltando: [...faltando, ...semTroca] });
+  const html = preencher(molde, trocas);
   escreverTexto(path.join(comp, 'index.html'), html);
   escreverJson(path.join(comp, 'sons.json'), montagem.sons);
   escreverJson(path.join(comp, 'legendas.json'), montagem.legendas.arquivo);

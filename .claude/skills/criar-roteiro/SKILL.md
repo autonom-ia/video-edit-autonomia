@@ -62,6 +62,8 @@ O gancho escolhido vira o fio do roteiro e volta no fecho.
 ### 6. O plano das cenas (em silêncio)
 1. Escreva `direcao_de_arte` primeiro: o que domina a tela em cada trecho e por quê.
 2. Escreva `projetos/P/cenas.json` pelo guia de `guias/camadas.md`, com tempos estimados a 2,75 palavras por segundo. Siga "Como pensar a tabela".
+   - Quando a fala cita um app, um site ou uma ação na tela, pesquise como ele é de verdade e desenhe a tela livre a partir dessa referência (`guias/tela-livre.md`). App que o aluno usa vai em `apps_reais`.
+   - Se a tela do vídeo vai mostrar algo que o aluno faz no computador ou no celular, a folha de gravação já pede para ele gravar a tela também (`guias/guia-de-gravacao.md`, "Se o vídeo mostra algo na tela").
 3. Escreva `projetos/P/cenas.md` pelo molde `modelos/cenas.md`, em palavras simples.
 4. Rode `./estudio telas --projeto P`. Se voltar `CENAS_INVALIDAS` ou `TELA_ESTOUROU`, corrija cada item de `dados.problemas[]` e rode de novo. Olhe os PNGs de `projetos/P/telas/`.
 5. Rode `./estudio amostras --tipo estilo --projeto P`. Ele gera as 3 imagens de estilo sem perguntar nada.

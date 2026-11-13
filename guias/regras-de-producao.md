@@ -6,7 +6,8 @@ Como usar:
 - Leia tudo antes de escrever um roteiro ou montar um vídeo.
 - Os números são os mesmos do kit (`kit/scripts/lib/regras.mjs`). Se um número daqui e um do kit discordarem, vale o do kit, e isso é um defeito a relatar.
 - Onde diz "o kit confere", existe um comando que reprova sozinho. Onde não diz, quem confere é você e o revisor.
-- O molde do vídeo já traz o ritmo, o zoom, a faixa, a legenda e o som certos. Não reinvente: mude só o que a tabela de cenas pede.
+- O molde do vídeo já traz o ritmo, o zoom, a faixa, a legenda e o som certos. Ele é o ponto de partida: melhore quando a cena pedir, com tela livre, gravação de tela e o repertório de `guias/tela-livre.md`. Quem segura o nível é o avaliador (regra 53), não a forma.
+- As regras travam três coisas: as decisões do aluno, a verdade e o resultado (o que aparece no vídeo). Nenhuma regra trava o jeito de você criar.
 
 ## 1. Pauta e verdade
 
@@ -130,20 +131,21 @@ Porquê: a tela ganha o quadro quando prova; a pessoa volta quando a fala é o q
 Faixa cor de papel nas alturas 0, 35, 50 ou 100 (% da tela). Faixa 100 só com tela e por até 3,5 s. A troca leva de 0,45 a 0,6 s.
 Porquê: o tamanho acompanha a importância. Faixa fixa deixa tudo com o mesmo peso.
 
-**29. Um sistema de cartões só.**
-Todos os cartões com as cores e as fontes da marca (`minha-marca/marca.json`), no mesmo desenho do começo ao fim. Cartão com 90% da largura.
+**29. Uma direção de arte só.**
+Cartões e textos nas cores e nas letras da marca (`minha-marca/marca.json`), no mesmo desenho do começo ao fim. O cartão ocupa a faixa, sem área morta embaixo. Tela de um app real tem a cara do app (regra 30); o que é do aluno tem a cara do aluno.
 Porquê: quem assiste aprende a ler o cartão uma vez e depois só lê o conteúdo.
 
-**30. Tela realista, sem faixa de simulação.**
-Conversa e notificação com nome comum e status "online", nas cores da marca do aluno. Sem etiqueta de "fictício" ou "simulação". O conteúdo continua inventado: sem pessoa real, sem dado de cliente, sem logo ou cor de app famoso. O kit confere: chave `etiqueta` reprova; cores de apps famosos reprovam no `checar-marca`.
-Porquê: a faixa entrega que é montado e mata a credibilidade. A cor de um app real expõe o aluno a problema de marca.
+**30. A tela mostra o que a fala diz, com a cara real.**
+Quando a fala cita um app, um site ou uma ação na tela, ela aparece: a gravação de tela do aluno, se houver; senão, a tela redesenhada a partir da referência real pesquisada (site oficial, print público, documentação), com nome, logo, cores e o jeito de mexer. Declare cada app em `apps_reais` do `cenas.json`, com a referência e o porquê: o `checar-marca` libera o nome e as cores dele neste vídeo. Logo real só do site oficial ou da Wikimedia.
+Continua proibido: faixa ou etiqueta de "fictício" e "simulação" (chave `etiqueta` reprova), pessoa real, dado de cliente, número sem prova, resultado ou depoimento inventado, app que o aluno não usa só para enfeitar, e imitar a marca ou o visual de outro criador. Cor e nome de app famoso fora de `apps_reais` reprovam no `checar-marca`.
+Porquê: no teste de 12/11/2026, a fala dizia "abro o Codex" e a tela mostrava um desenho genérico. Os três avaliadores pararam no segundo 8 pelo mesmo motivo: a prova ficou só na fala. A faixa de simulação entrega que é montado; o desenho genérico também.
 
 **31. Tudo importante dentro da zona segura.**
 y de 250 a 1500, 60 px da borda esquerda, 230 px da direita.
 Porquê: fora disso ficam a legenda do post, o nome do perfil e os botões do Instagram.
 
-**32. Cada tela no ar por até 4 segundos, com texto curto.**
-Limites de palavras por tipo de tela estão em `guias/camadas.md`. O kit confere e marca de vermelho o texto que estourou.
+**32. Tela no ar o tempo certo, com texto curto.**
+Tela do molde: até 4 s, com os limites de palavras de `guias/camadas.md` (o kit marca de vermelho o texto que estourou). Tela livre e mídia: até 8 s, porque o movimento vem do próprio conteúdo, mas nada parado mais de 2 s (regra 33) e texto que dê para ler no tempo (regra 36).
 Porquê: tela longa ou cheia de texto vira leitura, e ninguém lê Reel.
 
 ## 5. Ritmo e movimento

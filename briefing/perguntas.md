@@ -94,11 +94,16 @@ Só pergunte se `cta.tipo` for `comentar_palavra` ou `direct`.
 
 > Qual palavra ela comenta? Uma só, fácil de digitar. Exemplo: "CARDÁPIO". Se não souber, eu sugiro 3.
 
+Se o aluno disser que a palavra muda a cada vídeo, ou que ela "está no vídeo", grave `cta.por_video` = `true`, deixe `cta.palavra` e `cta.entrega` vazias, não pergunte o B9 e diga:
+> Combinado: em cada vídeo eu pego a palavra e o presente do que você falar.
+
 Se o aluno não souber, sugira 3 palavras ligadas à entrega, numeradas, a primeira com ★. Como a entrega (B9) vem depois, se ela ainda não existir, pergunte o B9 primeiro e volte ao B8. Grave em caixa alta, sem espaço. Palavra com acento é aceita, mas avise que sem acento é mais fácil de digitar e ofereça a versão sem acento.
 
 ### B9 · instalação · campo `cta.entrega` · obrigatório se `cta.tipo` = `comentar_palavra`
 
 > O que a pessoa recebe quando faz isso? Exemplo: "Um cardápio de 7 dias em PDF."
+
+Se a resposta for que muda a cada vídeo ou que "está no vídeo", siga como no B8: `cta.por_video` = `true`, entrega vazia, e a mesma frase de "Combinado".
 
 ### B10 · campo `provas[]` · padrão `[]` · fora da instalação
 

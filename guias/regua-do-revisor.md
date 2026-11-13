@@ -38,10 +38,10 @@ Cada critério leva uma nota de 0 a 10. A nota final é a soma de (nota × peso)
 |---|---|---|
 | Gancho e primeiros 3 s | 2 | Título e legenda no quadro 0. Quadro 0 claro (é a capa). Palavra-soco com golpe até 2,5 s. Você ficaria? |
 | Ritmo | 1,5 | Nada parado mais de 2 s. Mudança de tela, zoom ou texto no tempo da fala. Nenhum trecho morto. |
-| Direção de arte | 1,5 | Rosto grande (cheio ou dividido, sem moldura). Faixa acompanhando a importância. Um sistema de cartões só. Nada fora da zona segura. Nenhuma sobra de tela ou tela branca nas transições. |
+| Direção de arte | 1,5 | Rosto grande (cheio ou dividido, sem moldura). Faixa acompanhando a importância. Uma direção de arte só, com cartão que ocupa a faixa. Movimento com função (texto que se mexe, forma virando outra, câmera, 3D), nada de enfeite solto. Nada fora da zona segura. Nenhuma sobra de tela ou tela branca nas transições. |
 | Legenda e telas | 1 | Legenda curta, no tempo, fora da boca, uma ênfase por cena. Telas legíveis no tempo que ficam. Nomes e números certos. |
 | Som | 1,5 | Voz clara na frente. Trilha bem abaixo da voz, presente no celular. Todo movimento com som, nenhum som solto. Golpe nas viradas. Volume final de rede social (−14 LUFS), estéreo. |
-| Verdade e marca | 1,5 | O que a tela mostra é o que a fala diz. Tela realista sem faixa de simulação, sem pessoa real, sem marca de terceiro. Cores e fontes do aluno. |
+| Verdade e marca | 1,5 | A tela mostra acontecendo o que a fala diz: quando a fala cita um app, um site ou uma ação, ele aparece (gravação de tela ou tela com a cara real do app). Desenho genérico no lugar de um app citado, ou prova só na fala, derruba a nota. Tela realista sem faixa de simulação, sem pessoa real, sem dado de cliente, sem app que o aluno não usa. Cartões nas cores e letras do aluno. |
 | Pedido e fecho | 1 | Um pedido só, dito e escrito, com a palavra certa. O fim volta ao gancho. A legenda do post não promete mais que o vídeo. |
 
 ### Derrubador de premissa (tipo `premissa`)
