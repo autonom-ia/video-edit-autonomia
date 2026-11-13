@@ -129,3 +129,20 @@ test('cenas.json: legenda_rosto_y fora da zona segura reprova', () => {
   assert.equal(sobre(760).length, 0);
   assert.equal(validarCenas(base).problemas.filter((p) => p.onde === 'legenda_rosto_y').length, 0);
 });
+
+test('impacto da virada colado na chegada fica no golpe da fala', () => {
+  const d = dados([{ efeito: 'impacto-medio', em: 5.02, volume: 1.2 }]);
+  d.cenas[1] = { ...d.cenas[1], virada: true, enfase: [{ palavra: 'responde', inicio: 5.02, fim: 5.4 }] };
+  const sons = sonsDe(d);
+  assert.ok(sons.some((s) => s.efeito === 'impacto-medio' && s.motivo === 'cena c02' && s.golpe === 5.02));
+});
+
+test('QA: tela no começo do vídeo com whoosh desde o 0 passa', () => {
+  const d = dados();
+  d.telas = [{ id: 't01', tipo: 'midia', campos: { arquivo: 'midia/x.mp4', descricao: 'x', encaixe: 'cobrir' }, entra: 0.25, sai: 3 }];
+  d.cenas = [{ ...d.cenas[0], tela: 't01' }, d.cenas[1]];
+  d.cenas[1].tela = null;
+  const r = montarTelas(d, null, { midias: { t01: { src: 'assets/midia/x.mp4', tipo: 'video' } }, duracao: 10 });
+  const sons = planejarSons({ dados: d, eventosFaixa: [], telasInfo: r.info, zoomEv: [], cta: null, duracao: 10 });
+  assert.deepEqual(checarSonsNasTrocas(d.telas, sons), []);
+});

@@ -215,7 +215,12 @@ export function inicioDoSom(efeito, golpe) {
 export function planejarSons({ dados, eventosFaixa, telasInfo, zoomEv, cta, duracao }) {
   const explicitos = [];
   for (const c of dados.cenas) {
-    for (const s of c.sons || []) explicitos.push({ efeito: s.efeito, golpe: alinharNaChegada(s.em, telasInfo), volume: s.volume ?? 0.8, motivo: `cena ${c.id}` });
+    // O som do golpe da fala (virada, zoom punch) fica preso ao golpe, mesmo colado numa chegada de tela.
+    const golpeDaFala = c.virada || c.zoom === 'punch' ? tempoDoGolpe(c) : null;
+    for (const s of c.sons || []) {
+      const noGolpe = golpeDaFala !== null && Math.abs(s.em - golpeDaFala) <= CHEGADA_FOLGA_S;
+      explicitos.push({ efeito: s.efeito, golpe: noGolpe ? s.em : alinharNaChegada(s.em, telasInfo), volume: s.volume ?? 0.8, motivo: `cena ${c.id}` });
+    }
   }
   const auto = [];
   const add = (efeito, golpe, volume, motivo) => auto.push({ efeito, golpe: Math.max(0, golpe), volume, motivo });

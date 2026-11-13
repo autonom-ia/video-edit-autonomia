@@ -38,7 +38,9 @@ export function checarSonsNasTrocas(telas, sons, janela = QA.somNaTrocaS) {
     const aparece = Math.max(0, t.entra - RITMO.antecipacaoCardS);
     // sons.json de montagem antiga não tem "golpe": calcula pelo começo e pelo pico do efeito.
     const golpe = (s) => (typeof s.golpe === 'number' ? s.golpe : s.inicio + (SFX_PICO[s.efeito] || 0));
-    const tem = (sons || []).some((s) => Math.abs(golpe(s) - aparece) <= janela);
+    // Tela que aparece no começo: o som que já toca desde o 0 é o mais cedo possível e conta.
+    const desdeOZero = (s) => s.inicio <= 0.001 && aparece <= (SFX_PICO[s.efeito] || 0) + janela;
+    const tem = (sons || []).some((s) => Math.abs(golpe(s) - aparece) <= janela || desdeOZero(s));
     if (!tem) faltando.push({ tela: t.id, segundo: Math.round(aparece * 1000) / 1000 });
   }
   return faltando;
