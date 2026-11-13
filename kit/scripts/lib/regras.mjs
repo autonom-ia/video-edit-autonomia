@@ -152,6 +152,9 @@ export const CORTE_FALA = Object.freeze({
   respiroMaxS: 0.4,
   toleranciaS: 0.02,
   margemPalavraS: 0.03,
+  // Palavra fora do mapa da fala só conta como fala se for curta: palavra perdida pelo detector
+  // é curta ("é", "oi"); palavra longa ali é o Whisper esticando a palavra para dentro da pausa.
+  palavraPerdidaMaxS: 0.8,
 });
 
 // Limpeza da voz (DPDFNet 48 kHz, kit/py/limpar_voz.py). O limite deixa uns 24 dB de ruído a menos

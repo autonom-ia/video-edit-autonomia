@@ -8,7 +8,7 @@ import { acharChrome } from '../lib/chrome.mjs';
 import { earshot, earshotDisponivel } from '../lib/earshot.mjs';
 import { rodarTranscricao } from '../lib/fala.mjs';
 import { vozLimpa } from '../lib/voz-limpa.mjs';
-import { medirRosto } from '../lib/rosto.mjs';
+import { medirRosto, autotesteDoRosto } from '../lib/rosto.mjs';
 import { conferirEspelhos } from '../../testes/conferir-espelhos.mjs';
 import { aviso } from '../lib/saida.mjs';
 import { ultimasLinhas } from '../lib/executar.mjs';
@@ -68,6 +68,8 @@ export default async function conferirKit() {
       const mp4 = path.join(pasta, 'teste.mp4');
       const r = await ffmpeg(['-y', '-f', 'lavfi', '-i', 'testsrc=s=360x640:r=30', '-t', '1', '-pix_fmt', 'yuv420p', mp4]);
       if (r.codigo !== 0) return { ok: false, texto: 'não consegui gerar o vídeo de teste' };
+      const auto = await autotesteDoRosto();
+      if (auto.erro) return { ok: false, texto: `conta do rosto errada: ${auto.erro}` };
       const m = await medirRosto(mp4, path.join(pasta, 'rosto.json'));
       return { ok: Boolean(m.medida), texto: m.medida ? 'medida do rosto respondeu' : `medida do rosto falhou: ${m.erro}` };
     } finally {

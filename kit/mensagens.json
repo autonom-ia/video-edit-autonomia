@@ -375,6 +375,10 @@
     "texto": "Tem um trecho de mais de 2 segundos sem nada mudando na tela.",
     "acao": "Ponha uma tela, um zoom, uma troca de faixa ou um destaque nesse trecho."
   },
+  "TRECHO_REPETIDO": {
+    "texto": "Dois trechos pegam o mesmo pedaço do vídeo: essa fala vai sair duas vezes.",
+    "acao": "Confira dados.trechos em trechos.json. Se repetir foi de propósito (fechar repetindo o gancho), deixe; se foi engano, separe os trechos e rode ./estudio cortar de novo."
+  },
   "TRECHO_SEM_FALA": {
     "texto": "Um trecho escolhido não tem fala.",
     "acao": "Confira o trecho dados.trecho em trechos.json: se foi engano, tire; se é uma imagem de propósito, deixe."

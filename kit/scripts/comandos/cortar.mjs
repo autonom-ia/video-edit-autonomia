@@ -45,19 +45,19 @@ export function conferirTrechos(dados, duracao) {
     if (t.inicio < 0 || t.fim > duracao + 0.05) problemas.push({ onde: `trechos[${i}]`, problema: `fora do vídeo (que tem ${duracao} s)` });
   });
   if (!(dados.trechos || []).length) problemas.push({ onde: 'trechos', problema: 'nenhum trecho escolhido' });
-  return [...problemas, ...sobrepostos(dados.trechos || [])];
+  return problemas;
 }
 
-// Dois trechos com o mesmo pedaço do bruto repetem a fala no take. A ordem da lista pode ser
-// qualquer uma (o gancho pode vir do fim); o que não pode é pedaço em comum.
+// Dois trechos com o mesmo pedaço do bruto repetem a fala no take. Pode ser de propósito (fechar
+// repetindo o gancho), então é aviso: o assistente confere se quis repetir.
 export function sobrepostos(trechos) {
-  const problemas = [];
+  const pares = [];
   trechos.forEach((a, i) => {
     trechos.slice(i + 1).forEach((b, k) => {
-      if (a.inicio < b.fim && b.inicio < a.fim) problemas.push({ onde: `trechos[${i}] e trechos[${i + 1 + k}]`, problema: 'pegam o mesmo pedaço do vídeo; a fala sairia repetida' });
+      if (a.inicio < b.fim && b.inicio < a.fim) pares.push(aviso('TRECHO_REPETIDO', { trechos: [i, i + 1 + k] }));
     });
   });
-  return problemas;
+  return pares;
 }
 
 // A transcrição do bruto traz o mapa da fala. Sem ela, ou se for de outro vídeo, o corte
@@ -101,7 +101,7 @@ export default async function cortar({ opcoes }) {
     const filtros = await filtrosDisponiveis();
     if (!filtros.has('zscale') || !filtros.has('tonemap')) falha('HDR_SEM_ZSCALE', {});
   }
-  const avisos = [...ajuste.avisos];
+  const avisos = [...ajuste.avisos, ...sobrepostos(trechos.trechos)];
   fs.mkdirSync(projeto.arq('corte'), { recursive: true });
   const cortarX = await corteDoDeitado(projeto, bruto, info, ajuste.trechos, avisos);
   progresso('Limpando o ruído de fundo da sua voz...');

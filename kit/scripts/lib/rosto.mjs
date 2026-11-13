@@ -97,6 +97,12 @@ export async function medirRosto(entrada, saida, { trechos = null, rotacao = 0 }
   return { medida: lerJson(saida) };
 }
 
+// Autoteste da decodificação (rodado pelo conferir-kit em cada computador).
+export async function autotesteDoRosto() {
+  const r = await uv(['--autoteste'], TEMPO_MAXIMO_MS, { script: SCRIPT, semInternet: true });
+  return r.codigo === 0 ? { ok: true } : { erro: ultimasLinhas(r.erro || r.saida, 6) };
+}
+
 // rosto.json do projeto, só se for do take atual.
 export function lerRosto(arquivo, assinatura) {
   if (!fs.existsSync(arquivo)) return null;

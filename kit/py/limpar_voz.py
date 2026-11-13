@@ -28,7 +28,7 @@ TAXA = 48000
 JANELA = 960  # 20 ms a 48 kHz (o modelo recebe 481 faixas de frequência)
 PASSO = JANELA // 2
 ATRASO_QUADROS = 4  # a saída do modelo vem ~4 passos atrasada em relação à entrada
-BLOCO_QUADROS = 2048  # STFT em blocos: bruto de 10 min não estoura a memória
+BLOCO_QUADROS = 2048  # STFT e inversa em blocos (medido: bruto de 5 min, pico de 574 MB e 34 s no M4)
 
 
 class ModeloNaoConfere(RuntimeError):
@@ -78,16 +78,19 @@ def espectro(x: np.ndarray, janela: np.ndarray) -> np.ndarray:
 
 
 def onda(spec: np.ndarray, janela: np.ndarray) -> np.ndarray:
-    """STFT inversa por soma de janelas sobrepostas, com a borda centrada tirada."""
-    quadros = np.fft.irfft(spec, n=JANELA, axis=1) * janela
+    """STFT inversa por soma de janelas sobrepostas, em blocos, com a borda centrada tirada."""
     total = JANELA + PASSO * (len(spec) - 1)
-    saida = np.zeros(total, dtype=np.float64)
-    peso = np.zeros(total, dtype=np.float64)
-    for k in range(len(spec)):
-        saida[k * PASSO : k * PASSO + JANELA] += quadros[k]
-        peso[k * PASSO : k * PASSO + JANELA] += janela**2
-    saida = saida / np.where(peso > 1e-8, peso, 1.0)
-    return saida[JANELA // 2 : total - JANELA // 2].astype(np.float32)
+    saida = np.zeros(total, dtype=np.float32)
+    peso = np.zeros(total, dtype=np.float32)
+    quadrado = janela**2
+    for de in range(0, len(spec), BLOCO_QUADROS):
+        bloco = (np.fft.irfft(spec[de : de + BLOCO_QUADROS], n=JANELA, axis=1) * janela).astype(np.float32)
+        for k, quadro in enumerate(bloco):
+            pos = (de + k) * PASSO
+            saida[pos : pos + JANELA] += quadro
+            peso[pos : pos + JANELA] += quadrado
+    saida /= np.where(peso > 1e-8, peso, 1.0)
+    return saida[JANELA // 2 : total - JANELA // 2]
 
 
 def sessao_e_estado(modelo: Path):
@@ -108,24 +111,23 @@ def sessao_e_estado(modelo: Path):
 def limpar(audio: np.ndarray, modelo: Path, limite_db: float) -> np.ndarray:
     janela = janela_vorbis(JANELA)
     sessao, estado = sessao_e_estado(modelo)
-    nomes_in = [i.name for i in sessao.get_inputs()]
+    entrada, saida_estado = (i.name for i in sessao.get_inputs())
     nomes_out = [o.name for o in sessao.get_outputs()]
     # 3 janelas de folga no fim: o modelo atrasa 2 janelas, e sem folga os últimos 20 ms sairiam zerados.
     spec = espectro(np.pad(audio, (0, JANELA * 3)), janela)
-    ri = np.stack([spec.real, spec.imag], axis=-1)[None].astype(np.float32)  # (1, quadros, faixas, 2)
-    saidas = []
-    for t in range(ri.shape[1]):
-        quadro, estado = sessao.run(nomes_out, {nomes_in[0]: np.ascontiguousarray(ri[:, t : t + 1]), nomes_in[1]: estado})
-        saidas.append(quadro)
-    limpo = np.concatenate(saidas, axis=1)
-    # Limite de atenuação: mistura um pouco do original (alinhado ao atraso do modelo).
-    alfa = 10.0 ** (-limite_db / 20.0)
-    original = np.zeros_like(ri)
-    original[:, ATRASO_QUADROS:] = ri[:, :-ATRASO_QUADROS]
-    mistura = alfa * original + (1.0 - alfa) * limpo
-    resultado = onda(mistura[0, ..., 0] + 1j * mistura[0, ..., 1], janela)
+    # Limite de atenuação: mistura um pouco do original (alinhado ao atraso do modelo), quadro a
+    # quadro, direto no espectro de saída (sem guardar cópias do espectro inteiro).
+    alfa = np.float32(10.0 ** (-limite_db / 20.0))
+    misturado = np.empty_like(spec)
+    for t in range(len(spec)):
+        quadro_in = np.stack([spec[t].real, spec[t].imag], axis=-1)[None, None].astype(np.float32)
+        quadro, estado = sessao.run(nomes_out, {entrada: quadro_in, saida_estado: estado})
+        limpo = quadro[0, 0, :, 0] + 1j * quadro[0, 0, :, 1]
+        original = spec[t - ATRASO_QUADROS] if t >= ATRASO_QUADROS else 0
+        misturado[t] = alfa * original + (1 - alfa) * limpo
+    resultado = onda(misturado, janela)
     # Tira o atraso de 2 janelas do modelo e devolve com o tamanho da entrada.
-    resultado = np.concatenate([resultado[JANELA * 2 :], np.zeros(JANELA * 2, dtype=np.float32)])
+    resultado = resultado[JANELA * 2 :]
     saida = np.zeros(len(audio), dtype=np.float32)
     n = min(len(audio), len(resultado))
     saida[:n] = resultado[:n]

@@ -142,14 +142,44 @@ def medir(entrada: Path, intervalo: float, trechos, rotacao: int):
     return {"modelo": "yunet-2023mar", "largura": largura, "altura": altura, "intervalo_s": intervalo, "amostras": amostras}
 
 
+def autoteste() -> None:
+    """Confere a decodificação e o NMS com saídas sintéticas (uma caixa conhecida na grade).
+    O conferir-kit roda isto em cada computador; erro aqui sai como AssertionError."""
+    saidas = {}
+    for passo in PASSOS:
+        n = (LADO // passo) ** 2
+        for nome, largura in (("cls", 1), ("obj", 1), ("bbox", 4), ("kps", 10)):
+            saidas[f"{nome}_{passo}"] = np.zeros((1, n, largura), np.float32)
+    # passo 16, linha 10, coluna 7 (40 colunas): centro (7,5 x 16; 10,5 x 16) = (120, 168), lado 5 x 16 = 80
+    i = 10 * (LADO // 16) + 7
+    saidas["cls_16"][0, i, 0] = saidas["obj_16"][0, i, 0] = 0.9
+    saidas["bbox_16"][0, i] = [0.5, 0.5, np.log(5), np.log(5)]
+    caixas, pontos, notas = decodificar(saidas)
+    k = int(np.argmax(notas))
+    assert abs(notas[k] - 0.9) < 1e-6, notas[k]
+    assert np.allclose(caixas[k], [80, 128, 80, 80]), caixas[k]
+    assert np.allclose(pontos[k][0], [112, 160]), pontos[k][0]
+    caixas_nms = np.array([[0, 0, 100, 100], [5, 5, 100, 100], [300, 300, 50, 50]], float)
+    assert sem_repetidos(caixas_nms, np.array([0.9, 0.8, 0.7])) == [0, 2]
+    nomes = [o.name for o in ort.InferenceSession(str(MODELO), providers=["CPUExecutionProvider"]).get_outputs()]
+    assert sorted(nomes) == sorted(saidas), nomes
+
+
 def main() -> int:
     p = argparse.ArgumentParser(description="Posição do rosto ao longo do vídeo (YuNet).")
-    p.add_argument("--entrada", type=Path, required=True)
-    p.add_argument("--saida", type=Path, required=True)
+    p.add_argument("--autoteste", action="store_true", help="só confere a decodificação")
+    p.add_argument("--entrada", type=Path)
+    p.add_argument("--saida", type=Path)
     p.add_argument("--intervalo", type=float, default=0.5)
     p.add_argument("--trechos", default="")
     p.add_argument("--rotacao", type=int, default=0)
     a = p.parse_args()
+    if a.autoteste:
+        autoteste()
+        print(json.dumps({"ok": True}))
+        return 0
+    if not a.entrada or not a.saida:
+        p.error("informe --entrada e --saida")
     if not a.entrada.exists():
         print(json.dumps({"ok": False, "erro": "arquivo de entrada não existe"}))
         return 1

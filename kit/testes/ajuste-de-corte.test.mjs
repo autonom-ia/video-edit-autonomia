@@ -122,7 +122,15 @@ test('mapaComPalavras só acrescenta palavra que não encosta em fala', () => {
   assert.deepEqual(mapaComPalavras(fala, palavras), [{ inicio: 1, fim: 2 }, { inicio: 3, fim: 3.2 }]);
 });
 
-test('trechos com pedaço em comum reprovam; ordem trocada sem pedaço em comum passa', () => {
-  assert.equal(sobrepostos([{ inicio: 10, fim: 12 }, { inicio: 11, fim: 14 }]).length, 1);
+test('trechos com pedaço em comum avisam (pode ser o gancho repetido de propósito)', () => {
+  assert.deepEqual(sobrepostos([{ inicio: 10, fim: 12 }, { inicio: 11, fim: 14 }]).map((a) => [a.codigo, a.dados.trechos]), [['TRECHO_REPETIDO', [0, 1]]]);
   assert.deepEqual(sobrepostos([{ inicio: 20, fim: 22 }, { inicio: 1, fim: 5 }, { inicio: 5, fim: 8 }]), []);
+});
+
+test('palavra esticada pelo Whisper dentro da pausa não vira fala (regressão do revisor)', () => {
+  const fala = [{ inicio: 3.9, fim: 5.0 }, { inicio: 7.9, fim: 9.0 }];
+  const palavras = [{ texto: 'né', inicio: 5.3, fim: 7.7 }];
+  const r = ajustarTrechos([{ inicio: 3.8, fim: 6.0 }, { inicio: 7.8, fim: 9.2 }], transcricao(fala, palavras), DURACAO);
+  assert.deepEqual(r.problemas, []);
+  assert.ok(perto(r.trechos[0].fim, 5.0 + CORTE_FALA.folgaDepoisS), `fim ${r.trechos[0].fim}`);
 });

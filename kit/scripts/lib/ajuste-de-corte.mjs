@@ -18,11 +18,13 @@ const falaQueContem = (fala, t, tol) => fala.find((f) => f.inicio + tol < t && t
 const palavraQueContem = (palavras, t, margem) => palavras.find((p) => p.inicio + margem < t && t < p.fim - margem);
 const cruza = (de, ate, pedacos) => pedacos.some((p) => p.inicio < ate && de < p.fim);
 
-// O detector pode perder palavra curta ou falada baixo. Palavra da transcrição que não encosta
-// em nenhum pedaço de fala entra no mapa: aparar silêncio nunca pode apagar uma palavra.
-export function mapaComPalavras(fala, palavras) {
+// O detector pode perder palavra curta ou falada baixo. Palavra curta da transcrição que não
+// encosta em nenhum pedaço de fala entra no mapa: aparar silêncio nunca pode apagar uma palavra.
+// Palavra longa fora do mapa é o Whisper esticando a palavra pela pausa: fica de fora.
+export function mapaComPalavras(fala, palavras, maxS = CORTE_FALA.palavraPerdidaMaxS) {
   const encosta = (p) => fala.some((f) => f.inicio < p.fim && p.inicio < f.fim);
-  const extras = palavras.filter((p) => p.fim > p.inicio && !encosta(p)).map((p) => ({ inicio: p.inicio, fim: p.fim }));
+  const curta = (p) => p.fim > p.inicio && p.fim - p.inicio <= maxS;
+  const extras = palavras.filter((p) => curta(p) && !encosta(p)).map((p) => ({ inicio: p.inicio, fim: p.fim }));
   return [...fala, ...extras].sort((a, b) => a.inicio - b.inicio);
 }
 
@@ -106,7 +108,7 @@ function ajustarUm(trecho, i, ctx) {
 export function ajustarTrechos(trechos, transcricao, duracao, regras = CORTE_FALA) {
   if (!Array.isArray(transcricao?.fala)) return { trechos: trechos.map((t) => ({ ...t })), ajustes: [], problemas: [], avisos: [aviso('SEM_MAPA_DE_FALA', {})] };
   const palavras = Array.isArray(transcricao.palavras) ? transcricao.palavras : [];
-  const fala = mapaComPalavras(transcricao.fala, palavras);
+  const fala = mapaComPalavras(transcricao.fala, palavras, regras.palavraPerdidaMaxS);
   const resultado = { trechos: [], ajustes: [], problemas: [], avisos: [] };
   trechos.forEach((t, i) => {
     // A borda movida não pode engolir fala que já sai em outro trecho (sairia duas vezes).
