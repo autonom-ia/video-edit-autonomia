@@ -1,0 +1,16 @@
+{
+  "nome": "dolly",
+  "titulo": "Efeito vertigem",
+  "funcao": "A pessoa fica do mesmo tamanho enquanto o fundo chega perto (padrão) ou se afasta atrás dela, o famoso efeito vertigem do cinema. Use quando a fala marca uma decisão, uma tomada de consciência ou o começo de algo ('quero gravar', 'foi aí que eu percebi'). Não use em fala de lista ou explicação técnica, nem colado em outro efeito de câmera.",
+  "referencia": "Reel de referência 'Dolly Zoom' (estudado, não copiado). Ideia da peça 'camera-dolly-zoom' do registro do HyperFrames (Apache-2.0), refeita sem 3D: o fundo sem a pessoa cresce atrás do recorte, com o buraco tapado por cópias deslocadas do próprio fundo.",
+  "recorte": true,
+  "rosto_pequeno": false,
+  "duracao": { "min": 1.5, "max": 5 },
+  "campos": {
+    "direcao": { "tipo": "escolha", "opcoes": ["afasta", "aproxima"], "obrigatorio": false }
+  },
+  "sons": [
+    { "efeito": "subida", "em": 0.05, "volume": 0.7 },
+    { "efeito": "whoosh-rapido", "em": "fim", "recuo": 0.18, "volume": 0.6 }
+  ]
+}

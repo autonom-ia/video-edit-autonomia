@@ -177,3 +177,42 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--
 .amostra-rotulo { position: absolute; left: 40px; top: 1560px; z-index: 20; background: rgba(0,0,0,.7); color: #ffffff; font: 700 34px/1 Arial, sans-serif; padding: 14px 22px; border-radius: 12px; }
 .faixa-estourou { position: absolute; left: 0; right: 0; top: 0; z-index: 30; background: #d40000; color: #ffffff; font: 800 34px/1 Arial, sans-serif; padding: 22px 30px; }
 .estourou { outline: 8px solid #d40000; }
+
+/* efeitos de cena (kit/efeitos): três camadas por efeito, todas do tamanho do quadro.
+   fundo: atrás do rosto inteiro (aparece quando o rosto encolhe ou gira).
+   atras: entre o take e a pessoa recortada (texto atrás da cabeça, fundo trocado).
+   frente: na frente do rosto, embaixo da faixa, das telas e da legenda. */
+#ef-fundos { position: absolute; inset: 0; z-index: 0; }
+#ef-atras { position: absolute; inset: 0; }
+#ef-frentes { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
+.ef-camada { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: hidden; visibility: hidden; }
+.recorte { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; object-fit: cover; opacity: 0; }
+#cam { transform-origin: 540px 960px; }
+
+/* série numerada: cabeçalho no alto da zona segura */
+#serie { position: absolute; left: 70px; right: 250px; top: 250px; z-index: 7; opacity: 0; visibility: hidden; }
+.serie-titulo { display: inline-block; font: 800 30px/1.1 var(--fonte-leitura); color: var(--tinta); background: var(--papel); padding: 8px 16px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,.25); margin-bottom: 14px; }
+.serie-linha { display: flex; align-items: center; gap: 14px; height: 76px; }
+.serie-caixa { position: relative; flex: none; width: 86px; height: 70px; border-radius: 16px; background: var(--principal); box-shadow: 0 10px 26px rgba(0,0,0,.28); }
+.serie-num { position: absolute; inset: 0; display: grid; place-items: center; font: var(--peso-titulo) 40px/1 var(--fonte-titulo); color: var(--papel); opacity: 0; }
+.serie-nomes { position: relative; flex: 1; height: 70px; }
+.serie-nome { position: absolute; left: 0; top: 0; height: 70px; display: inline-flex; align-items: center; padding: 0 22px; border-radius: 16px; white-space: nowrap; font: 800 40px/1 var(--fonte-leitura); color: var(--tinta); background: var(--papel); box-shadow: 0 10px 26px rgba(0,0,0,.28); opacity: 0; }
+.serie-barra { display: flex; gap: 6px; margin-top: 16px; }
+.serie-seg { --enche: 0; position: relative; flex: 1; height: 8px; border-radius: 4px; background: rgba(255,255,255,.38); overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,.2); }
+.serie-seg::after { content: ""; position: absolute; inset: 0; background: var(--principal); transform-origin: 0 50%; transform: scaleX(var(--enche)); }
+
+/* checklist: contador grande e itens marcados */
+.chk-topo { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 30px; }
+.chk-conta { position: relative; display: inline-block; min-width: 1.2em; height: 1em; font: var(--peso-titulo) 150px/1 var(--fonte-titulo); color: var(--principal); letter-spacing: -.04em; }
+.chk-n { position: absolute; left: 0; top: 0; transform-origin: 0% 100%; }
+.chk-total { font: 800 54px/1 var(--fonte-titulo); color: var(--suave); }
+.chk-titulo { flex-basis: 100%; font: 700 40px/1.2 var(--fonte-leitura); color: var(--tinta); }
+.chk-lista { list-style: none; display: grid; grid-template-columns: 1fr; gap: 14px 26px; }
+.chk-duas .chk-lista { grid-template-columns: 1fr 1fr; gap: 12px 22px; }
+.chk-lista li { display: flex; align-items: center; gap: 14px; font: 600 38px/1.15 var(--fonte-leitura); }
+.chk-duas .chk-lista li { font-size: 28px; gap: 10px; }
+.chk-caixa { flex: none; width: 44px; height: 44px; border-radius: 10px; border: 3px solid var(--principal); display: grid; place-items: center; }
+.chk-duas .chk-caixa { width: 32px; height: 32px; border-radius: 8px; }
+.chk-v { width: 80%; height: 80%; fill: none; stroke: var(--principal); stroke-width: 3.4; stroke-linecap: round; stroke-linejoin: round; }
+.t-p .chk-conta { font-size: 90px; }
+.t-p .chk-lista li { font-size: 26px; }

@@ -19,6 +19,7 @@ Os textos integrais das licenças das peças versionadas, e das que exigem aviso
 | Nunito | Fonte de título e leitura (par de fontes) | SIL OFL 1.1 | Google Fonts, https://github.com/google/fonts/tree/main/ofl/nunito | `licencas/OFL-nunito.txt` e `kit/fontes/nunito/OFL.txt` |
 | bolo-de-camadas | Método das 5 camadas de edição, adaptado no molde de composição (`kit/molde/reel/`) e nos guias `guias/camadas.md` e `guias/tela-livre.md` (repertório de movimento); estilos por nicho copiados em `guias/nichos/`, só com um cabeçalho a mais | MIT, © 2026 Cauhi (cauhi.com) | https://github.com/pcauhi/bolo-de-camadas | `licencas/MIT-bolo-de-camadas.txt` |
 | instagram-agent-skill | Fórmulas de gancho e regras de naturalidade, traduzidas e adaptadas nos guias (`guias/ganchos.md`, `guias/naturalidade.md`) | MIT, © 2026 Jake Schincariol | https://github.com/Jakeschincariol/instagram-agent-skill | `licencas/MIT-instagram-agent-skill.txt` |
+| Registro de peças do HyperFrames | Tempo, curvas e técnica de várias peças (camcorder-hud, paper-collage-reveal, headline-slam, vfx-shatter, vfx-liquid-glass, camera-dolly-zoom e outras; a lista por efeito está no campo `referencia` de cada `kit/efeitos/*.json`), refeitos do zero em CSS, SVG e GSAP nos efeitos de cena. Nenhum arquivo do registro foi copiado | Apache 2.0 | https://github.com/heygen-com/hyperframes (registry) | `licencas/Apache-2.0-hyperframes.txt` |
 
 As fontes são variáveis (`*-Variable.ttf`). Foram copiadas sem modificação.
 
@@ -28,6 +29,7 @@ As fontes são variáveis (`*-Variable.ttf`). Foram copiadas sem modificação.
 |---|---|---|---|---|---|
 | HyperFrames | 0.9.20 (npm `hyperframes`) | Motor de render do vídeo (HTML para MP4) | Apache 2.0 | npm, pelo `package.json` | `licencas/Apache-2.0-hyperframes.txt` (com aviso de dependência) |
 | Skills do HyperFrames | as da versão acima | Instruções do motor para o assistente | as do HyperFrames | o próprio HyperFrames | no pacote |
+| Modelo de recorte `u2net_human_seg` (~170 MB) e onnxruntime-node | os que o `hyperframes remove-background` pedir | Recorta a pessoa do fundo nos efeitos de cena (`./estudio recortar`) | Apache 2.0 (modelo U²-Net) e MIT (onnxruntime) | o próprio HyperFrames, no primeiro recorte | no pacote baixado |
 | chrome-headless-shell | a que o HyperFrames pedir | Navegador escondido que fotografa cada quadro e as telas | licenças do Chromium (BSD-3 e outras) | o próprio HyperFrames | no pacote baixado |
 | GSAP | 3.14.2 (npm `gsap`) | Animação da composição e das telas livres (com os plugins SplitText, MorphSVG, DrawSVG e outros, que fazem parte do mesmo pacote); copiado de `node_modules` para a pasta do vídeo na montagem, só o que o vídeo usa | GSAP Standard "no charge" License, https://gsap.com/standard-license | npm, pelo `package.json` | no pacote |
 | faster-whisper | 1.2.1 (PyPI) | Transcrição palavra por palavra, no computador do aluno | MIT, © 2023 SYSTRAN | uv, pelo `pyproject.toml` | `licencas/MIT-faster-whisper.txt` |

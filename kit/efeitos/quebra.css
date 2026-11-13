@@ -1,0 +1,28 @@
+/* Quadro quebrado: fundo novo embaixo, cacos da foto por cima, trincas por cima de tudo (sempre atrás da pessoa). */
+.ef-quebra .qb-novo { position: absolute; inset: 0; overflow: hidden; background:
+  radial-gradient(120% 70% at 50% 40%, color-mix(in srgb, var(--principal) 55%, var(--fundo)), var(--fundo) 70%); }
+.ef-quebra .qb-luz { position: absolute; left: -20%; top: 0; width: 140%; height: 90%; background:
+  radial-gradient(42% 36% at 50% 42%, color-mix(in srgb, var(--principal) 70%, #ffffff) 0%, color-mix(in srgb, var(--principal) 60%, transparent) 38%, transparent 72%);
+  mix-blend-mode: screen; }
+.ef-quebra .qb-raios { position: absolute; left: -50%; top: -30%; width: 200%; height: 140%; transform-origin: 50% 50%;
+  background: repeating-conic-gradient(from 0deg at 50% 50%, color-mix(in srgb, var(--destaque) 9%, transparent) 0deg 1.5deg, transparent 1.5deg 11deg);
+  mask-image: radial-gradient(closest-side, transparent 8%, #000 30%, transparent 85%); -webkit-mask-image: radial-gradient(closest-side, transparent 8%, #000 30%, transparent 85%);
+  mix-blend-mode: screen; }
+.ef-quebra .qb-grao { position: absolute; inset: 0; background: radial-gradient(90% 60% at 50% 45%, transparent 40%, rgba(0,0,0,.55) 100%); }
+.ef-quebra .qb-vidro { position: absolute; inset: 0; }
+.ef-quebra .qb-caco { position: absolute; }
+.ef-quebra .qb-gira { position: absolute; inset: 0; }
+.ef-quebra .qb-vazio { background-color: transparent; }
+.ef-quebra .qb-img { position: absolute; inset: 0; background-size: 1080px 1920px; background-repeat: no-repeat; background-color: #d9d6d0; }
+.ef-quebra .qb-borda { position: absolute; left: 0; top: 0; overflow: visible; opacity: 0; }
+.ef-quebra .qb-borda polygon { fill: none; stroke: rgba(255,255,255,.95); stroke-width: 3.5; stroke-linejoin: round; }
+.ef-quebra .qb-borda { filter: drop-shadow(0 0 4px rgba(255,255,255,.8)); }
+.ef-quebra .qb-trincas { position: absolute; left: 0; top: 0; overflow: visible; filter: drop-shadow(0 0 3px rgba(255,255,255,.9)) drop-shadow(0 1px 1px rgba(0,0,0,.45)); }
+.ef-quebra .qb-trincas path { fill: none; stroke: #ffffff; stroke-linecap: round; stroke-linejoin: round; }
+.ef-quebra .qb-raio { stroke-width: 4.2; }
+.ef-quebra .qb-anel { stroke-width: 2.6; opacity: .9; }
+.ef-quebra .qb-impacto { position: absolute; width: 180px; height: 180px; margin: -90px 0 0 -90px; border-radius: 50%;
+  background: radial-gradient(circle, #ffffff 0%, rgba(255,255,255,.7) 18%, transparent 62%); }
+.ef-quebra .qb-clarao { position: absolute; inset: 0; background: #ffffff; }
+.ef-quebra .qb-po { position: absolute; clip-path: polygon(50% 0, 100% 70%, 20% 100%); opacity: 0;
+  background: linear-gradient(160deg, rgba(255,255,255,.85), color-mix(in srgb, var(--principal) 40%, rgba(255,255,255,.2))); }

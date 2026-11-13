@@ -1,0 +1,16 @@
+{
+  "nome": "celular",
+  "titulo": "Dentro do celular",
+  "funcao": "Use só se o aluno pedir, porque o rosto fica pequeno. O vídeo encolhe para dentro de um celular com a tela de Reels, como se já estivesse publicado. Combina com fala sobre postar, gravar no celular, o resultado no feed ou 'é isso que aparece para o seu cliente'. Não use em fala sem ligação com celular ou rede social, nem duas vezes no mesmo vídeo.",
+  "referencia": "Reel de referência 'Phone Mockup' (estudado, não copiado). Ideia do aparelho da peça 'vfx-iphone-device' do registro do HyperFrames (Apache-2.0), refeita em CSS e SVG, sem Three.js. Interface genérica, sem marca de app.",
+  "recorte": false,
+  "rosto_pequeno": true,
+  "duracao": { "min": 1.5, "max": 5 },
+  "campos": {
+    "rotulo": { "tipo": "texto", "palavras": 3, "obrigatorio": false }
+  },
+  "sons": [
+    { "efeito": "whoosh-medio", "em": 0.12, "volume": 0.7 },
+    { "efeito": "pop", "em": 0.8, "volume": 0.75 }
+  ]
+}

@@ -1,0 +1,25 @@
+/* Recorte de papel: folha colorida com borda rasgada atrás da pessoa e formas de colagem. */
+.ef-papel .pp-defs { position: absolute; width: 0; height: 0; }
+.ef-papel .pp-folha { position: absolute; left: 0; top: 0; width: 1080px; filter: drop-shadow(0 12px 18px rgba(0,0,0,.35)); }
+.ef-papel .pp-fibra, .ef-papel .pp-cor { position: absolute; inset: 0; }
+.ef-papel .pp-fibra { background: color-mix(in srgb, var(--papel) 85%, #ffffff); }
+.ef-papel .pp-cor { background:
+  radial-gradient(70% 45% at 50% 38%, color-mix(in srgb, var(--principal) 82%, #ffffff), transparent 70%),
+  var(--principal); }
+.ef-papel .pp-grao { position: absolute; inset: 0; mix-blend-mode: multiply; opacity: .55; background: #ffffff; }
+.ef-papel .pp-formas { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; transform-origin: 540px 900px; }
+.ef-papel .pp-forma { position: absolute; }
+.ef-papel .pp-in, .ef-papel .pp-base { position: absolute; inset: 0; }
+.ef-papel .pp-base svg { width: 100%; height: 100%; display: block; overflow: visible; filter: drop-shadow(5px 8px 0 rgba(0,0,0,.22)); }
+.ef-papel .pp-faixa-escura, .ef-papel .pp-faixa-clara { transform-origin: 0 50%; }
+.ef-papel .pp-faixa-escura .pp-base { background: var(--tinta); box-shadow: 0 8px 0 rgba(0,0,0,.18); }
+.ef-papel .pp-faixa-clara .pp-base { background: var(--papel); box-shadow: 0 6px 0 rgba(0,0,0,.15); }
+.ef-papel .pp-circulo .pp-base { border-radius: 50%; background: var(--destaque); box-shadow: 8px 12px 0 rgba(0,0,0,.2); }
+.ef-papel .pp-retorno .pp-base { opacity: .5;
+  background: radial-gradient(circle, color-mix(in srgb, var(--tinta) 70%, var(--principal)) 38%, transparent 42%) 0 0 / 24px 24px;
+  -webkit-mask-image: radial-gradient(closest-side, #000 30%, transparent 100%); mask-image: radial-gradient(closest-side, #000 30%, transparent 100%); }
+.ef-papel .pp-anel .pp-base svg { filter: none; }
+.ef-papel .pp-ponto .pp-base { border-radius: 50%; box-shadow: 4px 6px 0 rgba(0,0,0,.2); }
+.ef-papel .pp-p1 .pp-base { background: var(--papel); }
+.ef-papel .pp-p2 .pp-base { background: var(--destaque); }
+.ef-papel .pp-p3 .pp-base { background: var(--tinta); }

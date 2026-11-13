@@ -1,0 +1,15 @@
+{
+  "nome": "quebra",
+  "titulo": "Quadro quebrado",
+  "funcao": "O fundo atrás da pessoa trinca como vidro e estilhaça, revelando um fundo novo; a pessoa continua inteira na frente. Use quando a fala rompe com o jeito antigo, anuncia uma virada ou derruba uma crença ('esquece tudo', 'acabou isso', 'frase 1'). Não use em fala calma ou técnica, nem mais de uma vez no vídeo.",
+  "referencia": "Reel de referência 'Frame Break' (estudado, não copiado). Ideia de cacos de vidro adaptada das peças 'vfx-shatter' e 'glass-shard-title' do registro do HyperFrames (Apache-2.0), refeita em CSS e SVG, sem Three.js.",
+  "recorte": true,
+  "rosto_pequeno": false,
+  "duracao": { "min": 1.5, "max": 5 },
+  "campos": {},
+  "sons": [
+    { "efeito": "impacto-forte", "em": "golpe", "volume": 1.1 },
+    { "efeito": "whoosh-rapido", "em": "golpe", "apos": 0.3, "volume": 0.85 },
+    { "efeito": "cintilar", "em": "golpe", "apos": 0.4, "volume": 0.5 }
+  ]
+}

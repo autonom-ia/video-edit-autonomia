@@ -1,0 +1,19 @@
+{
+  "nome": "manchetes",
+  "titulo": "Chuva de manchetes",
+  "funcao": "Tratar o que a pessoa diz como notícia quente: faixas de jornal de TV entram em batida, inclinadas, umas passando atrás da cabeça e outras na frente. Bom para um resultado que surpreende, uma novidade ou uma virada (\"ele faz tudo sozinho\"). As primeiras faixas ficam inteiras acima da cabeça; as últimas passam atrás dela e aparecem só em parte, então ponha o mais importante primeiro. Não use em fala calma, explicação passo a passo ou assunto triste.",
+  "referencia": "Reel de referência 'Headline Storm' (estudado, não copiado). Tempo de pancada e tremor de três quadros adaptados da peça 'headline-slam' do registro do HyperFrames (Apache-2.0). Direção de arte própria nas cores da marca.",
+  "recorte": true,
+  "rosto_pequeno": false,
+  "duracao": { "min": 1.5, "max": 6 },
+  "campos": {
+    "itens": { "tipo": "lista", "itens": [3, 6], "palavras": 6, "obrigatorio": true },
+    "etiqueta": { "tipo": "texto", "palavras": 1, "obrigatorio": false }
+  },
+  "sons": [
+    { "efeito": "swish", "em": 0, "volume": 0.7 },
+    { "efeito": "impacto-medio", "em": 0.12, "volume": 0.9 },
+    { "efeito": "swish", "em": 0.3, "volume": 0.6 },
+    { "efeito": "swish", "em": 0.6, "volume": 0.5 }
+  ]
+}

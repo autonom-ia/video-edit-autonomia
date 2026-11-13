@@ -1,0 +1,28 @@
+{
+  "nome": "atravessar",
+  "titulo": "Zoom que atravessa o corte",
+  "funcao": "Fechar uma ideia e pular para a próxima com energia: nos últimos meio segundo da cena a câmera mergulha no rosto, borra e estoura em branco, e a cena seguinte nasce do branco. Use no fim de um bloco, antes de uma virada, de um resultado ou do pedido final (\"... e me dá até três músicas\" antes do \"Comente\"). Não use na última cena do vídeo, nem em fala que continua a mesma frase na cena seguinte.",
+  "referencia": "Reel de referência 'Zoom Through Cut' (estudado, não copiado). Tempo e curva de 'zoom-through-transition' e o estouro de 'flash-through-white', do registro do HyperFrames (Apache-2.0), refeitos em CSS e GSAP sem shader. Direção de arte própria nas cores da marca.",
+  "recorte": false,
+  "rosto_pequeno": false,
+  "nao_na_ultima_cena": true,
+  "duracao": {
+    "min": 1.2,
+    "max": 8
+  },
+  "campos": {},
+  "sons": [
+    {
+      "efeito": "whoosh-rapido",
+      "em": "fim",
+      "recuo": 0.18,
+      "volume": 0.8
+    },
+    {
+      "efeito": "impacto-medio",
+      "em": "fim",
+      "recuo": 0.02,
+      "volume": 0.55
+    }
+  ]
+}

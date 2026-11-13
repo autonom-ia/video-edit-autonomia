@@ -1,0 +1,6 @@
+/* Zoom que atravessa o corte: bordas na cor da marca, núcleo de luz e o branco final. */
+.ef-atravessar .at-borda { position: absolute; inset: 0; opacity: 0; mix-blend-mode: screen;
+  background: radial-gradient(90% 62% at 50% 55%, transparent 40%, color-mix(in srgb, var(--destaque) 35%, transparent) 78%, color-mix(in srgb, var(--destaque) 70%, #ffffff) 105%); }
+.ef-atravessar .at-nucleo { position: absolute; left: calc(var(--fx) - 450px); top: calc(var(--fy) - 450px); width: 900px; height: 900px; border-radius: 50%; opacity: 0;
+  background: radial-gradient(circle, #ffffff 0%, rgba(255,255,255,.92) 30%, color-mix(in srgb, var(--papel) 60%, transparent) 55%, transparent 72%); }
+.ef-atravessar .at-branco { position: absolute; inset: 0; opacity: 0; background: #ffffff; }

@@ -95,6 +95,26 @@
     "texto": "O roteiro ficou mais longo ou mais curto que o tamanho escolhido.",
     "acao": "Ajuste o roteiro em silêncio antes de mostrar."
   },
+  "EFEITO_COM_TELA": {
+    "texto": "Uma tela aparece por cima de um efeito de cena.",
+    "acao": "Veja dados.cena e dados.tela. Os dois juntos disputam a atenção: tire a tela desse trecho ou o efeito."
+  },
+  "EFEITO_FALTANDO": {
+    "texto": "Um efeito de cena do kit está sem o arquivo de animação.",
+    "acao": "Veja dados.efeito. Reinstale o estúdio pelo link da versão mais nova."
+  },
+  "EFEITO_FORA_DO_TAKE": {
+    "texto": "Uma cena com efeito termina depois do fim do vídeo gravado.",
+    "acao": "Veja dados.cena. Corrija o \"fim\" da cena no cenas.json (rode alinhar de novo) e recorte outra vez."
+  },
+  "EFEITO_SEM_ENFASE": {
+    "texto": "Um efeito de cena bate na palavra de ênfase, mas a cena não tem ênfase: o golpe vai cair no começo da cena.",
+    "acao": "Veja dados.cena. Ponha em \"enfase\" a palavra forte daquele trecho (rode alinhar de novo) ou troque o efeito."
+  },
+  "EFEITO_SEM_MEDIDA": {
+    "texto": "Um efeito de cena vai mirar no lugar típico do rosto, sem medida do seu vídeo.",
+    "acao": "Rode ./estudio recortar --projeto <P> (mede o rosto nas cenas com efeito em poucos minutos) e monte de novo."
+  },
   "ENFASE_SEM_CASAMENTO": {
     "texto": "Uma palavra de destaque não foi dita no vídeo.",
     "acao": "Troque a ênfase da cena por uma palavra que foi dita e rode alinhar de novo."
@@ -259,6 +279,18 @@
     "texto": "A conferência final achou um problema. Vou corrigir.",
     "acao": "Leia dados.reprovados, corrija pela causa (volume: mixar de novo; tela sem som: montar de novo; formato: render de novo) e rode qa de novo."
   },
+  "RECORTE_DESALINHADO": {
+    "texto": "O recorte saiu com um número de quadros diferente do esperado; a pessoa ficaria fora do tempo.",
+    "acao": "Veja dados.detalhe. Rode ./estudio recortar --projeto <P> --tudo. Se repetir, avise quem mantém o estúdio."
+  },
+  "RECORTE_FALHOU": {
+    "texto": "Não consegui recortar a pessoa do fundo.",
+    "acao": "Veja dados.detalhe. Na primeira vez o recorte baixa um modelo (~170 MB) e precisa de internet. Tente de novo; se repetir, troque o efeito por um que não precise de recorte."
+  },
+  "RECORTE_FALTANDO": {
+    "texto": "Falta o recorte da pessoa (ou ele está velho) para um efeito que precisa dele.",
+    "acao": "Rode ./estudio recortar --projeto <P> avisando que leva alguns minutos. Depois monte de novo."
+  },
   "REDE_FALHOU": {
     "texto": "Não consegui falar com a internet.",
     "acao": "No Codex, peça antes a liberação de internet e tente de novo (a caixa do Codex corta a internet). Só depois peça para conferir o Wi-Fi."
@@ -266,6 +298,10 @@
   "RENDER_FALHOU": {
     "texto": "A montagem do vídeo parou no meio.",
     "acao": "Rode ./estudio espaco. Tente de novo uma vez. Se falhar, rode a skill consertar."
+  },
+  "ROSTO_PEQUENO": {
+    "texto": "Este efeito deixa o seu rosto pequeno por um tempo, o que foge do método do estúdio.",
+    "acao": "Use só se o aluno pediu este efeito. Senão, troque por um efeito com o rosto grande."
   },
   "ROSTO_POUCO": {
     "texto": "O seu rosto ficou pouco tempo na tela.",

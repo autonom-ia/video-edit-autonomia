@@ -6,6 +6,11 @@ Apache 2.0, cujo texto integral segue abaixo. O HyperFrames não é copiado para
 este repositório: ele é instalado pelo npm na máquina de cada aluno, a partir
 do package.json. Nenhum arquivo do HyperFrames foi modificado.
 
+Os efeitos de cena (kit/efeitos/) adaptam tempo, curvas e técnica de peças
+do registro do HyperFrames, citadas no campo "referencia" de cada ficha. Elas
+foram refeitas do zero em CSS, SVG e GSAP: nenhum arquivo do registro foi
+copiado para este repositório.
+
 As skills do HyperFrames (pastas .agents/skills/hyperframes* e
 .claude/skills/hyperframes*) também não são versionadas: são instaladas pelo
 próprio HyperFrames e seguem a licença dele.

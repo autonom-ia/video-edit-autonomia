@@ -1,0 +1,16 @@
+{
+  "nome": "estudio",
+  "titulo": "Estúdio acendendo",
+  "funcao": "O fundo vira um estúdio escuro: dois softboxes giram, acendem, e uma placa 'NO AR' liga no alto. Bom quando a fala é sobre gravar, entrar no ar, começar a aparecer ou 'agora é sério'. Não use em fala sobre bastidor bagunçado ou intimidade (o estúdio passa ideia de produção), nem duas vezes no mesmo vídeo.",
+  "referencia": "Reel de referência 'Studio Reveal' (estudado, não copiado). Direção de arte própria nas cores da marca, feita só com CSS 3D e GSAP.",
+  "recorte": true,
+  "rosto_pequeno": false,
+  "duracao": { "min": 1.5, "max": 5 },
+  "campos": {
+    "placa": { "tipo": "texto", "palavras": 3, "obrigatorio": false }
+  },
+  "sons": [
+    { "efeito": "subida", "em": 0, "volume": 0.6 },
+    { "efeito": "impacto-medio", "em": 0.5, "volume": 0.9 }
+  ]
+}

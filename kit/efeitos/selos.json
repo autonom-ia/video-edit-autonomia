@@ -1,0 +1,15 @@
+{
+  "nome": "selos",
+  "titulo": "Selos de check",
+  "funcao": "De 2 a 4 pílulas com check entram uma a uma ao lado da cabeça, como itens marcados numa lista. Use quando a fala enumera o que algo faz, entrega ou resolve ('corta, legenda e põe música'). Não use em fala de uma ideia só, em negação ('não precisa de...') nem em cena com menos de 2 itens claros. Os selos entram a cada 0,42 s: com 4 itens, a cena precisa de uns 2,6 s; em cena curta, use 2 ou 3.",
+  "referencia": "Reel de referência 'Checklist Pop' (estudado, não copiado) e as peças marker-checklist-card e success-check do registro do HyperFrames (Apache-2.0): o check que estoura e se desenha. Direção de arte própria nas cores da marca.",
+  "recorte": false,
+  "rosto_pequeno": false,
+  "duracao": { "min": 1.5, "max": 6 },
+  "campos": {
+    "itens": { "tipo": "lista", "itens": [2, 4], "palavras": 3, "obrigatorio": true }
+  },
+  "sons": [
+    { "efeito": "pop", "em": 0.14, "volume": 0.9, "repetir": { "campo": "itens", "passo": 0.42 } }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "nome": "papel",
+  "titulo": "Recorte de papel",
+  "funcao": "A pessoa vira um adesivo de papel recortado, com contorno branco, sobre um fundo de colagem na cor da marca. Bom para marcar um passo, um número ou uma virada leve e divertida ('passo 1', 'olha só'). Não use em fala séria ou delicada (doença, perda, dinheiro difícil) nem duas vezes no mesmo vídeo.",
+  "referencia": "Reel de referência 'Paper Cutout' (estudado, não copiado). Borda rasgada e grão de papel adaptados da peça 'paper-collage-reveal' do registro do HyperFrames (Apache-2.0). Direção de arte própria nas cores da marca.",
+  "recorte": true,
+  "rosto_pequeno": false,
+  "duracao": { "min": 1.4, "max": 5 },
+  "campos": {},
+  "sons": [
+    { "efeito": "swish", "em": 0, "volume": 0.8 },
+    { "efeito": "pop", "em": 0.2, "volume": 0.7 }
+  ]
+}

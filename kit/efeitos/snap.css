@@ -1,0 +1,10 @@
+/* Zoom-relâmpago: vinheta, estouro de luz e um vazamento de luz na cor da marca. */
+.ef-snap .sn-vinheta { position: absolute; inset: 0; opacity: 0;
+  background: radial-gradient(70% 52% at 50% 58%, transparent 55%, rgba(0,0,0,.42) 100%); }
+.ef-snap .sn-flash { position: absolute; inset: 0; opacity: 0; mix-blend-mode: screen;
+  background: radial-gradient(70% 45% at var(--fx) var(--fy), rgba(255,255,255,.9), rgba(255,255,255,.3) 60%, rgba(255,255,255,.1) 100%); }
+.ef-snap .sn-luz { position: absolute; left: -300px; top: -300px; width: 1700px; height: 2500px; opacity: 0; mix-blend-mode: screen;
+  background:
+    radial-gradient(38% 26% at 18% 16%, color-mix(in srgb, var(--destaque) 85%, #ffffff), transparent 70%),
+    linear-gradient(128deg, color-mix(in srgb, var(--destaque) 55%, transparent) 0%, transparent 34%),
+    radial-gradient(30% 20% at 92% 88%, color-mix(in srgb, var(--principal) 60%, transparent), transparent 70%); }

@@ -1,0 +1,32 @@
+/* Curva de crescimento: painel escuro com grade fina, curva na cor da marca, placar no alto. */
+.ef-grafico .gf-painel { position: absolute; inset: 0; background:
+  radial-gradient(110% 60% at 75% 30%, color-mix(in srgb, var(--principal) 50%, var(--fundo)) 0%, var(--fundo) 70%); }
+.ef-grafico .gf-brilho { position: absolute; left: 380px; top: 140px; width: 900px; height: 900px; border-radius: 50%; transform-origin: 50% 50%;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--principal) 55%, transparent), transparent); mix-blend-mode: screen; }
+.ef-grafico .gf-grade { position: absolute; left: -120px; top: -120px; width: 1320px; height: 2160px; transform-origin: 50% 40%;
+  background-image:
+    linear-gradient(rgba(255,255,255,.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.07) 1px, transparent 1px);
+  background-size: 120px 120px;
+  mask-image: radial-gradient(80% 60% at 55% 40%, #000 30%, transparent 90%); -webkit-mask-image: radial-gradient(80% 60% at 55% 40%, #000 30%, transparent 90%); }
+.ef-grafico .gf-svg { position: absolute; left: 0; top: 0; overflow: visible; }
+.ef-grafico .gf-g1 { stop-color: color-mix(in srgb, var(--principal) 80%, #ffffff); stop-opacity: .55; }
+.ef-grafico .gf-g2 { stop-color: var(--principal); stop-opacity: .05; }
+.ef-grafico .gf-base { fill: none; stroke: rgba(255,255,255,.28); stroke-width: 3; stroke-dasharray: .012 .01; }
+.ef-grafico .gf-linha { fill: none; stroke: color-mix(in srgb, var(--principal) 55%, #ffffff); stroke-width: 11; stroke-linecap: round; stroke-linejoin: round; }
+.ef-grafico .gf-halo { fill: none; stroke: color-mix(in srgb, var(--principal) 70%, #ffffff); stroke-width: 30; stroke-linecap: round; opacity: .35; filter: blur(10px); }
+.ef-grafico .gf-ponto { position: absolute; left: 0; top: 0; width: 0; height: 0; }
+.ef-grafico .gf-miolo, .ef-grafico .gf-onda { position: absolute; left: -17px; top: -17px; width: 34px; height: 34px; border-radius: 50%; }
+.ef-grafico .gf-miolo { background: #ffffff; box-shadow: 0 0 0 6px color-mix(in srgb, var(--destaque) 85%, transparent), 0 0 40px 12px color-mix(in srgb, var(--destaque) 70%, transparent); }
+.ef-grafico .gf-onda { border: 4px solid var(--destaque); opacity: 0; }
+.ef-grafico .gf-placar { position: absolute; left: 70px; top: 270px; width: 640px; }
+.ef-grafico .gf-rotulo { font: 800 34px/1 var(--fonte-leitura); letter-spacing: .14em; text-transform: uppercase; color: color-mix(in srgb, var(--papel) 75%, transparent);
+  display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+.ef-grafico .gf-rotulo::before { content: ""; width: 14px; height: 14px; border-radius: 50%; background: var(--destaque); box-shadow: 0 0 14px var(--destaque); }
+.ef-grafico .gf-valor { display: flex; align-items: baseline; gap: 18px; transform-origin: 0% 80%; }
+.ef-grafico .gf-nums { position: relative; display: inline-grid; font: var(--peso-titulo) 200px/0.9 var(--fonte-titulo); letter-spacing: -.04em; color: var(--papel);
+  font-variant-numeric: tabular-nums; text-shadow: 0 10px 40px rgba(0,0,0,.5); transform-origin: 0% 80%; }
+.ef-grafico .gf-n { grid-area: 1 / 1; display: flex; align-items: baseline; gap: 18px; white-space: nowrap; }
+.ef-grafico .gf-suf { font: var(--peso-titulo) 64px/1 var(--fonte-titulo); text-shadow: none; color: var(--destaque); letter-spacing: -.01em; }
+.ef-grafico .gf-traco { margin-top: 18px; height: 6px; width: 260px; border-radius: 3px; transform-origin: 0 50%;
+  background: linear-gradient(90deg, var(--destaque), color-mix(in srgb, var(--principal) 60%, #ffffff)); }

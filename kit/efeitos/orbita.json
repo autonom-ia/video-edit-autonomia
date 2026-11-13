@@ -1,0 +1,49 @@
+{
+  "nome": "orbita",
+  "titulo": "Órbita de ícones",
+  "funcao": "Mostrar que uma coisa faz várias tarefas de uma vez, ou listar ferramentas e etapas sem precisar escrever: ícones giram em volta da cabeça, passando por trás e pela frente. Bom quando a fala enumera o que algo faz (corta, legenda, põe música) ou junta vários benefícios. Não use em fala de emoção ou de conselho sério, nem quando a fala tem um número ou frase que precisa ser lida.",
+  "referencia": "Reel de referência 'Orbit' (estudado, não copiado). Ideia de profundidade das peças 'three-orbiting-cards' e 'orbit-card' do registro do HyperFrames (Apache-2.0), refeita em CSS e SVG, sem Three.js. Ícones desenhados para o kit, nas cores da marca.",
+  "recorte": true,
+  "rosto_pequeno": false,
+  "duracao": {
+    "min": 1.5,
+    "max": 6
+  },
+  "campos": {
+    "icones": {
+      "tipo": "lista",
+      "itens": [
+        3,
+        6
+      ],
+      "opcoes": [
+        "microfone",
+        "legenda",
+        "play",
+        "tesoura",
+        "texto",
+        "estrela",
+        "raio",
+        "check",
+        "grafico",
+        "mensagem",
+        "calendario",
+        "dinheiro",
+        "casa",
+        "carro",
+        "coracao",
+        "escudo",
+        "pessoa",
+        "relogio"
+      ],
+      "obrigatorio": false
+    }
+  },
+  "sons": [
+    {
+      "efeito": "cintilar",
+      "em": 0.1,
+      "volume": 0.8
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+/* Cartão inclinado: fundo escuro com brilho na cor principal, moldura branca grossa em volta do take. */
+.ef-cartao-inclinado .ci-base { position: absolute; inset: 0; background:
+  radial-gradient(120% 70% at 50% 110%, color-mix(in srgb, var(--principal) 38%, transparent), transparent 70%),
+  linear-gradient(180deg, color-mix(in srgb, var(--fundo) 88%, #000), var(--fundo)); }
+.ef-cartao-inclinado .ci-brilho { position: absolute; left: -300px; top: 160px; width: 1680px; height: 1680px; border-radius: 50%;
+  background: conic-gradient(from 200deg, transparent 0deg, color-mix(in srgb, var(--principal) 75%, transparent) 70deg, transparent 140deg,
+  color-mix(in srgb, var(--principal) 45%, transparent) 230deg, transparent 300deg);
+  filter: blur(90px); opacity: 0; }
+.ef-cartao-inclinado .ci-luz { position: absolute; left: 520px; top: 240px; width: 560px; height: 560px; border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--destaque) 30%, transparent), transparent 68%); filter: blur(30px); opacity: 0; }
+.ef-cartao-inclinado .ci-grao { position: absolute; inset: 0; opacity: .5;
+  background-image: radial-gradient(rgba(255,255,255,.07) 1.2px, transparent 1.6px); background-size: 22px 22px;
+  -webkit-mask-image: radial-gradient(70% 55% at 50% 45%, #000, transparent); mask-image: radial-gradient(70% 55% at 50% 45%, #000, transparent); }
+.ef-cartao-inclinado .ci-moldura { position: absolute; left: 0; right: 0; top: 0; bottom: 0; opacity: 0; }
+/* borda em quatro barras de fundo branco: no render, borda e sombra de um elemento do tamanho do quadro somem */
+.ef-cartao-inclinado .ci-b { position: absolute; display: block; background: #ffffff; }
+.ef-cartao-inclinado .ci-cima { left: 0; right: 0; top: 0; }
+.ef-cartao-inclinado .ci-baixo { left: 0; right: 0; bottom: 0; }
+.ef-cartao-inclinado .ci-esq { left: 0; top: 0; bottom: 0; }
+.ef-cartao-inclinado .ci-dir { right: 0; top: 0; bottom: 0; }
+
+.ef-cartao-inclinado .ci-reflexo { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; opacity: 0;
+  background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,.0) 38%, rgba(255,255,255,.28) 47%, rgba(255,255,255,.08) 52%, transparent 62%); }

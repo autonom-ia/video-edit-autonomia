@@ -4,7 +4,9 @@
 import { FAIXA, ZOOM, RITMO, SFX, SFX_PICO, SOM } from './regras.mjs';
 import { gruposDeLegenda, tempoDosGrupos, legendaY, corDaLegenda } from './legenda.mjs';
 import { htmlDaTela, htmlDaMidia, itensDaTela } from './telas.mjs';
-import { faixaNoInstante, tamanhoPorFaixa } from './cenas.mjs';
+import { faixaNoInstante, tamanhoPorFaixa, fimDoGancho } from './cenas.mjs';
+import { fichaDoEfeito } from './efeitos.mjs';
+import { pessoaDaCena } from './recorte.mjs';
 import { normalizar, escaparHtml, palavras as separar, arred } from './texto.mjs';
 
 const r3 = (n) => arred(n, 3);
@@ -23,7 +25,8 @@ export function eventosDeFaixa(cenas, marca, rostoY) {
       eventos.push({ t: 0, faixa: c.faixa, d: 0 });
       atual = c.faixa;
     } else if (c.faixa !== atual) {
-      eventos.push({ t: r3(c.inicio), faixa: c.faixa, d: FAIXA.transicaoS[c.faixa] });
+      // cena com efeito entra em corte seco: o efeito é dono do #cam e a costura não pode brigar com ele
+      eventos.push({ t: r3(c.inicio), faixa: c.faixa, d: c.efeito ? 0 : FAIXA.transicaoS[c.faixa] });
       atual = c.faixa;
     }
   }
@@ -123,11 +126,7 @@ export function montarGancho(dados) {
     return `<span class="gw${marcar ? ' enf-t' : ''}">${escaparHtml(p)}</span>`;
   });
   const sobre = tg.publico ? `<div class="gancho-sobre">${escaparHtml(tg.publico)}</div>` : '';
-  let fim = primeira.fim || 3;
-  const mudaFaixa = dados.cenas.find((c) => c.faixa !== primeira.faixa);
-  if (mudaFaixa) fim = Math.min(fim, mudaFaixa.inicio + 0.3);
-  fim = Math.max(1.5, Math.min(fim, 3.5));
-  return { html: `${sobre}<div class="gancho-titulo">${palavrasTitulo.join(' ')}</div>`, fim: r3(fim) };
+  return { html: `${sobre}<div class="gancho-titulo">${palavrasTitulo.join(' ')}</div>`, fim: r3(fimDoGancho(dados.cenas)) };
 }
 
 const SOM_DE_ENTRADA = {
@@ -140,6 +139,7 @@ const SOM_DE_ENTRADA = {
   prompt: [['swish', 0.45], ['teclado', 0.45]],
   notificacao: [['vibrar', 0.7], ['notificacao-sucesso', 0.85]],
   cta: [['impacto-medio', 0.8], ['brilho', 0.55]],
+  checklist: [['swish', 0.5]],
   livre: [['swish', 0.55]],
   midia: [['whoosh-medio', 0.6]],
 };
@@ -191,6 +191,76 @@ export function montarCta(dados, telasInfo) {
   };
 }
 
+// Lane do Studio para os recortes (vídeo com transparência, um por cena com recorte).
+const TRILHA_RECORTE = 200;
+
+// Valor de um campo "arquivo" dentro da composição: midia/x.png vira assets/midia/x.png.
+function resolverCampos(efeito, ficha) {
+  const p = {};
+  for (const [nome, campo] of Object.entries(ficha.campos || {})) {
+    if (efeito[nome] === undefined) continue;
+    p[nome] = campo.tipo === 'arquivo' ? `assets/${efeito[nome]}` : efeito[nome];
+  }
+  return p;
+}
+
+// Efeitos de cena: três camadas vazias por efeito (fundo atrás do rosto inteiro, atrás da pessoa
+// e na frente do rosto) e o vídeo do recorte. recortes: { idDaCena: true } das cenas com recorte pronto.
+export function montarEfeitos(dados, { recortes = {}, marca = null, medidas = [] } = {}) {
+  const fundo = [];
+  const atras = [];
+  const frente = [];
+  const videos = [];
+  const info = [];
+  dados.cenas.forEach((c) => {
+    if (!c.efeito) return;
+    const ficha = fichaDoEfeito(c.efeito.nome);
+    if (!ficha) return;
+    const id = escaparHtml(c.id);
+    const classe = `ef-camada ef-${escaparHtml(ficha.nome)}`;
+    fundo.push(`<div id="ef-${id}-fundo" class="${classe} ef-fundo" data-layout-ignore></div>`);
+    atras.push(`<div id="ef-${id}-atras" class="${classe} ef-atras" data-layout-ignore></div>`);
+    frente.push(`<div id="ef-${id}-frente" class="${classe} ef-frente" data-layout-ignore></div>`);
+    const temRecorte = ficha.recorte && recortes[c.id];
+    if (temRecorte) {
+      const inicio = r3(Math.round(c.inicio * 30) / 30);
+      const dur = r3(Math.round(c.fim * 30) / 30 - inicio);
+      videos.push(`<video id="rec-${id}" class="clip recorte" src="assets/recorte/${id}.webm" data-start="${inicio}" data-duration="${dur}" data-track-index="${TRILHA_RECORTE + info.length}" muted playsinline></video>`);
+    }
+    info.push({
+      id: c.id,
+      nome: ficha.nome,
+      inicio: r3(c.inicio),
+      fim: r3(c.fim),
+      golpe: r3(tempoDoGolpe(c)),
+      recorte: temRecorte ? `#rec-${c.id}` : null,
+      foto: temRecorte ? `assets/recorte/${c.id}.png` : null,
+      fundoSemPessoa: temRecorte ? `assets/recorte/${c.id}-fundo.png` : null,
+      pessoa: temRecorte ? recortes[c.id].pessoa : pessoaDaCena(c.id, c.inicio, medidas),
+      p: resolverCampos(c.efeito, ficha),
+      marca: marca ? { nome: marca.nome || '', arroba: marca.arroba || '' } : { nome: '', arroba: '' },
+    });
+  });
+  return { info, htmlFundo: fundo.join('\n'), htmlAtras: atras.join('\n'), htmlFrente: frente.join('\n'), htmlRecortes: videos.join('\n') };
+}
+
+// Série numerada: cabeçalho com o título, o número e o nome do item, e a barra em segmentos.
+export function montarSerie(dados, duracao) {
+  const s = dados.serie;
+  if (!s || !Array.isArray(s.itens) || !s.itens.length) return { html: '', dados: null };
+  const total = s.itens.length;
+  const doisDigitos = (n) => (n < 10 ? `0${n}` : String(n));
+  const numeros = s.itens.map((_, k) => `<b class="serie-num" id="serie-n${k}">${doisDigitos(k + 1)}</b>`).join('');
+  const nomes = s.itens.map((it, k) => `<span class="serie-nome" id="serie-i${k}">${escaparHtml(it.nome)}</span>`).join('');
+  const segmentos = s.itens.map((_, k) => `<i class="serie-seg" id="serie-s${k}"></i>`).join('');
+  const titulo = s.titulo ? `<div class="serie-titulo">${escaparHtml(s.titulo)}</div>` : '';
+  const fimCta = dados.cta && typeof dados.cta.em === 'number' ? dados.cta.em : duracao;
+  return {
+    html: `<div id="serie" data-layout-ignore>${titulo}<div class="serie-linha"><span class="serie-caixa">${numeros}</span><span class="serie-nomes">${nomes}</span></div><div class="serie-barra">${segmentos}</div></div>`,
+    dados: { total, itens: s.itens.map((it, k) => ({ k, em: r3(it.em) })), fim: r3(Math.min(duracao, fimCta)) },
+  };
+}
+
 // Folga depois do "entra" em que um som da cena ainda é o som da chegada da tela: 1 quadro.
 const CHEGADA_FOLGA_S = 1 / 30 + 0.001;
 
@@ -212,7 +282,7 @@ export function inicioDoSom(efeito, golpe) {
   return Math.max(0, golpe - (SFX_PICO[efeito] || 0));
 }
 
-export function planejarSons({ dados, eventosFaixa, telasInfo, zoomEv, cta, duracao }) {
+export function planejarSons({ dados, eventosFaixa, telasInfo, zoomEv, cta, duracao, efeitosInfo = [], serie = null }) {
   const explicitos = [];
   for (const c of dados.cenas) {
     // O som do golpe da fala (virada, zoom punch) fica preso ao golpe, mesmo colado numa chegada de tela.
@@ -250,6 +320,20 @@ export function planejarSons({ dados, eventosFaixa, telasInfo, zoomEv, cta, dura
     // A saída acelera (power2.in, 0,35 s): o movimento maior vem perto do fim.
     if (t.sai < duracao - 0.3) add('whoosh-rapido', t.sai + 0.2, 0.5, `tela ${t.id} sai`);
   }
+  for (const e of efeitosInfo) {
+    const ficha = fichaDoEfeito(e.nome);
+    for (const som of (ficha && ficha.sons) || []) {
+      // "golpe": a palavra de ênfase; "fim": o fim da cena menos o recuo (efeito de saída); número: depois do início
+      const golpe = som.em === 'golpe' ? e.golpe + (som.apos || 0) : som.em === 'fim' ? e.fim - (som.recuo || 0) : e.inicio + som.em;
+      // "repetir": um som por item de um campo de lista do efeito (ex.: um pop por selo)
+      const lista = som.repetir && Array.isArray(e.p[som.repetir.campo]) ? e.p[som.repetir.campo] : [null];
+      lista.forEach((_, k) => {
+        const t = golpe + k * (som.repetir ? som.repetir.passo : 0);
+        if (t <= e.fim + 0.3) add(som.efeito, t, som.volume ?? 0.7, `efeito ${e.nome} ${e.id}`);
+      });
+    }
+  }
+  if (serie) for (const it of serie.itens) add('swish', it.em, 0.5, `série ${it.k + 1}`);
   if (cta) {
     add('brilho', cta.em, 0.55, 'pedido');
     add('pop', cta.em + 0.1, 0.85, 'pedido');
@@ -291,14 +375,16 @@ export function jsonParaScript(objeto) {
 }
 
 // Junta tudo: dados para o animacao.js, pedaços de HTML e os arquivos sons.json e legendas.json.
-export function montarComposicao({ dados, transcricao, marca, duracao, livres = {}, midias = {} }) {
+export function montarComposicao({ dados, transcricao, marca, duracao, livres = {}, midias = {}, recortes = {}, medidas = [] }) {
   const eventosFaixa = eventosDeFaixa(dados.cenas, marca, dados.legenda_rosto_y);
   const zoomEv = eventosDeZoom(dados.cenas, eventosFaixa);
   const legendas = montarLegendas(transcricao.palavras || [], dados.cenas);
   const gancho = montarGancho(dados);
   const telas = montarTelas(dados, marca, { livres, midias, duracao });
   const cta = montarCta(dados, telas.info);
-  const sons = planejarSons({ dados, eventosFaixa, telasInfo: telas.info, zoomEv, cta: cta.dados, duracao });
+  const efeitos = montarEfeitos(dados, { recortes, marca, medidas });
+  const serie = montarSerie(dados, duracao);
+  const sons = planejarSons({ dados, eventosFaixa, telasInfo: telas.info, zoomEv, cta: cta.dados, duracao, efeitosInfo: efeitos.info, serie: serie.dados });
   const dadosReel = {
     duracao: r3(duracao),
     faixas: eventosFaixa,
@@ -307,7 +393,9 @@ export function montarComposicao({ dados, transcricao, marca, duracao, livres = 
     telas: telas.info,
     gancho: { fim: gancho.fim },
     cta: cta.dados,
+    efeitos: efeitos.info,
+    serie: serie.dados,
     ease: FAIXA.ease,
   };
-  return { dadosReel, legendas, gancho, telas, cta, sons };
+  return { dadosReel, legendas, gancho, telas, cta, sons, efeitos, serie };
 }

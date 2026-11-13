@@ -4,14 +4,16 @@ import path from 'node:path';
 import { RAIZ, KIT, daRaiz } from '../lib/caminhos.mjs';
 import { abrirProjeto, exigirArquivo, lerMarca, mudarEtapa, lerEstado } from '../lib/projeto.mjs';
 import { lerJson, escreverJson, escreverTexto } from '../lib/json.mjs';
-import { falha, reprovado } from '../lib/saida.mjs';
+import { falha, reprovado, aviso } from '../lib/saida.mjs';
 import { sondar, resumoDoVideo } from '../lib/ffmpeg.mjs';
 import { montarComposicao, htmlDosSons, jsonParaScript } from '../lib/composicao.mjs';
 import { estiloCss } from '../lib/amostra.mjs';
 import { escaparHtml, preencher } from '../lib/texto.mjs';
 import { conferirTabela } from './telas.mjs';
 import { lerTelaDeArquivo, pluginsCitados, tipoDeMidia } from '../lib/telas-livres.mjs';
-import { MIDIA, RITMO } from '../lib/regras.mjs';
+import { MIDIA, RITMO, RECORTE } from '../lib/regras.mjs';
+import { arquivosDoEfeito } from '../lib/efeitos.mjs';
+import { conferirRecortes, assinaturaDoTake, medidasDaPessoa, cenaForaDoTake } from '../lib/recorte.mjs';
 
 // Tela que passa do fim do vídeo, ou gravação mais curta que o tempo da tela (congelaria).
 export function conferirDuracoes(telas, duracaoVideo, duracaoDasMidias) {
@@ -89,6 +91,41 @@ function copiarOuLigar(origem, destino) {
   }
 }
 
+// Recortes prontos das cenas que pedem recorte. Faltando ou velho: reprova com a ação de recortar.
+function copiarRecortes(projeto, dados, take, assets) {
+  const { faltando, prontos } = conferirRecortes(projeto.pasta, dados.cenas, assinaturaDoTake(take));
+  if (faltando.length) reprovado('RECORTE_FALTANDO', { cenas: faltando });
+  const destino = path.join(assets, RECORTE.pasta);
+  fs.rmSync(destino, { recursive: true, force: true });
+  const recortes = {};
+  for (const r of prontos) {
+    copiarOuLigar(r.video, path.join(destino, `${r.id}.webm`));
+    copiarOuLigar(r.foto, path.join(destino, `${r.id}.png`));
+    copiarOuLigar(r.fundo, path.join(destino, `${r.id}-fundo.png`));
+    recortes[r.id] = { pessoa: r.pessoa };
+  }
+  return recortes;
+}
+
+// Copia o .js e o .css dos efeitos usados para comp/efeitos e devolve as tags para o molde.
+function copiarEfeitos(efeitosInfo, comp) {
+  const pasta = path.join(comp, 'efeitos');
+  fs.rmSync(pasta, { recursive: true, force: true });
+  const tags = [];
+  for (const nome of new Set(efeitosInfo.map((e) => e.nome))) {
+    const arq = arquivosDoEfeito(nome);
+    if (!arq.js) falha('EFEITO_FALTANDO', { efeito: nome });
+    fs.mkdirSync(pasta, { recursive: true });
+    if (arq.css) {
+      fs.copyFileSync(arq.css, path.join(pasta, `${nome}.css`));
+      tags.push(`    <link rel="stylesheet" href="efeitos/${nome}.css" />`);
+    }
+    fs.copyFileSync(arq.js, path.join(pasta, `${nome}.js`));
+    tags.push(`    <script src="efeitos/${nome}.js"></script>`);
+  }
+  return tags.join('\n');
+}
+
 export default async function montar({ opcoes }) {
   const projeto = abrirProjeto(opcoes);
   const marca = lerMarca();
@@ -96,6 +133,8 @@ export default async function montar({ opcoes }) {
   const transcricao = lerJson(exigirArquivo(projeto.arq('transcricao.json')));
   const take = exigirArquivo(projeto.arq('take.mp4'));
   const info = resumoDoVideo(await sondar(take));
+  const foraDoTake = cenaForaDoTake(dados.cenas, [], info.duracao);
+  if (foraDoTake) falha('EFEITO_FORA_DO_TAKE', foraDoTake);
   const gsap = path.join(RAIZ, 'node_modules', 'gsap', 'dist', 'gsap.min.js');
   if (!fs.existsSync(gsap)) falha('MONTADOR_FALTANDO', { detalhe: 'gsap' });
 
@@ -138,7 +177,12 @@ export default async function montar({ opcoes }) {
     scriptsDePlugin.push(`    <script src="assets/gsap/${nome}.min.js"></script>`);
   }
 
-  const montagem = montarComposicao({ dados, transcricao, marca, duracao: info.duracao, livres: deArquivo.livres, midias: deArquivo.midias });
+  const recortes = copiarRecortes(projeto, dados, take, assets);
+  const medidas = medidasDaPessoa(projeto.arq(RECORTE.pasta), assinaturaDoTake(take));
+  const montagem = montarComposicao({ dados, transcricao, marca, duracao: info.duracao, livres: deArquivo.livres, midias: deArquivo.midias, recortes, medidas });
+  const tagsDeEfeito = copiarEfeitos(montagem.efeitos.info, comp);
+  const semMedida = montagem.efeitos.info.filter((e) => e.pessoa && e.pessoa.medida === false).map((e) => e.id);
+  const avisosDoMontar = semMedida.length ? [...avisos, aviso('EFEITO_SEM_MEDIDA', { cenas: semMedida })] : avisos;
   for (const efeito of new Set(montagem.sons.map((s) => s.efeito))) {
     fs.copyFileSync(path.join(KIT, 'sfx', `${efeito}.wav`), path.join(assets, 'sfx', `${efeito}.wav`));
   }
@@ -159,6 +203,12 @@ export default async function montar({ opcoes }) {
     DADOS: jsonParaScript(montagem.dadosReel),
     PLUGINS: scriptsDePlugin.join('\n'),
     MIDIAS: montagem.telas.htmlMidias,
+    EF_FUNDO: montagem.efeitos.htmlFundo,
+    EF_ATRAS: montagem.efeitos.htmlAtras,
+    EF_FRENTE: montagem.efeitos.htmlFrente,
+    RECORTES: montagem.efeitos.htmlRecortes,
+    SERIE: montagem.serie.html,
+    EFEITOS: tagsDeEfeito,
     TELAS: montagem.telas.html,
   };
   const faltando = Object.keys(trocas).filter((chave) => !molde.includes(`{{${chave}}}`));
@@ -172,7 +222,7 @@ export default async function montar({ opcoes }) {
   return {
     ok: true,
     resumo: `Vídeo montado: ${montagem.legendas.dados.length} legendas, ${(dados.telas || []).length} telas, ${montagem.sons.length} sons.`,
-    avisos,
+    avisos: avisosDoMontar,
     arquivos: { comp: projeto.rel('comp'), index: projeto.rel('comp', 'index.html'), sons: projeto.rel('comp', 'sons.json'), legendas: projeto.rel('comp', 'legendas.json') },
     dados: { duracao_s: info.duracao, legendas: montagem.legendas.dados.length, telas: (dados.telas || []).length, sons: montagem.sons.length },
   };

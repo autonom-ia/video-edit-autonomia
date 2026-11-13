@@ -96,6 +96,40 @@
         }
       }
     },
+    "serie": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "itens"
+      ],
+      "description": "Série numerada: cabeçalho com número, nome do item e barra de progresso em segmentos.",
+      "properties": {
+        "titulo": {
+          "type": "string"
+        },
+        "itens": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 20,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "nome",
+              "em"
+            ],
+            "properties": {
+              "nome": {
+                "type": "string"
+              },
+              "em": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      }
+    },
     "cenas": {
       "type": "array",
       "minItems": 1,
@@ -214,6 +248,24 @@
           },
           "reconstrucao": {
             "type": "boolean"
+          },
+          "efeito": {
+            "type": "object",
+            "description": "Efeito de cena do kit (./estudio efeitos lista todos). Os campos de cada efeito ficam na ficha kit/efeitos/<nome>.json e são conferidos pelo validador.",
+            "required": [
+              "nome",
+              "porque"
+            ],
+            "properties": {
+              "nome": {
+                "type": "string"
+              },
+              "porque": {
+                "type": "string",
+                "description": "Que trecho da fala o efeito ajuda a entender (4 palavras ou mais)."
+              }
+            },
+            "additionalProperties": true
           }
         }
       }
@@ -245,6 +297,7 @@
               "prompt",
               "notificacao",
               "cta",
+              "checklist",
               "livre",
               "midia"
             ]
