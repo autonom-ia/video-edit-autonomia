@@ -59,5 +59,5 @@ test('tempo dos grupos: o primeiro aparece no quadro 0 e nenhum sobrepõe o pró
   assert.equal(t[0].inicio, 0);
   assert.ok(t[0].fim <= t[1].inicio);
   assert.equal(legendaY(50), 988);
-  assert.equal(legendaY(100), 1490);
+  assert.equal(legendaY(100), 1424);
 });

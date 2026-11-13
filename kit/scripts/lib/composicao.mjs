@@ -1,7 +1,7 @@
 // Monta os dados da composição do Reel (5 camadas): take, legenda palavra a palavra,
 // rosto cheio ou dividido sem moldura, faixa clara 0/35/50/100, telas, zoom e som em cada movimento.
 // Portado do molde que levou o primeiro vídeo à nota 8,7, sem nada específico de marca.
-import { FAIXA, ZOOM, RITMO, SFX, SOM } from './regras.mjs';
+import { FAIXA, ZOOM, RITMO, SFX, SFX_PICO, SOM } from './regras.mjs';
 import { gruposDeLegenda, tempoDosGrupos, legendaY, corDaLegenda } from './legenda.mjs';
 import { htmlDaTela, htmlDaMidia, itensDaTela } from './telas.mjs';
 import { faixaNoInstante, tamanhoPorFaixa } from './cenas.mjs';
@@ -15,7 +15,7 @@ export function posicaoDaCamera(faixa) {
   return h >= 900 ? h - 640 : h - 560;
 }
 
-export function eventosDeFaixa(cenas, marca) {
+export function eventosDeFaixa(cenas, marca, rostoY) {
   const eventos = [];
   let atual = null;
   for (const c of cenas) {
@@ -29,7 +29,7 @@ export function eventosDeFaixa(cenas, marca) {
   }
   return eventos.map((ev) => {
     const cor = corDaLegenda(ev.faixa, marca);
-    return { ...ev, altura: FAIXA.alturaPx[ev.faixa], camY: posicaoDaCamera(ev.faixa), capY: legendaY(ev.faixa), capTexto: cor.texto, capSombra: cor.sombra };
+    return { ...ev, altura: FAIXA.alturaPx[ev.faixa], camY: posicaoDaCamera(ev.faixa), capY: legendaY(ev.faixa, rostoY), capTexto: cor.texto, capSombra: cor.sombra };
   });
 }
 
@@ -191,18 +191,34 @@ export function montarCta(dados, telasInfo) {
   };
 }
 
+// Folga depois do "entra" em que um som da cena ainda é o som da chegada da tela.
+const CHEGADA_FOLGA_S = 0.15;
+
+// A tela aparece antes do "entra" (antecipação do cartão). Um som que a cena pôs entre o quadro
+// em que a tela aparece e logo depois do "entra" é o som da chegada: vai para o quadro em que ela
+// aparece. Sem isso, ele tocava 4 quadros atrasado (Issue #13).
+export function alinharNaChegada(em, telasInfo) {
+  const chegada = (telasInfo || []).find((t) => em >= t.entrada - 0.01 && em <= t.entra + CHEGADA_FOLGA_S);
+  return chegada ? chegada.entrada : em;
+}
+
+// "golpe" é o quadro em que o som precisa bater; o começo do arquivo vem antes nos sons de passagem.
+export function inicioDoSom(efeito, golpe) {
+  return Math.max(0, golpe - (SFX_PICO[efeito] || 0));
+}
+
 export function planejarSons({ dados, eventosFaixa, telasInfo, zoomEv, cta, duracao }) {
   const explicitos = [];
   for (const c of dados.cenas) {
-    for (const s of c.sons || []) explicitos.push({ efeito: s.efeito, inicio: s.em, volume: s.volume ?? 0.8, motivo: `cena ${c.id}` });
+    for (const s of c.sons || []) explicitos.push({ efeito: s.efeito, golpe: alinharNaChegada(s.em, telasInfo), volume: s.volume ?? 0.8, motivo: `cena ${c.id}` });
   }
   const auto = [];
-  const add = (efeito, inicio, volume, motivo) => auto.push({ efeito, inicio: Math.max(0, inicio), volume, motivo });
+  const add = (efeito, golpe, volume, motivo) => auto.push({ efeito, golpe: Math.max(0, golpe), volume, motivo });
   const abertura = zoomEv.find((z) => z.tipo === 'abertura' && z.t < 0.05);
   if (abertura) {
     add('impacto-forte', 0, 1.0, 'abertura');
     add('impacto-medio', 0, 1.0, 'abertura');
-    add('whoosh-rapido', 0.12, 0.6, 'abertura');
+    add('whoosh-rapido', 0.21, 0.6, 'abertura');
   }
   for (const c of dados.cenas) {
     const golpe = tempoDoGolpe(c);
@@ -213,20 +229,22 @@ export function planejarSons({ dados, eventosFaixa, telasInfo, zoomEv, cta, dura
       add('impacto-medio', golpe, 0.8, `zoom ${c.id}`);
     }
   }
-  for (const f of eventosFaixa) if (f.d > 0) add('whoosh-medio', f.t, 0.7, 'faixa');
+  // A costura da faixa anda durante f.d: o pico do whoosh cai no meio do movimento.
+  for (const f of eventosFaixa) if (f.d > 0) add('whoosh-medio', f.t + f.d / 2, 0.7, 'faixa');
   for (const t of telasInfo) {
-    (SOM_DE_ENTRADA[t.tipo] || [['pop', 0.7]]).forEach(([efeito, vol], k) => add(efeito, t.entra - 0.1 + k * 0.05, vol, `tela ${t.id}`));
+    (SOM_DE_ENTRADA[t.tipo] || [['pop', 0.7]]).forEach(([efeito, vol], k) => add(efeito, t.entrada + k * 0.05, vol, `tela ${t.id}`));
     for (const it of t.itens) {
       if (t.tipo === 'conversa') add(it.de === 'eu' ? 'notificacao-saida' : 'pop', it.t, it.de === 'eu' ? 0.8 : 0.7, `tela ${t.id}`);
       else add('pop', it.t, 0.7, `tela ${t.id}`);
     }
-    if (t.sai < duracao - 0.3) add('whoosh-rapido', t.sai, 0.5, `tela ${t.id} sai`);
+    // A saída acelera (power2.in, 0,35 s): o movimento maior vem perto do fim.
+    if (t.sai < duracao - 0.3) add('whoosh-rapido', t.sai + 0.2, 0.5, `tela ${t.id} sai`);
   }
   if (cta) {
     add('brilho', cta.em, 0.55, 'pedido');
     add('pop', cta.em + 0.1, 0.85, 'pedido');
   }
-  const perto = (lista, s, janela) => lista.some((x) => Math.abs(x.inicio - s.inicio) < janela && (janela > 0.1 || x.efeito === s.efeito));
+  const perto = (lista, s, janela) => lista.some((x) => Math.abs(x.golpe - s.golpe) < janela && (janela > 0.1 || x.efeito === s.efeito));
   const finais = [...explicitos];
   for (const s of auto) {
     if (perto(explicitos, s, 0.15)) continue;
@@ -234,12 +252,14 @@ export function planejarSons({ dados, eventosFaixa, telasInfo, zoomEv, cta, dura
     finais.push(s);
   }
   return finais
+    .map((s) => ({ ...s, inicio: inicioDoSom(s.efeito, s.golpe) }))
     .filter((s) => SFX[s.efeito] !== undefined && s.inicio < duracao - 0.02)
     .sort((a, b) => a.inicio - b.inicio)
     .map((s) => ({
       efeito: s.efeito,
       arquivo: `assets/sfx/${s.efeito}.wav`,
       inicio: r3(s.inicio),
+      golpe: r3(s.golpe),
       volume: Math.min(SOM.volumeMaxHyperframes, Math.max(0, Number(s.volume))),
       duracao: r3(Math.min(SFX[s.efeito], duracao - s.inicio)),
       motivo: s.motivo,
@@ -258,7 +278,7 @@ export function jsonParaScript(objeto) {
 
 // Junta tudo: dados para o animacao.js, pedaços de HTML e os arquivos sons.json e legendas.json.
 export function montarComposicao({ dados, transcricao, marca, duracao, livres = {}, midias = {} }) {
-  const eventosFaixa = eventosDeFaixa(dados.cenas, marca);
+  const eventosFaixa = eventosDeFaixa(dados.cenas, marca, dados.legenda_rosto_y);
   const zoomEv = eventosDeZoom(dados.cenas, eventosFaixa);
   const legendas = montarLegendas(transcricao.palavras || [], dados.cenas);
   const gancho = montarGancho(dados);

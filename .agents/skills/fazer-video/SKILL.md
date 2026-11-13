@@ -88,7 +88,7 @@ No caminho B, faça isto antes do F-04 (passo 5.3), para o aluno aprovar o plano
    - sobras esmaecidas da tela anterior;
    - tela branca ou vazia;
    - texto fora da zona segura (a sobreposição marca);
-   - legenda sobre a boca;
+   - legenda sobre a boca ou abaixo de y 1500: mude `legenda_rosto_y` (regra 39);
    - rosto pequeno, cortado ou emoldurado;
    - trecho parado mais de 2 s;
    - tela livre: letra pequena demais para o celular, contraste fraco, legenda passando por cima do que importa;

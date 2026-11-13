@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { sondar, resumoDoVideo, loudness, ffmpeg, valoresDeMetadado, temposComDoisPontos } from './ffmpeg.mjs';
 import { temFaststart } from './mp4.mjs';
-import { MASTER, SOM, QA } from './regras.mjs';
+import { MASTER, SOM, QA, RITMO } from './regras.mjs';
 import { lerJson } from './json.mjs';
 import { arred } from './texto.mjs';
 
@@ -29,12 +29,15 @@ async function silencios(arquivo) {
   return { inicios: temposComDoisPontos(r.erro, 'silence_start'), fins: temposComDoisPontos(r.erro, 'silence_end') };
 }
 
+// Toda tela que aparece precisa de um som batendo no quadro em que ela aparece (o "entra" menos
+// a antecipação do cartão). Mede o golpe do som (pico), não o começo do arquivo (Issue #13).
 export function checarSonsNasTrocas(telas, sons, janela = QA.somNaTrocaS) {
   const faltando = [];
   for (const t of telas || []) {
     if (typeof t.entra !== 'number') continue;
-    const tem = (sons || []).some((s) => Math.abs(s.inicio - t.entra) <= janela);
-    if (!tem) faltando.push({ tela: t.id, segundo: t.entra });
+    const aparece = Math.max(0, t.entra - RITMO.antecipacaoCardS);
+    const tem = (sons || []).some((s) => Math.abs((typeof s.golpe === 'number' ? s.golpe : s.inicio) - aparece) <= janela);
+    if (!tem) faltando.push({ tela: t.id, segundo: Math.round(aparece * 1000) / 1000 });
   }
   return faltando;
 }

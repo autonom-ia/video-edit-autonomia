@@ -43,8 +43,15 @@ export const FAIXA = Object.freeze({
   alturaPx: { 0: 0, 35: 672, 50: 960, 100: 1920 },
   transicaoS: { 0: 0.45, 35: 0.45, 50: 0.55, 100: 0.55 },
   ease: 'power3.inOut',
-  legendaY: { 0: 1600, 35: 700, 50: 988, 100: 1490 },
+  // Topo da legenda. Ela tem até ~75 px de altura (palavra de ênfase): em 1424 termina em 1500,
+  // dentro da zona segura (Issue #13).
+  legendaY: { 0: 1424, 35: 700, 50: 988, 100: 1424 },
 });
+
+// Topo da legenda com o rosto cheio (faixa 0), escolhido pelo assistente olhando o take
+// (cenas.json, legenda_rosto_y): abaixo da boca se couber, senão acima da cabeça. Fica sempre
+// dentro da zona segura: a legenda tem até ~75 px, então o topo vai até 1424 (Issue #13).
+export const LEGENDA_ROSTO_Y = Object.freeze({ min: 250, max: 1424 });
 
 export const LEGENDA = Object.freeze({
   maxPalavras: 3,
@@ -94,7 +101,8 @@ export const QA = Object.freeze({
   quadroZeroYavgMin: 16,
   congelamentoMaxS: 2,
   duracaoToleranciaPct: 15,
-  somNaTrocaS: 0.15,
+  // O pico do som de uma troca precisa cair até 2 quadros do quadro em que a tela aparece.
+  somNaTrocaS: 2 / 30,
   silencioDb: -45,
 });
 
@@ -131,6 +139,16 @@ export const SFX = Object.freeze({
   vibrar: 1.1155,
   subida: 2.1945,
   cintilar: 1.109,
+});
+
+// Sons de passagem demoram a chegar no pico de volume (medido em janelas de 10 ms). O estúdio
+// começa o som antes do momento pedido para o pico cair nele (Issue #13). Os outros sons batem
+// já no começo, ou são longos de propósito (teclado, subida, vibrar) e começam no momento pedido.
+export const SFX_PICO = Object.freeze({
+  'whoosh-rapido': 0.09,
+  'whoosh-medio': 0.23,
+  swish: 0.07,
+  zip: 0.23,
 });
 
 export const LIMITES_TELA = Object.freeze({
