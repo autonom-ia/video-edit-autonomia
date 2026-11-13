@@ -11,16 +11,21 @@ import { arred, linhas } from '../lib/texto.mjs';
 import { progresso } from '../lib/executar.mjs';
 import { ajustarTrechos } from '../lib/ajuste-de-corte.mjs';
 import { medirRosto, resumoDoRosto, cortePeloRosto, medirRostoDoTake } from '../lib/rosto.mjs';
+import { vozLimpa } from '../lib/voz-limpa.mjs';
+import { somDoBruto } from '../lib/som-do-bruto.mjs';
 
 const r3 = (n) => arred(n, 3);
 
-export function grafoDeCorte(trechos, { hdr = false, cortarX = null } = {}) {
+// vozLimpa: o som vem da segunda entrada (voz limpa do bruto, mesmo tempo); sem ela, do próprio
+// vídeo, com o filtro de ruído antigo (afftdn).
+export function grafoDeCorte(trechos, { hdr = false, cortarX = null, vozLimpa = false } = {}) {
   const partes = [];
   const pares = [];
+  const som = vozLimpa ? '1:a' : '0:a';
   trechos.forEach((t, i) => {
     const dur = r3(t.fim - t.inicio);
     partes.push(`[0:v]trim=start=${r3(t.inicio)}:end=${r3(t.fim)},setpts=PTS-STARTPTS[v${i}]`);
-    partes.push(`[0:a]atrim=start=${r3(t.inicio)}:end=${r3(t.fim)},asetpts=PTS-STARTPTS,afade=t=in:d=0.02,afade=t=out:st=${r3(Math.max(0, dur - 0.03))}:d=0.03[a${i}]`);
+    partes.push(`[${som}]atrim=start=${r3(t.inicio)}:end=${r3(t.fim)},asetpts=PTS-STARTPTS,afade=t=in:d=0.02,afade=t=out:st=${r3(Math.max(0, dur - 0.03))}:d=0.03[a${i}]`);
     pares.push(`[v${i}][a${i}]`);
   });
   partes.push(`${pares.join('')}concat=n=${trechos.length}:v=1:a=1[vc][ac]`);
@@ -28,7 +33,8 @@ export function grafoDeCorte(trechos, { hdr = false, cortarX = null } = {}) {
     // Vídeo deitado: o recorte 9:16 vai para onde está o rosto (cortarX); sem medida, fica no meio.
   const recorte = cortarX === null ? `${MASTER.largura}:${MASTER.altura}` : `${MASTER.largura}:${MASTER.altura}:${cortarX}:0`;
   partes.push(`[vc]${cor}fps=${MASTER.fps},scale=${MASTER.largura}:${MASTER.altura}:force_original_aspect_ratio=increase,crop=${recorte},setsar=1,format=yuv420p[v]`);
-  partes.push(`[ac]highpass=f=80,afftdn=nf=-25,loudnorm=I=${SOM.vozLufs}:TP=-3:LRA=11,aresample=${MASTER.taxaAudio},aformat=channel_layouts=stereo,asplit=2[a][voz]`);
+  const ruido = vozLimpa ? '' : 'afftdn=nf=-25,';
+  partes.push(`[ac]highpass=f=80,${ruido}loudnorm=I=${SOM.vozLufs}:TP=-3:LRA=11,aresample=${MASTER.taxaAudio},aformat=channel_layouts=stereo,asplit=2[a][voz]`);
   return partes.join(';\n');
 }
 
@@ -85,14 +91,17 @@ export default async function cortar({ opcoes }) {
   const avisos = [...ajuste.avisos];
   fs.mkdirSync(projeto.arq('corte'), { recursive: true });
   const cortarX = await corteDoDeitado(projeto, bruto, info, ajuste.trechos, avisos);
-  const grafo = grafoDeCorte(ajuste.trechos, { hdr: info.hdr, cortarX });
+  progresso('Limpando o ruído de fundo da sua voz...');
+  const limpa = await vozLimpa(projeto.arq('corte'), await somDoBruto(projeto, bruto, origem), origem);
+  if (limpa.erro) avisos.push(aviso('VOZ_SEM_LIMPEZA', { detalhe: limpa.erro }));
+  const grafo = grafoDeCorte(ajuste.trechos, { hdr: info.hdr, cortarX, vozLimpa: Boolean(limpa.arquivo) });
   const arqGrafo = projeto.arq('corte', 'grafo.txt');
   fs.writeFileSync(projeto.arq('corte', 'trechos-ajustados.json'), `${JSON.stringify({ fonte: 'bruto', trechos: ajuste.trechos, ajustes: ajuste.ajustes }, null, 2)}\n`, 'utf8');
   fs.writeFileSync(arqGrafo, linhas(grafo).join('\n'), 'utf8');
   progresso('Cortando as pausas e os erros...');
   await ffmpegOk(
     [
-      '-y', '-i', bruto, '-/filter_complex', arqGrafo,
+      '-y', '-i', bruto, ...(limpa.arquivo ? ['-i', limpa.arquivo] : []), '-/filter_complex', arqGrafo,
       '-map', '[v]', '-map', '[a]', '-c:v', 'libx264', '-preset', 'medium', '-crf', String(MASTER.crfTake), '-pix_fmt', 'yuv420p',
       '-r', String(MASTER.fps), '-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709',
       '-c:a', 'aac', '-b:a', MASTER.bitrateAudio, '-ar', String(MASTER.taxaAudio), '-ac', '2', '-movflags', '+faststart', projeto.arq('take.mp4'),
@@ -110,6 +119,6 @@ export default async function cortar({ opcoes }) {
     resumo: `Take pronto: ${Math.round(take.duracao * 10) / 10} s, em ${ajuste.trechos.length} trechos.`,
     avisos,
     arquivos: { take: projeto.rel('take.mp4'), voz: projeto.rel('voz.wav'), trechos_ajustados: projeto.rel('corte', 'trechos-ajustados.json') },
-    dados: { duracao_s: take.duracao, trechos: ajuste.trechos.length, soma_trechos_s: r3(total), hdr_convertido: info.hdr, ajustes: ajuste.ajustes, rosto, recorte_deitado_x: cortarX },
+    dados: { duracao_s: take.duracao, trechos: ajuste.trechos.length, soma_trechos_s: r3(total), hdr_convertido: info.hdr, ajustes: ajuste.ajustes, rosto, recorte_deitado_x: cortarX, voz_limpa: Boolean(limpa.arquivo) },
   };
 }

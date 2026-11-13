@@ -347,6 +347,10 @@
     "texto": "Não achei o seu vídeo na pasta 2-videos-brutos.",
     "acao": "O ./estudio receber já olha a pasta Downloads (últimas 24 h). Se não achou, mostre o texto F-01c, abra a pasta com ./estudio abrir 2-videos-brutos e espere o aluno dizer pronto."
   },
+  "SOM_DO_BRUTO_FALHOU": {
+    "texto": "Não consegui ler o som do seu vídeo.",
+    "acao": "Veja dados.detalhe. Confira se o vídeo tem som (receber avisa VIDEO_SEM_SOM) e rode de novo. Se falhar, rode a skill consertar."
+  },
   "TELA_DEPOIS_DO_FIM": {
     "texto": "Uma tela do plano passa do fim do vídeo.",
     "acao": "Veja dados.problemas. Ajuste \"sai\" da tela para antes do fim do vídeo e monte de novo."
@@ -394,5 +398,9 @@
   "VIDEO_SEM_SOM": {
     "texto": "O vídeo veio sem som. Sem a sua voz eu não consigo montar o Reel.",
     "acao": "Peça para conferir se o microfone estava ligado e para mandar outro arquivo."
+  },
+  "VOZ_SEM_LIMPEZA": {
+    "texto": "Não consegui limpar o ruído de fundo da sua voz com o modelo novo. Usei o filtro simples.",
+    "acao": "Veja dados.detalhe. Sem internet na primeira vez o modelo não baixa: com internet, rode ./estudio cortar de novo. Se continuar, rode a skill consertar."
   }
 }

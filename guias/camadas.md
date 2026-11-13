@@ -15,6 +15,7 @@ Um Reel falado bem editado é um bolo de 5 camadas, uma em cima da outra. O alun
 ## Camada 1: o take
 
 - É a base. O corte é feito pelo kit (`./estudio cortar`) a partir do `trechos.json` que você escreve: melhor tomada de cada bloco, sem respiro maior que 0,4 s, sem muleta e sem silêncio no fim.
+- O som do bruto sai num WAV no relógio do arquivo (`bruto/som.wav`): transcrição, mapa da fala e limpeza da voz usam esse mesmo tempo, o do corte. A voz passa pela limpeza de ruído (DPDFNet) antes de cortar.
 - O `cortar` usa dois medidores. O **mapa da fala** (`fala` na transcrição do bruto) acerta as bordas de cada trecho e aponta respiro longo. A **medida do rosto** (`rosto.json`) diz onde fica o rosto no take: dela saem a altura da legenda, o centro do zoom e, em vídeo deitado, onde recortar o 9:16.
 - A cor não é mexida, a não ser o ajuste automático de vídeo HDR do iPhone para cor normal.
 - Aqui no estúdio: se a gravação estiver ruim de luz ou de som, isso é dito ao aluno como pedido de regravar o trecho (texto F-03), não escondido com filtro.

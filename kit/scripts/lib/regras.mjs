@@ -150,6 +150,12 @@ export const CORTE_FALA = Object.freeze({
   margemPalavraS: 0.03,
 });
 
+// Limpeza da voz (DPDFNet 48 kHz, kit/py/limpar_voz.py). O limite deixa uns 24 dB de ruído a menos
+// em vez de zerar o fundo: silêncio absoluto soa como vácuo. Medido em 13/11/2026 com dois takes
+// reais e ruído de ventilador: voz acima do fundo de 11-12 dB no original, 14-15 dB com o filtro
+// antigo (afftdn) e ~34 dB com esta no limite de 24, sem mudar as palavras da transcrição.
+export const LIMPEZA = Object.freeze({ limiteDb: 24 });
+
 export const FALA = Object.freeze({ memoriaMinimaGb: 8, modeloGrande: 'large-v3-turbo', modeloPequeno: 'small' });
 
 // Duração medida (ffprobe) dos 14 sons de kit/sfx.
