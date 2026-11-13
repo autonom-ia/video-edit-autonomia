@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { sondar, resumoDoVideo, loudness, ffmpeg, valoresDeMetadado, temposComDoisPontos } from './ffmpeg.mjs';
 import { temFaststart } from './mp4.mjs';
-import { MASTER, SOM, QA, RITMO } from './regras.mjs';
+import { MASTER, SOM, QA, RITMO, SFX_PICO } from './regras.mjs';
 import { lerJson } from './json.mjs';
 import { arred } from './texto.mjs';
 
@@ -36,7 +36,9 @@ export function checarSonsNasTrocas(telas, sons, janela = QA.somNaTrocaS) {
   for (const t of telas || []) {
     if (typeof t.entra !== 'number') continue;
     const aparece = Math.max(0, t.entra - RITMO.antecipacaoCardS);
-    const tem = (sons || []).some((s) => Math.abs((typeof s.golpe === 'number' ? s.golpe : s.inicio) - aparece) <= janela);
+    // sons.json de montagem antiga não tem "golpe": calcula pelo começo e pelo pico do efeito.
+    const golpe = (s) => (typeof s.golpe === 'number' ? s.golpe : s.inicio + (SFX_PICO[s.efeito] || 0));
+    const tem = (sons || []).some((s) => Math.abs(golpe(s) - aparece) <= janela);
     if (!tem) faltando.push({ tela: t.id, segundo: Math.round(aparece * 1000) / 1000 });
   }
   return faltando;

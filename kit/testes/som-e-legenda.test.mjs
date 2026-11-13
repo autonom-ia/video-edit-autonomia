@@ -37,8 +37,45 @@ test('som da cena no "entra" da tela vai para o quadro em que ela aparece', () =
 test('som da cena longe da chegada fica onde a cena pôs', () => {
   const info = [{ entrada: APARECE, entra: 5 }];
   assert.equal(alinharNaChegada(6.2, info), 6.2);
-  assert.equal(alinharNaChegada(5 + 0.15, info), APARECE);
-  assert.equal(alinharNaChegada(5 + 0.2, info), 5.2);
+  assert.equal(alinharNaChegada(5 + 1 / 30, info), APARECE, 'até 1 quadro depois do entra é chegada');
+  assert.equal(alinharNaChegada(5.1, info), 5.1, 'virada ou clique 0,1 s depois fica');
+});
+
+test('com duas telas perto, o som vai para a chegada de "entra" mais perto', () => {
+  const info = [{ entrada: 7.9, entra: 8.03 }, { entrada: 7.967, entra: 8.1 }];
+  assert.equal(alinharNaChegada(8.1, info), 7.967);
+  assert.equal(alinharNaChegada(8.03, info), 7.9);
+});
+
+test('impacto da cena 0,1 s depois do entra não apaga o som automático da chegada', () => {
+  const sons = sonsDe(dados([{ efeito: 'impacto-medio', em: 5.1, volume: 1.2 }]));
+  assert.ok(sons.some((s) => s.efeito === 'impacto-medio' && s.golpe === 5.1));
+  assert.ok(sons.some((s) => s.motivo === 'tela t01' && s.efeito === 'swish'));
+});
+
+test('perto do zero o golpe registrado é o pico real', () => {
+  const d = dados();
+  d.telas[0].entra = 0.2;
+  d.cenas[1].inicio = 0;
+  d.cenas = [d.cenas[1]];
+  const r = montarTelas(d, null, { duracao: 10 });
+  const midia = planejarSons({ dados: { ...d, cenas: [{ ...d.cenas[0], sons: [{ efeito: 'whoosh-medio', em: 0.1 }] }] }, eventosFaixa: [], telasInfo: r.info, zoomEv: [], cta: null, duracao: 10 })
+    .find((s) => s.efeito === 'whoosh-medio');
+  assert.equal(midia.inicio, 0);
+  assert.equal(midia.golpe, SFX_PICO['whoosh-medio']);
+});
+
+test('integração: os sons planejados passam no QA das trocas', () => {
+  for (const sons of [[], [{ efeito: 'impacto-medio', em: 5 }], [{ efeito: 'whoosh-rapido', em: 5 }], [{ efeito: 'pop', em: 5.1 }]]) {
+    const d = dados(sons);
+    assert.deepEqual(checarSonsNasTrocas(d.telas, sonsDe(d)), [], JSON.stringify(sons));
+  }
+});
+
+test('QA: sons.json antigo, sem golpe, usa o começo mais o pico', () => {
+  const telas = [{ id: 't01', entra: 5 }];
+  assert.equal(checarSonsNasTrocas(telas, [{ efeito: 'swish', inicio: APARECE - SFX_PICO.swish }]).length, 0);
+  assert.equal(checarSonsNasTrocas(telas, [{ efeito: 'swish', inicio: 5 }]).length, 1);
 });
 
 test('som de passagem começa antes para o pico cair no golpe', () => {

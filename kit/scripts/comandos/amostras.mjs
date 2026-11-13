@@ -108,7 +108,7 @@ export async function amostrasDeEstilo(projeto) {
   for (let i = 0; i < 3; i += 1) {
     const q = quadros[i];
     const png = projeto.arq('amostras', `estilo-${i + 1}.png`);
-    await fotografarPagina(paginaDeAmostra({ marca, fundo, ...q }), png);
+    await fotografarPagina(paginaDeAmostra({ marca, fundo, legendaRostoY: cenas.legenda_rosto_y, ...q }), png);
     saidas.push(png);
   }
   return { saidas, semRosto: !fundo };

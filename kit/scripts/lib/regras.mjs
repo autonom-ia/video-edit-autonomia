@@ -141,7 +141,8 @@ export const SFX = Object.freeze({
   cintilar: 1.109,
 });
 
-// Sons de passagem demoram a chegar no pico de volume (medido em janelas de 10 ms). O estúdio
+// Sons de passagem demoram a chegar no pico de volume. Medido em kit/sfx com
+// ffmpeg -af "asetnsamples=n=480,astats=metadata=1:reset=1" (janelas de 10 ms, maior RMS). O estúdio
 // começa o som antes do momento pedido para o pico cair nele (Issue #13). Os outros sons batem
 // já no começo, ou são longos de propósito (teclado, subida, vibrar) e começam no momento pedido.
 export const SFX_PICO = Object.freeze({

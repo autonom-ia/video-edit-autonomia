@@ -191,15 +191,20 @@ export function montarCta(dados, telasInfo) {
   };
 }
 
-// Folga depois do "entra" em que um som da cena ainda é o som da chegada da tela.
-const CHEGADA_FOLGA_S = 0.15;
+// Folga depois do "entra" em que um som da cena ainda é o som da chegada da tela: 1 quadro.
+const CHEGADA_FOLGA_S = 1 / 30 + 0.001;
 
-// A tela aparece antes do "entra" (antecipação do cartão). Um som que a cena pôs entre o quadro
-// em que a tela aparece e logo depois do "entra" é o som da chegada: vai para o quadro em que ela
-// aparece. Sem isso, ele tocava 4 quadros atrasado (Issue #13).
+// A tela aparece antes do "entra" (antecipação do cartão). Um som que a cena pôs no "entra" da
+// tela (ou entre o quadro em que ela aparece e o "entra") é o som da chegada: vai para o quadro em
+// que ela aparece. Sem isso, ele tocava 4 quadros atrasado (Issue #13). Som mais longe do "entra"
+// (virada, clique, item) fica onde a cena pôs. Com duas telas perto, vale a de "entra" mais perto.
 export function alinharNaChegada(em, telasInfo) {
-  const chegada = (telasInfo || []).find((t) => em >= t.entrada - 0.01 && em <= t.entra + CHEGADA_FOLGA_S);
-  return chegada ? chegada.entrada : em;
+  let melhor = null;
+  for (const t of telasInfo || []) {
+    if (em < t.entrada - 0.01 || em > t.entra + CHEGADA_FOLGA_S) continue;
+    if (!melhor || Math.abs(em - t.entra) < Math.abs(em - melhor.entra)) melhor = t;
+  }
+  return melhor ? melhor.entrada : em;
 }
 
 // "golpe" é o quadro em que o som precisa bater; o começo do arquivo vem antes nos sons de passagem.
@@ -252,7 +257,11 @@ export function planejarSons({ dados, eventosFaixa, telasInfo, zoomEv, cta, dura
     finais.push(s);
   }
   return finais
-    .map((s) => ({ ...s, inicio: inicioDoSom(s.efeito, s.golpe) }))
+    .map((s) => {
+      const inicio = inicioDoSom(s.efeito, s.golpe);
+      // Perto do zero o começo não recua o bastante: o pico cai depois, e o golpe registrado é o real.
+      return { ...s, inicio, golpe: Math.max(s.golpe, inicio + (SFX_PICO[s.efeito] || 0)) };
+    })
     .filter((s) => SFX[s.efeito] !== undefined && s.inicio < duracao - 0.02)
     .sort((a, b) => a.inicio - b.inicio)
     .map((s) => ({

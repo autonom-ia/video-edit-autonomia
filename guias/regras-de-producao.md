@@ -177,7 +177,7 @@ Porquê: esses defeitos só aparecem parando o vídeo na troca. Assistindo, ning
 Porquê: a maioria assiste sem som. Legenda longa disputa com o rosto.
 
 **39. Legenda nunca sobre a boca.**
-Com o rosto cheio, ela fica onde não tapa a boca e não sai da zona segura (regra 31): olhe um quadro do take e ponha em `legenda_rosto_y` o topo dela, de 250 a 1424. Abaixo da boca, se couber (a legenda tem ~75 px e termina até 1500). Se o rosto estiver baixo no quadro e a boca passar de ~1350, acima da cabeça. Sem o campo, ela fica em 1424. Com faixa, acompanha a faixa no mesmo ritmo (35 em y 700, 50 em y 988, 100 em y 1424) e troca de cor: escura sobre o papel, clara sobre o rosto.
+Com o rosto cheio, ela fica onde não tapa a boca e não sai da zona segura (regra 31): olhe um quadro do take e ponha em `legenda_rosto_y` o topo dela, de 250 a 1424. Abaixo da boca, se couber (a legenda tem ~75 px e termina até 1500). Se o rosto estiver baixo no quadro e a boca passar de ~1350, acima da cabeça. Confira nos quadros que ela não cobre o gancho escrito (até ~610 no começo), uma tela solta (250 a ~630) nem o selo do pedido (~1290 a 1370). Sem o campo, ela fica em 1424. Com faixa, acompanha a faixa no mesmo ritmo (35 em y 700, 50 em y 988, 100 em y 1424) e troca de cor: escura sobre o papel, clara sobre o rosto.
 Porquê: legenda na boca tapa quem vende. Legenda que some na troca de faixa comia o começo das frases.
 
 **40. Uma ênfase por cena, no máximo.**
@@ -191,7 +191,7 @@ Porquê: o transcritor erra nome próprio e número. Legenda errada passa descui
 ## 7. Som
 
 **42. Todo movimento tem som; nem todo som tem movimento.**
-Corte, entrada de tela e clique levam efeito. Efeito solto, sem nada mudando na tela, é ruído. O kit reprova troca de tela sem som a até 0,15 s dela.
+Corte, entrada de tela e clique levam efeito. Efeito solto, sem nada mudando na tela, é ruído. O kit põe um som na chegada de cada tela e reprova se nenhum som bater a até 2 quadros do quadro em que ela aparece.
 Porquê: o som faz o olho notar a mudança. Som sem motivo cansa.
 
 **43. Golpes de virada mais altos que os outros efeitos.**
