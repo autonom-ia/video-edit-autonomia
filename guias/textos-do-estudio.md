@@ -134,6 +134,13 @@ No Mac, a primeira vez que o estúdio olha a pasta Downloads, o Mac pode pergunt
 
 Em seguida, diga o F-00 no sentido do celular para o computador. Depois do "pronto", rode o `receber` de novo. Se o aluno preferir arrastar sozinho, abra a pasta 2-videos-brutos.
 
+**F-01e**, a fala mostra algo na tela do computador ou do celular (um app, um site, uma conta sendo feita). Pergunte uma vez por vídeo, logo depois do F-01:
+> Você falou de {{o que aparece na tela}}. Você gravou a tela fazendo isso? Se gravou, eu uso a gravação no vídeo: é a prova mais forte.
+> 1. Gravei, está no computador ★
+> 2. Não gravei
+
+"Gravei": pergunte onde está ("na pasta Downloads", "na Área de Trabalho") ou procure os vídeos recentes dessas pastas e mostre a primeira imagem. Confira os quadros antes de usar (senha, chave, e-mail, nome de cliente, notificação pessoal) e corte o que não pode ir ao ar. "Não gravei": siga sem perguntar de novo; a tela é redesenhada a partir da referência real (`guias/tela-livre.md`).
+
 **F-02, progresso.** Uma linha por etapa, sem pergunta:
 > Cortando as pausas e os erros... (1 de 7)
 

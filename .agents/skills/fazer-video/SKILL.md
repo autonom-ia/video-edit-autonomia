@@ -5,7 +5,9 @@ description: Transforma o vídeo gravado pelo aluno num Reel pronto para postar 
 
 # Fazer o vídeo
 
-O aluno gravou. Você faz o resto. Ele só decide: o plano das cenas (só no caminho B), a prévia e a música. Qual vídeo (F-01b, F-01d) e regravar um trecho (F-03) só aparecem quando o caso exige. Todo o resto você decide pelas regras, sem perguntar.
+O aluno gravou. Você faz o resto. Ele só decide: o plano das cenas (só no caminho B), a prévia e a música. Qual vídeo (F-01b, F-01d), gravação de tela (F-01e) e regravar um trecho (F-03) só aparecem quando o caso exige. Todo o resto você decide pelas regras, sem perguntar.
+
+O molde é o ponto de partida. Quando a cena pede mais, você desenha a tela, usa a gravação de tela do aluno e pesquisa a cara real do app citado (`guias/tela-livre.md`). As regras travam as decisões do aluno, a verdade e o resultado, não o seu jeito de criar.
 
 Comandos: no Mac e no Windows com Git Bash, `./estudio <comando>`. No PowerShell do Windows, `.\estudio.cmd <comando>`. Sempre de dentro da pasta do estúdio. Leia só a última linha (JSON) e traduza o `codigo` pelo `kit/mensagens.json`, seguindo a `acao`. Exit 2 = reprovado: corrija pela causa e rode de novo.
 
@@ -14,7 +16,9 @@ No Codex: siga a regra única do CLAUDE.md, seção 5. Em resumo, `musica` pede 
 ## Leia antes
 
 - `minha-marca/briefing.json`, `minha-marca/marca.json` e, se existir, `minha-marca/aprendizados.md`.
-- `guias/regras-de-producao.md`, `guias/camadas.md`, `guias/textos-do-estudio.md` (F-00 a F-09), `guias/postagem.md`.
+- `guias/regras-de-producao.md`, `guias/camadas.md`, `guias/tela-livre.md`, `guias/textos-do-estudio.md` (F-00 a F-09), `guias/postagem.md`.
+- O estilo do nicho do aluno em `guias/nichos/` (o `LEIA-ME.md` diz qual), ou `minha-marca/estilo-do-nicho.md`, se existir.
+- As skills do HyperFrames, se você precisar de um detalhe do motor (GSAP, 3D, SVG): vêm com o pacote, em `node_modules/hyperframes`.
 
 Sem `minha-marca/marca.json`: rode a skill `minha-marca` antes.
 
@@ -46,10 +50,12 @@ Rode `./estudio receber --projeto P`. Ele olha a pasta 2-videos-brutos e também
 3. F-03 só se um trecho mudar o sentido, ferir a verdade (afirmação sem prova, `palavras_proibidas`, `cuidados_do_nicho`) ou se não houver nenhuma tomada usável do gancho. Escolha de tomada comum nunca vira pergunta.
 4. `./estudio cortar --projeto P`. `TRECHOS_INVALIDOS`: corrija e rode de novo.
 5. `./estudio transcrever --projeto P --fonte take`.
+6. **Gravação de tela.** Se a fala mostra algo na tela do computador ou do celular (um app, um site, uma conta), diga o F-01e uma vez. Com o arquivo: confira os quadros (senha, chave, e-mail, nome de cliente, notificação pessoal) e prepare o trecho com `./estudio midia --projeto P --arquivo "<arquivo>" --nome <nome> --de <s> --ate <s> [--velocidade N] [--corte x,y,l,a]`. Ela entra como tela `midia` no passo 5b.
 
 ### 4. Conferir a legenda
 1. Compare `transcricao-take.json` palavra por palavra com o roteiro (caminho A) e com o briefing: nome da marca, @, palavra do pedido, termos obrigatórios, números.
-2. Escreva `projetos/P/correcoes.json` (`[]` se nada mudar). Corrija só o que o transcritor errou, nunca o jeito de falar do aluno.
+2. Escreva `projetos/P/correcoes.json` (`[]` se nada mudar). Corrija só o que o transcritor errou, nunca o jeito de falar do aluno. Nome de app que ele falou fica como ele falou: o app vai em `apps_reais`, não vira "o aplicativo".
+   - Se `cta.por_video` = `true` no briefing, a palavra do pedido e o presente saem desta fala. Use os dois no `cta` e na tela `cta` do `cenas.json` e na `postagem.txt`. Não grave no briefing.
 3. `./estudio aplicar-correcoes --projeto P`. Correção que não casou vira aviso: confira o `inicio` e rode de novo.
 4. `./estudio estado --projeto P --etapa alinhamento`.
 
@@ -61,6 +67,15 @@ Só quando o vídeo foi gravado sem roteiro nosso (`caminho` = `B`).
 4. `./estudio telas --projeto P` até passar. `./estudio amostras --tipo estilo --projeto P`. Depois `./estudio pagina-de-aprovacao --projeto P` (abre a página do vídeo no papel). Nunca abra `roteiro.md` nem `cenas.md` para o aluno.
 5. F-04. Mudança pedida: aplique e mostre só o que mudou. "Trocar o estilo": `amostras` de novo.
 6. Com o "Aprovar" do aluno: `./estudio estado --projeto P --gate cenas=aprovado --resposta "<palavras do aluno>"`. Sem resposta dele, não há aprovação: um pedido geral como "faz o vídeo completo" não conta.
+
+### 5b. Telas que provam (os dois caminhos)
+Para cada app, site ou ação que a fala cita:
+1. Há gravação de tela do aluno (passo 3.6)? Use em `midia`.
+2. Senão, pesquise a referência real (site oficial, print público, documentação) e desenhe uma tela `livre` com movimento: a janela chegando, o texto sendo digitado, a caixinha aprovada, o resultado aparecendo. Siga `guias/tela-livre.md`.
+3. App que o aluno usa vai em `apps_reais`, com a `referencia` e o `porque`.
+4. Pense no vídeo todo como um diretor: a forma que vira a próxima, a câmera que se aproxima, o 3D que dá profundidade. O repertório está em `guias/tela-livre.md`. Cada efeito tem função.
+
+No caminho B, faça isto antes do F-04 (passo 5.3), para o aluno aprovar o plano já com as telas certas. No caminho A, troque a tela do plano pela gravação ou pela tela livre e mostre na prévia (GATE 2).
 
 ### 6. Alinhar
 `./estudio alinhar --projeto P`. Ele acerta os tempos das cenas e das ênfases pela fala real. Para cada aviso de cena sem casamento, ajuste a `fala` da cena em `cenas.json` ao que foi dito e rode de novo. Atualize `cenas.md` se mudou algo que o aluno viu.
@@ -75,7 +90,9 @@ Só quando o vídeo foi gravado sem roteiro nosso (`caminho` = `B`).
    - texto fora da zona segura (a sobreposição marca);
    - legenda sobre a boca;
    - rosto pequeno, cortado ou emoldurado;
-   - trecho parado mais de 2 s.
+   - trecho parado mais de 2 s;
+   - tela livre: letra pequena demais para o celular, contraste fraco, legenda passando por cima do que importa;
+   - gravação de tela: dado pessoal à mostra, parte importante cortada pelo `encaixe`.
 5. Achou: corrija em `cenas.json` (tempo, faixa, tela, zoom) e repita de 1 a 4. No máximo 3 vezes. Se sobrar defeito, ele vai para o avaliador.
 
 ### 8. GATE 2: a prévia
@@ -124,8 +141,8 @@ Se o aluno pedir voz gerada, avatar, música paga ou qualquer serviço de nuvem:
 
 ## Saídas
 
-`projetos/P/`: `bruto/`, `transcricao-bruta.json`, `trechos.json`, `take.mp4`, `voz.wav`, `transcricao-take.json`, `correcoes.json`, `transcricao.json`, `cenas.json`, `cenas.md`, `telas/`, `comp/`, `quadros/`, `checagem-marca.json`, `previa.mp4`, `sem-trilha.mp4`, `trilha/`, `final-mix.mp4`, `qa/`, `revisor/`, `revisao-video-N.md`, `final.mp4`, `postagem.txt`. Em `3-videos-prontos/`: o vídeo, a capa e a legenda.
+`projetos/P/`: `bruto/`, `midia/`, `telas-livres/`, `transcricao-bruta.json`, `trechos.json`, `take.mp4`, `voz.wav`, `transcricao-take.json`, `correcoes.json`, `transcricao.json`, `cenas.json`, `cenas.md`, `telas/`, `comp/`, `quadros/`, `checagem-marca.json`, `previa.mp4`, `sem-trilha.mp4`, `trilha/`, `final-mix.mp4`, `qa/`, `revisor/`, `revisao-video-N.md`, `final.mp4`, `postagem.txt`. Em `3-videos-prontos/`: o vídeo, a capa e a legenda.
 
 ## Onde você para e pergunta
 
-F-04 (só caminho B), F-05, F-06. Quando o caso exige: F-01b, F-01d, F-01c, F-03, F-07, F-09. Nada mais.
+F-04 (só caminho B), F-05, F-06. Quando o caso exige: F-01b, F-01d, F-01c, F-01e, F-03, F-07, F-09. Nada mais.

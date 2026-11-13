@@ -4,7 +4,7 @@
 > Copyright (c) 2026 Cauhi (cauhi.com). Texto integral da licença em `licencas/MIT-bolo-de-camadas.txt`.
 > Mudanças: português do Brasil, motor HyperFrames, sobrescritas do estúdio marcadas com "Aqui no estúdio", e o guia de `cenas.json`.
 
-Um Reel falado bem editado é um bolo de 5 camadas, uma em cima da outra. O aluno só grava a fala. O resto é o molde do kit, guiado pela tabela de cenas que você escreve.
+Um Reel falado bem editado é um bolo de 5 camadas, uma em cima da outra. O aluno só grava a fala. O resto é com você: o molde do kit é o ponto de partida, e a tabela de cenas diz o que cada trecho pede. Quando a cena pede mais que o molde, desenhe a tela (`guias/tela-livre.md`).
 
 1. **O take**: a fala gravada, cortada.
 2. **A legenda**: palavra por palavra, no tempo da fala.
@@ -36,23 +36,25 @@ Um Reel falado bem editado é um bolo de 5 camadas, uma em cima da outra. O alun
 ## Camada 4: a tela
 
 - Uma tela nova a cada 2 a 4 s, entrando na palavra que a nomeia (o kit adianta uns 4 quadros).
-- Um sistema de cartões só, nas cores e fontes da marca do aluno.
-- Cada tela fica no ar no máximo 4 s.
-- Aqui no estúdio: **sem selo de "simulação"** e sem etiqueta de "fictício". A tela parece real, mas o conteúdo é inventado por nós: nome comum, nada de cliente real. **Sem logo, nome ou cor de app famoso.** A conversa usa as cores da marca do aluno num desenho genérico.
+- **A tela mostra acontecendo o que a fala diz.** Fala "abro o Codex": aparece o Codex abrindo. Fala "aprova as caixinhas": aparece a caixinha. Na ordem de força: a gravação de tela do aluno (`midia`), a tela redesenhada a partir da referência real (`livre`), a tela do molde.
+- Uma direção de arte só no vídeo inteiro: as cores e as letras da marca nos cartões e nos textos. A tela de um app real tem a cara do app.
+- Tela do molde fica no ar até 4 s; tela livre e mídia, até 8 s, desde que nada fique parado mais de 2 s.
+- Aqui no estúdio: **sem selo de "simulação"** e sem etiqueta de "fictício". O conteúdo dentro da tela é inventado por nós: nome comum, nada de cliente real, número só com prova.
+- **App que o aluno usa de verdade e cita na fala aparece como é**, a partir da referência pesquisada: nome, logo, cores e desenho. Declare em `apps_reais`. App que ele não usa não entra só para enfeitar.
 - Aqui no estúdio: número na tela só com prova, redondo, com a origem anotada no campo `origem`, que nunca aparece.
 
 ## Camada 5: zoom e som
 
 - Zoom de abertura no começo, punch-in na palavra de ênfase, zoom lento em fala longa. Os valores estão no kit e em `guias/regras-de-producao.md` (regra 34).
 - Um efeito em cada batida visual: whoosh na troca, pop no que chega, subida e impacto na revelação, teclado só enquanto um texto se digita (e só se a pessoa não estiver falando o texto).
-- Aqui no estúdio: só os 14 efeitos livres que vêm em `kit/sfx/`. Nunca som de marca.
+- Aqui no estúdio: os 14 efeitos livres que vêm em `kit/sfx/` (CC0). Nunca som de marca.
 - Aqui no estúdio: voz em cerca de −20 LUFS antes do ganho final; efeitos de 3 a 6 LU abaixo da voz; trilha 14 dB abaixo da voz; final em −14 LUFS, estéreo.
 
 ---
 
 ## Como a tabela de cenas vira `cenas.json`
 
-Você escreve `projetos/<P>/cenas.json` e, ao lado, `cenas.md` (a mesma coisa em tabela legível, pelo molde `modelos/cenas.md`). O kit valida com `./estudio telas --projeto <P>`. Qualquer chave fora das listadas abaixo reprova.
+Você escreve `projetos/<P>/cenas.json` e, ao lado, `cenas.md` (a mesma coisa em tabela legível, pelo molde `modelos/cenas.md`). O kit valida com `./estudio telas --projeto <P>`. A forma do arquivo é fixa (chave fora das listadas reprova); o desenho das telas, não: para isso existem `livre` e `midia`.
 
 ### O topo do arquivo
 
@@ -62,6 +64,7 @@ Você escreve `projetos/<P>/cenas.json` e, ao lado, `cenas.md` (a mesma coisa em
 | `duracao_alvo_s` | Duração esperada em segundos (médio: 30 a 45; curto: até 30). |
 | `direcao_de_arte` | Lista de trechos `{"de", "ate", "domina", "porque"}`: o que domina a tela em cada trecho e por quê. Escreva antes das cenas. |
 | `titulo_gancho` | `{"texto", "publico"}`: o gancho escrito do quadro 0 (até 10 palavras) e, se quiser, quem é o público (até 12 palavras ou `""`). Obrigatório. |
+| `apps_reais` | Opcional. Lista `{"nome", "referencia", "porque", "citado_como"}` (o último, opcional: como o aluno chamou o app na fala) dos apps que o aluno usa de verdade e cita na fala. Libera o nome e as cores deles neste vídeo. Veja `guias/tela-livre.md`. |
 | `cenas` | A lista de cenas, em ordem. |
 | `telas` | A lista de telas que aparecem por cima. |
 | `cta` | `{"palavra", "em"}`: a palavra do pedido (uma só, sem espaço) e o segundo em que ela aparece. |
@@ -96,11 +99,13 @@ Palavras contadas por espaço:
 | `frase` | `texto`, `apoio` (opcional) | até 8 · até 6 |
 | `numero` | `numero`, `apoio`, `origem` | até 4 · até 6 · `origem` obrigatória, nunca exibida |
 | `lista` | `titulo` (opcional), `itens` | título até 10 · de 2 a 4 itens de até 7 |
-| `passos` | `itens`, `atual` | de 2 a 5 itens de até 7 · `atual` é a posição do passo da vez (tem barra de progresso que soma) |
-| `conversa` | `nome`, `status`, `mensagens` | `nome` comum de até 3 palavras · `status` = "online" · de 1 a 5 mensagens `{"de": "outro" ou "eu", "texto"}` de até 35 |
+| `passos` | `itens`, `atual` | de 2 a 5 itens de até 7 · `atual` é o passo da vez, **contando do 0**: o primeiro passo é `0`, o segundo é `1` (tem barra de progresso que soma) |
+| `conversa` | `nome`, `status` (opcional), `mensagens` | `nome` comum de até 3 palavras · `status` de até 3 palavras ("online", "digitando...") · de 1 a 5 mensagens `{"de": "outro" ou "eu", "texto"}` de até 35. É chat de celular; app de computador vai em `livre` |
 | `prompt` | `prompt`, `resposta` | até 40 · até 25 (tela de IA genérica, sem marca) |
 | `notificacao` | `app`, `texto` | `app` é "Mensagens", "E-mail" ou "Agenda" · até 35 |
 | `cta` | `palavra`, `frase` | 1 palavra · até 8 |
+| `livre` | `arquivo`, `descricao`, `entrada` (opcional) | `arquivo` = `telas-livres/<id>.html` no projeto · `descricao` em uma frase · `entrada` = `padrao` ou `propria` · até 8 s no ar. Veja `guias/tela-livre.md` |
+| `midia` | `arquivo`, `descricao`, `encaixe` (opcional) | `arquivo` = `midia/<nome>` preparado pelo `./estudio midia` · `encaixe` = `cobrir` ou `conter` · até 8 s no ar |
 
 Nunca use a chave `etiqueta`. Ela existia para escrever "simulação" na tela e foi proibida.
 
@@ -112,3 +117,5 @@ Nunca use a chave `etiqueta`. Ela existia para escrever "simulação" na tela e 
 4. **Fala longa sem tela:** zoom `lento` e um som curto a cada linha nova.
 5. **Pedido:** tela `cta` com a palavra, rosto dividido, e a última fala voltando ao gancho.
 6. **Fio que soma:** quando der, um número ou uma lista que cresce ao longo do vídeo (passo 1 de 4, 2 de 4...). Dá motivo para ficar até o fim.
+7. **Prova acontecendo:** cada tela ou ação citada na fala aparece. Gravação de tela do aluno, se houver; senão, a tela redesenhada da referência real, com movimento (digitação, clique, caixinha aprovada, resultado chegando).
+8. **Repertório de movimento:** texto que se mexe, forma virando outra, câmera em movimento, 3D, rastro, desenho que se traça. Cada um com função. Lista e exemplos em `guias/tela-livre.md`.

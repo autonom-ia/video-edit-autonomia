@@ -52,6 +52,16 @@ Leia uma vez antes de começar. Leva 3 minutos. Tudo aqui é para o seu vídeo s
 - Não precisa sair perfeito de uma vez. Pode gravar tudo num vídeo só, com os erros. Eu tiro as pausas e os erros.
 - Sorria no começo e no fim. Faz diferença.
 
+## Se o vídeo mostra algo na tela
+
+Se você vai falar de um app, um site ou uma conta que faz no computador ou no celular, grave a tela fazendo isso também. É a prova mais forte do vídeo.
+- Mac: aperte Command + Shift + 5 e escolha "Gravar a tela inteira".
+- iPhone: puxe a central de controle e toque no botão de gravar a tela.
+- Windows: aperte Windows + Alt + R.
+- Android: puxe a barra de cima e toque em "Gravar tela".
+
+Antes de gravar, feche o que for pessoal: e-mail, conversa, senha, nome de cliente. Pode gravar devagar, que eu acelero.
+
 ## Depois de gravar
 
 - Não corte nem edite o vídeo no celular.
@@ -59,4 +69,5 @@ Leia uma vez antes de começar. Leva 3 minutos. Tudo aqui é para o seu vídeo s
   - iPhone e Mac: pelo AirDrop. O vídeo cai na pasta Downloads, e o assistente acha ele lá.
   - Android ou Windows: pelo cabo do carregador, com o app Fotos do Windows (Importar), ou pelo Google Drive no navegador.
   - Nunca pelo WhatsApp normal nem por e-mail: eles diminuem a qualidade. Se não houver outro jeito, mande pelo WhatsApp como Documento.
+- Se gravou a tela, passe a gravação junto, do mesmo jeito.
 - Escreva para o assistente: faz meu vídeo. Ele acha o vídeo e põe na pasta 2-videos-brutos para você.

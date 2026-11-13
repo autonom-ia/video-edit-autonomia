@@ -82,7 +82,8 @@ Rode tudo de dentro da pasta do estúdio: `~/estudio-de-reels` no Mac; `%USERPRO
 - **Leia só a última linha** de cada comando. Ela é um JSON numa linha só, com `ok`, `codigo`, `resumo`, `arquivos` e `avisos`.
 - **Traduza o código.** Os de instalação estão em `instalar/mensagens.json`; os de produção, em `kit/mensagens.json`. Diga ao aluno o `texto` (trocando os `{{ }}` pelos `dados`) e faça a `acao`.
 - Saída 0 é ok, 1 é erro de execução, 2 é reprovado na conferência (corrija pela causa e rode de novo).
-- **Nunca chame `ffmpeg`, `node`, `npx`, `npm`, `uv` ou `hyperframes` direto.** O estúdio acha os programas sozinho. Em especial, nunca rode `hyperframes render` fora do `./estudio`: ele pula a checagem de marca.
+- **Use o `./estudio` para montar, conferir e entregar.** Ele acha os programas sozinho e roda a checagem de marca antes do render. Nunca rode `hyperframes render` fora dele.
+- **Criar é livre.** Você escreve as telas livres (HTML, CSS e GSAP), prepara gravação de tela com `./estudio midia` e pesquisa a referência real de cada app citado. Veja `guias/tela-livre.md`.
 - Comando que falha duas vezes: skill `consertar`.
 
 ## 5. Caixinhas de permissão
@@ -122,13 +123,14 @@ Só nestes momentos. Os textos exatos estão nos arquivos indicados.
 | Escolha do gancho | P-03 | idem |
 | Plano das cenas (GATE 1) | P-04 ou F-04 | idem |
 | Qual vídeo, vídeo achado em Downloads, pasta vazia, regravar trecho | F-01b, F-01d, F-01c, F-03 | idem |
+| Gravação de tela (só quando a fala mostra algo na tela do computador ou do celular) | F-01e | idem |
 | Prévia (GATE 2) | F-05 | idem |
 | Música | F-06 | idem |
 | Nota baixa depois de 3 rodadas | P-03b, F-07 | idem |
 | Algo pago | F-09 | idem |
 | Medição | M-01 | idem |
 
-**Orçamento por vídeo, fora a instalação: no máximo 5 decisões** (pauta, gancho, GATE 1, GATE 2, música). No caminho B, sem pauta e sem gancho. Não existe pergunta antes das pautas: o P-02 já traz "ou me diga o seu assunto". O avaliador roda depois da conferência técnica (passo 12 da skill fazer-video). Se ele ou o QA pedirem mudança na imagem, junte tudo e mostre uma única nova prévia ("É a última prévia"), que conta como parte do GATE 2. Nunca mais de uma. F-01b, F-01d, F-01c e F-03 só aparecem quando o caso exige.
+**Orçamento por vídeo, fora a instalação: no máximo 5 decisões** (pauta, gancho, GATE 1, GATE 2, música). No caminho B, sem pauta e sem gancho. Não existe pergunta antes das pautas: o P-02 já traz "ou me diga o seu assunto". O avaliador roda depois da conferência técnica (passo 12 da skill fazer-video). Se ele ou o QA pedirem mudança na imagem, junte tudo e mostre uma única nova prévia ("É a última prévia"), que conta como parte do GATE 2. Nunca mais de uma. F-01b, F-01d, F-01c, F-01e e F-03 só aparecem quando o caso exige.
 
 **O que você nunca pergunta:**
 - formato, fps, codec, volume, LUFS, dB, filtros;
@@ -145,7 +147,8 @@ Só nestes momentos. Os textos exatos estão nos arquivos indicados.
 - **Mostrar, não afirmar.** Cada promessa do vídeo aparece acontecendo na tela.
 - **Número real e redondo** ("7 de cada 10"), só de `provas[]` do briefing, com a origem anotada fora da tela. Sem prova, sem número.
 - **Respeite o briefing:** `cuidados_do_nicho` (nunca inventar resultado de cliente, preço, depoimento, prazo), `palavras_proibidas`, `termos_obrigatorios` e `marcas_proibidas`.
-- **Tela realista sem faixa de "simulação"**, sem pessoa real, sem dado de cliente, sem logo, nome ou cor de app famoso. Nome comum, conteúdo inventado por nós.
+- **Tela realista sem faixa de "simulação"**, sem pessoa real, sem dado de cliente. O conteúdo dentro da tela é inventado por nós, com nome comum.
+- **App que o aluno usa de verdade e cita na fala aparece como é**, redesenhado da referência pesquisada ou na gravação de tela dele, declarado em `apps_reais`. App que ele não usa não entra para enfeitar.
 - **A fala nunca afirma o que não aconteceu.** Use pergunta ("já ouviu essa?").
 - **Abra pelo problema de quem assiste**, nunca pela biografia ou apresentação.
 - **Toda pauta tem premissa e prova.** Sem prova no briefing, ela é hipótese e leva no cartão do P-02 a linha "Para ser verdade", que o aluno confirma ao escolher. Pauta com prova sempre vem antes de hipótese.
@@ -176,7 +179,7 @@ Nunca use expressão regular para interpretar o que o aluno escreveu. Quem enten
 | `guias/` | Regras de produção, régua do avaliador, ganchos, camadas, naturalidade, postagem, referências, textos do estúdio, guia de gravação |
 | `briefing/` | As perguntas do briefing e o briefing em branco |
 | `modelos/` | Moldes de pauta, roteiro, cenas, revisão, medição e aprendizados |
-| `kit/` | O motor do estúdio. Não edite |
+| `kit/` | O motor do estúdio. Não edite: a atualização sobrescreve. O que você cria (telas livres, mídia) fica na pasta do projeto |
 | `instalar/` | O instalador e os textos de instalação. Não edite |
 | `.ferramentas/` | Os programas do estúdio (escondida). Só o instalador mexe. Desinstalar apaga só ela e os atalhos |
 
@@ -186,7 +189,8 @@ Nunca use expressão regular para interpretar o que o aluno escreveu. Quem enten
 
 O molde do vídeo já traz o ritmo, o zoom, a faixa, a legenda e o som que levaram um Reel real à nota 8,7 de 10 no avaliador independente. Aquele vídeo precisou de 9 versões; com estas regras, o do aluno chega lá em 1 ou 2.
 
-- Não reinvente. Siga `guias/regras-de-producao.md` (53 regras) e mude só o que a tabela de cenas pede.
+- O molde é o ponto de partida, não o teto. Siga `guias/regras-de-producao.md` (53 regras) e melhore quando a cena pedir: tela livre, gravação de tela, app real pesquisado e o repertório de movimento do método das camadas (`guias/tela-livre.md`). As regras travam só as decisões do aluno, a verdade e o resultado; o jeito de criar é seu.
+- A tela mostra acontecendo o que a fala diz. Quando a fala cita um app ou uma ação, pesquise a referência real e desenhe, ou use a gravação de tela do aluno.
 - Sem referência baixada, use `guias/regua-embutida.md` e siga. Nunca prenda o aluno por causa de um download.
 - Referência é régua, não molde. Nunca copie o desenho de ninguém.
 - Rosto grande ou nada: cheio ou dividido, sem moldura.

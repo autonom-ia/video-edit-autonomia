@@ -20,7 +20,8 @@ export function obrigatoriosFaltando(b) {
   const dores = (b.publico && Array.isArray(b.publico.dores) ? b.publico.dores : []).filter((d) => !vazio(d));
   if (dores.length < 1) faltando.push('publico.dores');
   if (vazio(b.cta && b.cta.tipo)) faltando.push('cta.tipo');
-  if (b.cta && b.cta.tipo === 'comentar_palavra') {
+  // Com cta.por_video, a palavra e o presente saem da fala de cada vídeo (Issue #10, bug B3).
+  if (b.cta && b.cta.tipo === 'comentar_palavra' && b.cta.por_video !== true) {
     if (vazio(b.cta.entrega)) faltando.push('cta.entrega');
   }
   return faltando;

@@ -54,7 +54,9 @@ function corpo(tela, marca) {
 }
 
 // tamanho: p (faixa 35 ou solta), m (faixa 50), g (faixa 100). solta: sobre o rosto (faixa 0).
-export function htmlDaTela(tela, { tamanho = 'm', solta = false, marca = null } = {}) {
+// fragmento: o HTML da tela livre, já lido do arquivo do projeto.
+export function htmlDaTela(tela, { tamanho = 'm', solta = false, marca = null, fragmento = '' } = {}) {
+  if (tela.tipo === 'livre') return `<div class="tela tela-livre" id="tela-${e(tela.id)}" data-tela="${e(tela.id)}">${fragmento}</div>`;
   const classes = ['tela', `tela-${tela.tipo}`, `t-${tamanho}`, 'caixa'];
   if (solta) classes.push('solta');
   return `<div class="${classes.join(' ')}" id="tela-${e(tela.id)}" data-tela="${e(tela.id)}">${corpo(tela, marca)}</div>`;
@@ -65,4 +67,18 @@ export function itensDaTela(tela) {
   if (tela.tipo === 'lista' || tela.tipo === 'passos') return (c.itens || []).length;
   if (tela.tipo === 'conversa') return (c.mensagens || []).length;
   return 0;
+}
+
+// Gravação de tela, vídeo de apoio ou imagem. Ocupa a faixa de ponta a ponta (ou a tela toda
+// na faixa 0 e 100). O vídeo fica fora de #telas porque um <video> com tempo não pode estar
+// dentro de outro elemento com tempo (regra do HyperFrames).
+// src: caminho do arquivo dentro da composição. video: { inicio, duracao, trilha } ou null (imagem).
+export function htmlDaMidia(tela, { alturaPx, src, video = null }) {
+  const encaixe = (tela.campos && tela.campos.encaixe) === 'conter' ? 'conter' : 'cobrir';
+  const id = e(tela.id);
+  const altura = alturaPx > 0 ? alturaPx : 1920;
+  const conteudo = video
+    ? `<video id="v-${id}" class="clip midia-arquivo" src="${e(src)}" data-start="${video.inicio}" data-duration="${video.duracao}" data-track-index="${video.trilha}" muted playsinline></video>`
+    : `<img class="midia-arquivo" src="${e(src)}" alt="">`;
+  return `<div class="tela tela-midia midia-${encaixe}" id="tela-${id}" data-tela="${id}" style="height: ${altura}px"><div class="midia-conteudo">${conteudo}</div></div>`;
 }

@@ -63,6 +63,33 @@
         }
       }
     },
+    "apps_reais": {
+      "type": "array",
+      "description": "Apps que o aluno usa de verdade e cita na fala. O nome e as cores deles ficam liberados neste vídeo.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "nome",
+          "referencia",
+          "porque"
+        ],
+        "properties": {
+          "nome": {
+            "type": "string"
+          },
+          "referencia": {
+            "type": "string"
+          },
+          "porque": {
+            "type": "string"
+          },
+          "citado_como": {
+            "type": "string"
+          }
+        }
+      }
+    },
     "cenas": {
       "type": "array",
       "minItems": 1,
@@ -211,7 +238,9 @@
               "conversa",
               "prompt",
               "notificacao",
-              "cta"
+              "cta",
+              "livre",
+              "midia"
             ]
           },
           "campos": {

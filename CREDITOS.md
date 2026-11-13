@@ -17,7 +17,7 @@ Os textos integrais das licenças das peças versionadas, e das que exigem aviso
 | Inter | Fonte de leitura (par de fontes) | SIL OFL 1.1 | Google Fonts, https://github.com/google/fonts/tree/main/ofl/inter | `licencas/OFL-inter.txt` e `kit/fontes/inter/OFL.txt` |
 | Fraunces | Fonte de título (par de fontes) | SIL OFL 1.1 | Google Fonts, https://github.com/google/fonts/tree/main/ofl/fraunces | `licencas/OFL-fraunces.txt` e `kit/fontes/fraunces/OFL.txt` |
 | Nunito | Fonte de título e leitura (par de fontes) | SIL OFL 1.1 | Google Fonts, https://github.com/google/fonts/tree/main/ofl/nunito | `licencas/OFL-nunito.txt` e `kit/fontes/nunito/OFL.txt` |
-| bolo-de-camadas | Método das 5 camadas de edição, adaptado no molde de composição (`kit/molde/reel/`) e no guia `guias/camadas.md` | MIT, © 2026 Cauhi (cauhi.com) | https://github.com/pcauhi/bolo-de-camadas | `licencas/MIT-bolo-de-camadas.txt` |
+| bolo-de-camadas | Método das 5 camadas de edição, adaptado no molde de composição (`kit/molde/reel/`) e nos guias `guias/camadas.md` e `guias/tela-livre.md` (repertório de movimento); estilos por nicho copiados em `guias/nichos/`, só com um cabeçalho a mais | MIT, © 2026 Cauhi (cauhi.com) | https://github.com/pcauhi/bolo-de-camadas | `licencas/MIT-bolo-de-camadas.txt` |
 | instagram-agent-skill | Fórmulas de gancho e regras de naturalidade, traduzidas e adaptadas nos guias (`guias/ganchos.md`, `guias/naturalidade.md`) | MIT, © 2026 Jake Schincariol | https://github.com/Jakeschincariol/instagram-agent-skill | `licencas/MIT-instagram-agent-skill.txt` |
 
 As fontes são variáveis (`*-Variable.ttf`). Foram copiadas sem modificação.
@@ -29,7 +29,7 @@ As fontes são variáveis (`*-Variable.ttf`). Foram copiadas sem modificação.
 | HyperFrames | 0.9.20 (npm `hyperframes`) | Motor de render do vídeo (HTML para MP4) | Apache 2.0 | npm, pelo `package.json` | `licencas/Apache-2.0-hyperframes.txt` (com aviso de dependência) |
 | Skills do HyperFrames | as da versão acima | Instruções do motor para o assistente | as do HyperFrames | o próprio HyperFrames | no pacote |
 | chrome-headless-shell | a que o HyperFrames pedir | Navegador escondido que fotografa cada quadro e as telas | licenças do Chromium (BSD-3 e outras) | o próprio HyperFrames | no pacote baixado |
-| GSAP | 3.14.2 (npm `gsap`) | Animação da composição; copiado de `node_modules` para a pasta do vídeo na montagem | GSAP Standard "no charge" License, https://gsap.com/standard-license | npm, pelo `package.json` | no pacote |
+| GSAP | 3.14.2 (npm `gsap`) | Animação da composição e das telas livres (com os plugins SplitText, MorphSVG, DrawSVG e outros, que fazem parte do mesmo pacote); copiado de `node_modules` para a pasta do vídeo na montagem, só o que o vídeo usa | GSAP Standard "no charge" License, https://gsap.com/standard-license | npm, pelo `package.json` | no pacote |
 | faster-whisper | 1.2.1 (PyPI) | Transcrição palavra por palavra, no computador do aluno | MIT, © 2023 SYSTRAN | uv, pelo `pyproject.toml` | `licencas/MIT-faster-whisper.txt` |
 | Modelo de fala (large-v3-turbo ou small) | conversão para faster-whisper | O "ouvido de texto" usado pelo faster-whisper | MIT (pesos Whisper da OpenAI) | `./estudio preparar-fala` | no repositório do modelo |
 | earshot | commit `4ac3d2ac2b151e1c23376f9ce7f3047a17050013` | "Ouvido de som": critica a mixagem e escolhe trilha (opcional) | MIT, © 2026 Leon Lin | instalador, via `uv tool install` | `licencas/MIT-earshot.txt` |

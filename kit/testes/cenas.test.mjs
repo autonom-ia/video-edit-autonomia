@@ -72,8 +72,9 @@ test('limites das telas', () => {
   assert.ok(numero.some((p) => p.tipo === 'origem'));
   const lista = validarTela({ id: 'l', tipo: 'lista', campos: { itens: ['só um'] }, entra: 0, sai: 2 }, 'l');
   assert.ok(lista.some((p) => p.problema.includes('2 a 4 itens')));
-  const conversa = validarTela({ id: 'c', tipo: 'conversa', campos: { nome: 'Ana', status: 'digitando', mensagens: [{ de: 'outro', texto: 'Oi' }] }, entra: 0, sai: 2 }, 'c');
-  assert.ok(conversa.some((p) => p.problema.includes('online')));
+  // "status" deixou de ser obrigatório "online" (Issue #10); continua curto.
+  const conversa = validarTela({ id: 'c', tipo: 'conversa', campos: { nome: 'Ana', status: 'visto por último ontem', mensagens: [{ de: 'outro', texto: 'Oi' }] }, entra: 0, sai: 2 }, 'c');
+  assert.ok(conversa.some((p) => p.problema.includes('"status"') && p.problema.includes('limite é 3')));
   const notif = validarTela({ id: 'x', tipo: 'notificacao', campos: { app: 'MeuApp', texto: 'Oi' }, entra: 0, sai: 2 }, 'x');
   assert.ok(notif.some((p) => p.problema.includes('"app"')));
   const passos = validarTela({ id: 'p', tipo: 'passos', campos: { itens: ['a', 'b'], atual: 5 }, entra: 0, sai: 2 }, 'p');

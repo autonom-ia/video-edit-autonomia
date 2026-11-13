@@ -20,6 +20,9 @@ export const RITMO = Object.freeze({
   golpeAteS: 2.5,
   paradoMaxS: 2.0,
   telaMaxS: 4.0,
+  // Tela livre e mídia (gravação de tela, imagem): o movimento é do próprio conteúdo, então
+  // podem ficar mais tempo. Quem confere se nada fica parado é a folha de quadros e o QA.
+  telaLivreMaxS: 8.0,
   faixaCheiaMaxS: 3.5,
   cardLarguraPct: 90,
   zoomMax: 1.1,
@@ -136,11 +139,27 @@ export const LIMITES_TELA = Object.freeze({
   numero: { numero: 4, apoio: 6 },
   lista: { titulo: 10, item: 7, itensMin: 2, itensMax: 4 },
   passos: { item: 7, itensMin: 2, itensMax: 5 },
-  conversa: { nome: 3, mensagem: 35, mensagensMin: 1, mensagensMax: 5 },
+  conversa: { nome: 3, status: 3, mensagem: 35, mensagensMin: 1, mensagensMax: 5 },
   prompt: { prompt: 40, resposta: 25 },
   notificacao: { texto: 35, apps: ['Mensagens', 'E-mail', 'Agenda'] },
   cta: { frase: 8 },
 });
+
+// Mídia preparada pelo comando "midia" (gravação de tela, vídeo de apoio, imagem).
+export const MIDIA = Object.freeze({
+  pasta: 'midia',
+  video: ['.mp4', '.mov', '.m4v', '.webm', '.mkv'],
+  imagem: ['.png', '.jpg', '.jpeg', '.webp', '.svg'],
+  larguraMax: 1920,
+  velocidadeMax: 120,
+  crf: 18,
+});
+
+// Plugins do GSAP que a tela livre pode usar. O montar copia só os que a tela cita.
+export const PLUGINS_GSAP = Object.freeze([
+  'CustomEase', 'CustomBounce', 'CustomWiggle', 'DrawSVGPlugin', 'EasePack', 'Flip', 'MorphSVGPlugin',
+  'MotionPathPlugin', 'Physics2DPlugin', 'PhysicsPropsPlugin', 'ScrambleTextPlugin', 'SplitText', 'TextPlugin',
+]);
 
 export const TITULO_GANCHO = Object.freeze({ texto: 10, publico: 12 });
 

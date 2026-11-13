@@ -161,11 +161,27 @@
   },
   "MARCA_REPROVADA": {
     "texto": "Apareceu no vídeo um nome, cor ou palavra que não pode. Vou trocar.",
-    "acao": "Leia dados.problemas. Troque a cor pela da marca; se for palavra falada na legenda, corrija com correcoes.json (ex.: um app famoso vira 'o aplicativo'). Monte e rode de novo."
+    "acao": "Leia dados.problemas. App que o aluno usa de verdade e cita na fala: declare em apps_reais do cenas.json (nome, referencia, porque), sem trocar o que ele falou. Cor de app que não está no vídeo: troque pela cor da marca. Palavra proibida do aluno: tire da tela. Monte e rode de novo."
   },
   "MEMORIA_POUCA_FALA": {
     "texto": "Seu computador tem pouca memória. Vou usar um ouvido de texto menor e conferir a legenda palavra por palavra.",
     "acao": "Avise com o texto POUCA_MEMORIA do instalador e confira a transcrição com mais cuidado."
+  },
+  "MIDIA_CURTA": {
+    "texto": "Uma gravação de tela é mais curta que o tempo que ela fica no vídeo.",
+    "acao": "Veja dados.problemas. Prepare um trecho maior com ./estudio midia (ou uma velocidade menor), ou diminua o tempo da tela no cenas.json."
+  },
+  "MIDIA_FALHOU": {
+    "texto": "Não consegui preparar a gravação de tela.",
+    "acao": "Leia dados.detalhe. Confira --de, --ate e --corte e rode de novo. Se falhar duas vezes, siga com uma tela desenhada no lugar."
+  },
+  "MIDIA_FORA_DA_PASTA": {
+    "texto": "Uma mídia do vídeo está fora da pasta de mídia do projeto.",
+    "acao": "Rode ./estudio midia --projeto P --arquivo <original> para cada item de dados.arquivos e use o caminho midia/<nome> que ele devolver."
+  },
+  "MIDIA_FORMATO": {
+    "texto": "Esse arquivo não é um vídeo nem uma imagem que eu consigo usar.",
+    "acao": "Veja dados.aceitos. Peça ao aluno o arquivo original (vídeo da gravação de tela ou print) ou siga sem ele."
   },
   "MIXAGEM_FALHOU": {
     "texto": "Não consegui acertar o som do vídeo.",
@@ -270,6 +286,10 @@
   "SEM_VIDEO": {
     "texto": "Não achei o seu vídeo na pasta 2-videos-brutos.",
     "acao": "O ./estudio receber já olha a pasta Downloads (últimas 24 h). Se não achou, mostre o texto F-01c, abra a pasta com ./estudio abrir 2-videos-brutos e espere o aluno dizer pronto."
+  },
+  "TELA_DEPOIS_DO_FIM": {
+    "texto": "Uma tela do plano passa do fim do vídeo.",
+    "acao": "Veja dados.problemas. Ajuste \"sai\" da tela para antes do fim do vídeo e monte de novo."
   },
   "TELA_ESTOUROU": {
     "texto": "Um texto ficou grande demais para a tela. Vou encurtar.",

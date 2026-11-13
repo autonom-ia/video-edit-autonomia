@@ -45,10 +45,21 @@
     tl.to('#gancho', { opacity: 0, y: -20, duration: 0.3, ease: 'power2.in' }, Math.max(0.1, D.gancho.fim - 0.3));
   }
 
+  // telas livres registram aqui a própria animação: window.__telaLivre['t03'] = function (tl, ctx) {...}
+  var livres = window.__telaLivre || {};
+
   // telas: entram ~4 quadros antes da palavra, de 94% com leve desfoque
   D.telas.forEach(function (t) {
     tl.set(t.sel, { visibility: 'visible' }, t.entrada);
-    tl.fromTo(t.sel, { opacity: 0, y: 26, scale: 0.94, filter: 'blur(8px)' }, { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)', duration: 0.6, ease: P }, t.entrada);
+    if (t.entradaPropria) tl.set(t.sel, { opacity: 1 }, t.entrada);
+    else tl.fromTo(t.sel, { opacity: 0, y: 26, scale: 0.94, filter: 'blur(8px)' }, { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)', duration: 0.6, ease: P }, t.entrada);
+    if (t.tipo === 'midia' && existe(t.sel + ' .midia-conteudo')) {
+      // a mídia nunca fica parada: aproximação lenta durante todo o tempo no ar
+      tl.fromTo(t.sel + ' .midia-conteudo', { scale: 1 }, { scale: 1.06, duration: Math.max(0.5, t.sai - t.entrada), ease: 'none' }, t.entrada);
+    }
+    if (t.tipo === 'livre' && typeof livres[t.id] === 'function') {
+      livres[t.id](tl, { sel: t.sel, el: document.querySelector(t.sel), entrada: t.entrada, entra: t.entra, sai: t.sai, duracao: t.sai - t.entrada });
+    }
     t.itens.forEach(function (it) {
       tl.set(it.sel, { opacity: 0 }, 0);
       tl.fromTo(it.sel, { opacity: 0, y: 16, scale: 0.97 }, { opacity: 1, y: 0, scale: 1, duration: 0.32, ease: P }, it.t);
@@ -69,7 +80,7 @@
       rws.forEach(function (w, k) { tl.fromTo(w, { opacity: 0 }, { opacity: 1, duration: 0.12 }, inicioR + k * passoR); });
     }
     if (t.tipo === 'numero') tl.fromTo(t.sel + ' .num-grande', { scale: 1.14 }, { scale: 1, duration: 0.5, ease: 'expo.out' }, t.entra);
-    tl.to(t.sel, { opacity: 0, y: -24, scale: 0.97, filter: 'blur(6px)', duration: 0.35, ease: 'power2.in' }, t.sai);
+    if (!t.entradaPropria) tl.to(t.sel, { opacity: 0, y: -24, scale: 0.97, filter: 'blur(6px)', duration: 0.35, ease: 'power2.in' }, t.sai);
     tl.set(t.sel, { visibility: 'hidden' }, t.sai + 0.36);
   });
 

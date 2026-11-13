@@ -42,6 +42,21 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--
 .t-p { max-height: 382px; }
 .t-m { max-height: 670px; }
 .t-g { max-height: 1250px; top: 280px; }
+/* o cartão enche a faixa, sem área morta embaixo dele (Issue #10) */
+.t-p:not(.solta) > .cartao { min-height: 340px; }
+.t-m > .cartao { min-height: 620px; }
+.t-g > .cartao { min-height: 1150px; }
+.t-p:not(.solta) > .cartao, .t-m > .cartao, .t-g > .cartao { display: flex; flex-direction: column; justify-content: center; }
+
+/* tela livre: desenhada pelo assistente, ocupa o quadro todo; o CSS dela começa por #tela-<id> */
+.tela.tela-livre { left: 0; top: 0; width: 1080px; height: 1920px; overflow: visible; }
+
+/* mídia: gravação de tela, vídeo de apoio ou imagem, de ponta a ponta na faixa */
+#midias { position: absolute; inset: 0; z-index: 6; }
+.tela.tela-midia { left: 0; top: 0; width: 1080px; overflow: hidden; background: var(--fundo); }
+.midia-conteudo { position: absolute; inset: 0; transform-origin: 50% 50%; }
+.midia-arquivo { position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; }
+.midia-conter .midia-arquivo { object-fit: contain; }
 .cartao { background: var(--cartao); border: 2px solid var(--borda); border-radius: 32px; padding: 40px 48px; box-shadow: 0 18px 48px var(--sombra); }
 .t-p .cartao { padding: 26px 34px; border-radius: 26px; }
 .solta .cartao, .solta .janela-conversa, .solta .janela-ia, .solta .notif { box-shadow: 0 26px 70px rgba(0,0,0,.42); }
@@ -50,9 +65,9 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--
 .t-p .rotulo { font-size: 22px; margin-bottom: 14px; }
 .t-g .rotulo { font-size: 34px; margin-bottom: 36px; }
 
-.card-texto { font: var(--peso-titulo) 84px/1.06 var(--fonte-titulo); letter-spacing: -.02em; }
-.t-p .card-texto { font-size: 62px; }
-.t-g .card-texto { font-size: 108px; }
+.card-texto { font: var(--peso-titulo) 96px/1.06 var(--fonte-titulo); letter-spacing: -.02em; }
+.t-p .card-texto { font-size: 70px; }
+.t-g .card-texto { font-size: 116px; }
 
 .frase-texto { font: var(--peso-titulo) 72px/1.1 var(--fonte-titulo); letter-spacing: -.015em; }
 .frase-apoio { font: 500 38px/1.3 var(--fonte-leitura); color: var(--suave); margin-top: 22px; }

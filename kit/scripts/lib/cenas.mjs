@@ -1,9 +1,10 @@
 // Validação da tabela de cenas (cenas.json), com os limites da spec D.4 e D.6.
-import { contarPalavras } from './texto.mjs';
+import { contarPalavras, normalizar, contemTermo } from './texto.mjs';
 import { RITMO, LIMITES_TELA, TITULO_GANCHO, FAIXA, ROSTO_NENHUM_MAX_PCT } from './regras.mjs';
 import { aviso } from './saida.mjs';
+import { lerTelaDeArquivo } from './telas-livres.mjs';
 
-const CHAVES_TOPO = ['versao', 'duracao_alvo_s', 'direcao_de_arte', 'titulo_gancho', 'cenas', 'telas', 'cta'];
+const CHAVES_TOPO = ['versao', 'duracao_alvo_s', 'direcao_de_arte', 'titulo_gancho', 'apps_reais', 'cenas', 'telas', 'cta'];
 const CHAVES_CENA = ['id', 'fala', 'inicio', 'fim', 'rosto', 'faixa', 'zoom', 'tela', 'enfase', 'sons', 'virada', 'reconstrucao'];
 const CHAVES_TELA = ['id', 'tipo', 'campos', 'entra', 'sai'];
 const CAMPOS = {
@@ -16,9 +17,25 @@ const CAMPOS = {
   prompt: ['prompt', 'resposta'],
   notificacao: ['app', 'texto'],
   cta: ['palavra', 'frase'],
+  // Desenhada pelo assistente: HTML, CSS e animação num arquivo do projeto.
+  livre: ['arquivo', 'descricao', 'entrada'],
+  // Gravação de tela, vídeo de apoio ou imagem, preparada pelo comando "midia".
+  midia: ['arquivo', 'descricao', 'encaixe'],
 };
+// Telas cujo movimento vem do próprio conteúdo (sem limite de palavras por campo).
+export const TELAS_DE_ARQUIVO = ['livre', 'midia'];
 export const TIPOS_DE_TELA = Object.keys(CAMPOS);
 export const EFEITOS = ['impacto-forte', 'impacto-medio', 'whoosh-rapido', 'whoosh-medio', 'swish', 'pop', 'zip', 'teclado', 'brilho', 'notificacao-saida', 'notificacao-sucesso', 'vibrar', 'subida', 'cintilar'];
+
+// O id vira nome de arquivo (telas/<id>.png) e seletor (#tela-<id>).
+export function idSeguro(id) {
+  if (!id || id.length > 40) return false;
+  for (const ch of id) {
+    const ok = (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || (ch >= '0' && ch <= '9') || ch === '-' || ch === '_';
+    if (!ok) return false;
+  }
+  return true;
+}
 
 const num = (v) => typeof v === 'number' && Number.isFinite(v);
 const txt = (v) => typeof v === 'string';
@@ -46,14 +63,16 @@ export function palavrasDaTela(tela) {
     if (txt(v)) partes.push(v);
     else if (Array.isArray(v)) for (const item of v) partes.push(txt(item) ? item : (item && item.texto) || '');
   }
+  if (TELAS_DE_ARQUIVO.includes(tela.tipo)) return 0;
   if (tela.tipo === 'numero') return contarPalavras(`${c.numero || ''} ${c.apoio || ''}`);
   return contarPalavras(partes.join(' '));
 }
 
-export function validarTela(tela, onde) {
+export function validarTela(tela, onde, { pastaProjeto = null } = {}) {
   const problemas = [];
   chavesDesconhecidas(tela, CHAVES_TELA, onde, problemas);
   if (!txt(tela.id) || !tela.id) problemas.push({ onde, problema: 'tela sem "id"' });
+  else if (!idSeguro(tela.id)) problemas.push({ onde, problema: `"id" da tela só pode ter letras sem acento, números, "-" e "_" (veio "${tela.id}")` });
   if (!TIPOS_DE_TELA.includes(tela.tipo)) {
     problemas.push({ onde, problema: `tipo de tela desconhecido: "${tela.tipo}"` });
     return problemas;
@@ -89,12 +108,14 @@ export function validarTela(tela, onde) {
       const itens = Array.isArray(c.itens) ? c.itens : [];
       if (itens.length < L.itensMin || itens.length > L.itensMax) problemas.push({ onde, problema: `passos precisa de ${L.itensMin} a ${L.itensMax} itens`, tipo: 'limite' });
       itens.forEach((it, i) => limite(problemas, onde, `itens[${i}]`, it, L.item));
-      if (!Number.isInteger(c.atual) || c.atual < 0 || c.atual >= Math.max(1, itens.length)) problemas.push({ onde, problema: '"atual" precisa ser o número de um dos passos (começando em 0)' });
+      if (!Number.isInteger(c.atual) || c.atual < 0 || c.atual >= Math.max(1, itens.length)) {
+        problemas.push({ onde, problema: `"atual" conta do 0: o primeiro passo é 0, o segundo é 1, o último é ${Math.max(0, itens.length - 1)} (veio ${JSON.stringify(c.atual)})` });
+      }
       break;
     }
     case 'conversa': {
       limite(problemas, onde, 'nome', c.nome, L.nome);
-      if (c.status !== 'online') problemas.push({ onde, problema: '"status" precisa ser "online"' });
+      if (c.status !== undefined) limite(problemas, onde, 'status', c.status, L.status);
       const msgs = Array.isArray(c.mensagens) ? c.mensagens : [];
       if (msgs.length < L.mensagensMin || msgs.length > L.mensagensMax) problemas.push({ onde, problema: `conversa precisa de ${L.mensagensMin} a ${L.mensagensMax} mensagens`, tipo: 'limite' });
       msgs.forEach((m, i) => {
@@ -116,12 +137,22 @@ export function validarTela(tela, onde) {
       if (!txt(c.palavra) || !c.palavra.trim() || contarPalavras(c.palavra) !== 1) problemas.push({ onde, problema: '"palavra" do pedido precisa ser uma palavra só' });
       limite(problemas, onde, 'frase', c.frase ?? '', L.frase);
       break;
+    case 'livre':
+    case 'midia': {
+      if (!txt(c.descricao) || !c.descricao.trim()) problemas.push({ onde, problema: '"descricao" diz em uma frase o que a tela mostra (vai para o avaliador)' });
+      if (tela.tipo === 'livre' && c.entrada !== undefined && !['padrao', 'propria'].includes(c.entrada)) problemas.push({ onde, problema: '"entrada" é "padrao" (o estúdio faz a chegada e a saída) ou "propria" (a sua animação faz)' });
+      if (tela.tipo === 'midia' && c.encaixe !== undefined && !['cobrir', 'conter'].includes(c.encaixe)) problemas.push({ onde, problema: '"encaixe" é "cobrir" (enche o espaço) ou "conter" (mostra tudo)' });
+      const lido = lerTelaDeArquivo(tela, pastaProjeto);
+      lido.problemas.forEach((problema) => problemas.push({ onde, problema }));
+      break;
+    }
     default:
       break;
   }
   if (num(tela.entra) && num(tela.sai)) {
+    const maximo = TELAS_DE_ARQUIVO.includes(tela.tipo) ? RITMO.telaLivreMaxS : RITMO.telaMaxS;
     if (tela.sai <= tela.entra) problemas.push({ onde, problema: '"sai" precisa ser depois de "entra"' });
-    if (tela.sai - tela.entra > RITMO.telaMaxS + 1e-6) problemas.push({ onde, problema: `tela fica ${(tela.sai - tela.entra).toFixed(2)} s no ar; o máximo é ${RITMO.telaMaxS} s` });
+    if (tela.sai - tela.entra > maximo + 1e-6) problemas.push({ onde, problema: `tela fica ${(tela.sai - tela.entra).toFixed(2)} s no ar; o máximo é ${maximo} s` });
   } else {
     problemas.push({ onde, problema: 'tela precisa de "entra" e "sai" em segundos' });
   }
@@ -129,7 +160,30 @@ export function validarTela(tela, onde) {
 }
 
 // Devolve {problemas: [...], avisos: [...]}. Problemas reprovam (exit 2); avisos só informam.
-export function validarCenas(dados, { briefing = null } = {}) {
+// Apps que o aluno usa de verdade e cita na fala: nome, de onde veio a referência e por quê.
+// O app precisa aparecer na fala pelo nome ou pelo jeito que o aluno chamou ("citado_como").
+function validarAppsReais(lista, cenas, problemas) {
+  if (lista === undefined) return;
+  if (!Array.isArray(lista)) {
+    problemas.push({ onde: 'apps_reais', problema: 'precisa ser uma lista' });
+    return;
+  }
+  const falas = normalizar(cenas.map((c) => c.fala || '').join(' '));
+  lista.forEach((app, i) => {
+    const onde = `apps_reais[${i}]`;
+    chavesDesconhecidas(app, ['nome', 'referencia', 'porque', 'citado_como'], onde, problemas);
+    for (const campo of ['nome', 'referencia', 'porque']) {
+      if (!app || !txt(app[campo]) || !app[campo].trim()) problemas.push({ onde, problema: `falta "${campo}"` });
+    }
+    if (!app || !txt(app.nome) || !app.nome.trim()) return;
+    const comoFalou = txt(app.citado_como) && app.citado_como.trim() ? app.citado_como : '';
+    if (!contemTermo(falas, app.nome) && !(comoFalou && contemTermo(falas, comoFalou))) {
+      problemas.push({ onde, problema: `"${app.nome}" não aparece na fala. App liberado é o que o aluno usa e cita; se ele chamou de outro jeito, ponha as palavras dele em "citado_como"` });
+    }
+  });
+}
+
+export function validarCenas(dados, { briefing = null, pastaProjeto = null } = {}) {
   const problemas = [];
   const avisos = [];
   if (!dados || typeof dados !== 'object') return { problemas: [{ onde: 'cenas.json', problema: 'arquivo vazio ou inválido' }], avisos };
@@ -145,7 +199,8 @@ export function validarCenas(dados, { briefing = null } = {}) {
   const telas = Array.isArray(dados.telas) ? dados.telas : [];
   if (!cenas.length) problemas.push({ onde: 'cenas', problema: 'não há nenhuma cena' });
   const idsTela = new Set(telas.map((t) => t.id));
-  telas.forEach((t, i) => problemas.push(...validarTela(t, `telas[${i}] (${t.id || 'sem id'})`)));
+  telas.forEach((t, i) => problemas.push(...validarTela(t, `telas[${i}] (${t.id || 'sem id'})`, { pastaProjeto })));
+  validarAppsReais(dados.apps_reais, cenas, problemas);
 
   let anterior = null;
   let semRosto = 0;
