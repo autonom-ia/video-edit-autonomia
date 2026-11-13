@@ -15,7 +15,12 @@ Uso:
 Saída (JSON):
   {"idioma": "pt", "modelo": "...", "duracao_s": 41.2,
    "palavras": [{"texto": "Você", "inicio": 0.12, "fim": 0.31, "prob": 0.98}],
-   "segmentos": [{"texto": "...", "inicio": 0.12, "fim": 2.9}]}
+   "segmentos": [{"texto": "...", "inicio": 0.12, "fim": 2.9}],
+   "fala": [{"inicio": 0.1, "fim": 2.95}]}
+
+"fala" é o mapa de onde há voz, do detector de fala Silero VAD (MIT), que já vem dentro do
+faster-whisper. É mais preciso que o tempo das palavras (uns 30 ms): o ./estudio cortar usa para
+nunca cortar no meio da fala, aparar silêncio morto e achar respiro longo.
 """
 
 import argparse
@@ -56,6 +61,24 @@ def preparar(nome: str) -> None:
     print(json.dumps({"ok": True, "modelo": nome, "revisao": revisao or ""}))
 
 
+# Pausa mínima que separa dois pedaços de fala no mapa: pega até o respiro curto entre frases.
+VAD_SILENCIO_MINIMO_MS = 100
+
+
+def mapa_da_fala(entrada: Path):
+    """Onde há voz no arquivo, em segundos, sem folga em volta (o kit decide a folga)."""
+    from faster_whisper.audio import decode_audio
+    from faster_whisper.vad import VadOptions, get_speech_timestamps
+
+    taxa = 16000
+    audio = decode_audio(str(entrada), sampling_rate=taxa)
+    opcoes = VadOptions(min_silence_duration_ms=VAD_SILENCIO_MINIMO_MS, speech_pad_ms=0)
+    return [
+        {"inicio": round(p["start"] / taxa, 3), "fim": round(p["end"] / taxa, 3)}
+        for p in get_speech_timestamps(audio, opcoes, sampling_rate=taxa)
+    ]
+
+
 def transcrever(entrada: Path, saida: Path, nome: str) -> None:
     # O modelo já foi baixado no preparar-fala: aqui não usa internet.
     modelo = carregar_modelo(nome, so_local=True)
@@ -86,6 +109,7 @@ def transcrever(entrada: Path, saida: Path, nome: str) -> None:
         "duracao_s": round(float(info.duration), 3),
         "palavras": palavras,
         "segmentos": blocos,
+        "fala": mapa_da_fala(entrada),
     }
     saida.parent.mkdir(parents=True, exist_ok=True)
     temporario = saida.with_suffix(".tmp")

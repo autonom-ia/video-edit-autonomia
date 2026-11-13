@@ -67,6 +67,27 @@
           }
         }
       }
+    },
+    "fala": {
+      "description": "Onde há voz (Silero VAD), em segundos e sem folga. O ./estudio cortar usa para acertar as bordas dos trechos.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "inicio",
+          "fim"
+        ],
+        "properties": {
+          "inicio": {
+            "type": "number",
+            "minimum": 0
+          },
+          "fim": {
+            "type": "number",
+            "minimum": 0
+          }
+        }
+      }
     }
   }
 }

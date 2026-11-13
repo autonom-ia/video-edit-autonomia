@@ -41,14 +41,18 @@ Rode `./estudio receber --projeto P`. Ele olha a pasta 2-videos-brutos e também
 
 ### 3. Escolher as falas (corte)
 1. `./estudio transcrever --projeto P --fonte bruto`.
-2. Leia `projetos/P/transcricao-bruta.json` e escreva `projetos/P/trechos.json`:
+2. Leia `projetos/P/transcricao-bruta.json` e escreva `projetos/P/trechos.json`. Além das palavras, ela traz `fala`: onde há voz, medido pelo detector de fala (mais preciso que o tempo das palavras). Use `fala` para achar as pausas:
    - a melhor tomada de cada bloco (caminho A: compare com `roteiro.md`; prefira a mais firme e natural, não a mais longa);
    - sem respiro maior que 0,4 s dentro do trecho;
    - sem muleta ("é...", "tipo", "né" soltos, palavra repetida por gaguejo), sem falso começo, sem silêncio no fim;
-   - começo e fim de trecho no meio do silêncio, nunca cortando sílaba;
+   - começo e fim de trecho no silêncio entre dois pedaços de `fala`, nunca cortando sílaba. A folga exata de silêncio nas pontas o `cortar` acerta sozinho;
    - caminho B: pode reordenar para o melhor gancho ficar no começo (marque `motivo`).
 3. F-03 só se um trecho mudar o sentido, ferir a verdade (afirmação sem prova, `palavras_proibidas`, `cuidados_do_nicho`) ou se não houver nenhuma tomada usável do gancho. Escolha de tomada comum nunca vira pergunta.
-4. `./estudio cortar --projeto P`. `TRECHOS_INVALIDOS`: corrija e rode de novo.
+4. `./estudio cortar --projeto P`. Ele acerta as bordas pelo mapa da fala: estica o fim que caiu perto do fim de uma fala, apara o silêncio sobrando nas pontas e grava o que mudou em `corte/trechos-ajustados.json` (o seu `trechos.json` fica como está).
+   - `TRECHOS_INVALIDOS`: uma borda corta uma palavra no meio. Mude para a pausa mais perto e rode de novo.
+   - `RESPIRO_LONGO`: divida o trecho em dois, pulando a pausa, e rode de novo. Se a pausa é de propósito (suspense), deixe.
+   - `CORTE_JUSTO`: a borda ficou colada na fala. Abra a folha de quadros ou ouça esse instante; palavra cortada, mude a borda.
+   - `SEM_MAPA_DE_FALA`: a transcrição é antiga. Rode o item 1 de novo e depois o `cortar`.
 5. `./estudio transcrever --projeto P --fonte take`.
 6. **Gravação de tela.** Se a fala mostra algo na tela do computador ou do celular (um app, um site, uma conta), diga o F-01e uma vez. Com o arquivo: confira os quadros (senha, chave, e-mail, nome de cliente, notificação pessoal) e prepare o trecho com `./estudio midia --projeto P --arquivo "<arquivo>" --nome <nome> --de <s> --ate <s> [--velocidade N] [--corte x,y,l,a]`. Ela entra como tela `midia` no passo 5b.
 

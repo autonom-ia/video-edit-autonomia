@@ -63,6 +63,10 @@
     "texto": "Não consegui cortar o vídeo.",
     "acao": "Confira trechos.json e tente de novo. Se falhar, rode a skill consertar."
   },
+  "CORTE_JUSTO": {
+    "texto": "Um corte ficou bem colado na fala. Vale ouvir esse ponto.",
+    "acao": "Ouça o take em dados.instante_s do trecho dados.trecho. Se a palavra saiu cortada, mude a borda em trechos.json para a pausa mais perto e rode ./estudio cortar de novo."
+  },
   "COR_DE_APP_FAMOSO": {
     "texto": "Uma das suas cores é igual à de um aplicativo famoso. Pode usar, só não vou usar telas desse aplicativo.",
     "acao": "Só avise. A cor foi tirada da lista de proibidos da marca."
@@ -299,6 +303,10 @@
     "texto": "A montagem do vídeo parou no meio.",
     "acao": "Rode ./estudio espaco. Tente de novo uma vez. Se falhar, rode a skill consertar."
   },
+  "RESPIRO_LONGO": {
+    "texto": "Ficou uma pausa longa dentro de um trecho.",
+    "acao": "Divida o trecho dados.trecho em dois, pulando a pausa de dados.duracao_s s que começa em dados.em_s (tempo do bruto), e rode ./estudio cortar de novo. Se a pausa for de propósito (suspense), deixe."
+  },
   "ROSTO_PEQUENO": {
     "texto": "Este efeito deixa o seu rosto pequeno por um tempo, o que foge do método do estúdio.",
     "acao": "Use só se o aluno pediu este efeito. Senão, troque por um efeito com o rosto grande."
@@ -310,6 +318,10 @@
   "ROTEIRO_SEM_FALA": {
     "texto": "O roteiro está sem as falas marcadas.",
     "acao": "Escreva a fala em linhas que começam com '> ' na seção Fala do roteiro."
+  },
+  "SEM_MAPA_DE_FALA": {
+    "texto": "Cortei sem o mapa da fala, então as bordas podem ter ficado soltas.",
+    "acao": "Rode ./estudio transcrever --fonte bruto (a transcrição nova traz o mapa) e depois ./estudio cortar de novo. dados.motivo diz o que faltou."
   },
   "SEM_MUSICA_BOA": {
     "texto": "Não achei uma música boa com essa busca.",
@@ -346,6 +358,10 @@
   "TRECHO_PARADO": {
     "texto": "Tem um trecho de mais de 2 segundos sem nada mudando na tela.",
     "acao": "Ponha uma tela, um zoom, uma troca de faixa ou um destaque nesse trecho."
+  },
+  "TRECHO_SEM_FALA": {
+    "texto": "Um trecho escolhido não tem fala.",
+    "acao": "Confira o trecho dados.trecho em trechos.json: se foi engano, tire; se é uma imagem de propósito, deixe."
   },
   "VIDEO_DEITADO": {
     "texto": "O vídeo foi gravado com o celular deitado. O Reel é em pé, então vou cortar as laterais.",

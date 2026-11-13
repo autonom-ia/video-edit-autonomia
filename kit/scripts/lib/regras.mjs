@@ -121,6 +121,21 @@ export const ESPACO = Object.freeze({ avisoRenderGb: 4, minimoGb: 2 });
 
 export const MUSICA = Object.freeze({ duracaoMinS: 20, duracaoMaxS: 180, licencas: ['cc0', 'by'] });
 
+// Ajuste dos cortes pelo mapa da fala (Silero VAD, em transcricao-bruta.json "fala").
+// Folga: quanto de silêncio fica antes e depois da voz em cada trecho. O detector entra uns
+// 0,1 s atrasado em consoante soprada ("f", "s"), por isso a folga de antes. O fim tem mais folga
+// porque a última sílaba some devagar. Esticar/recuar: o quanto o kit move sozinho uma borda
+// que caiu dentro da fala. Respiro: pausa dentro do trecho que já soa como buraco.
+export const CORTE_FALA = Object.freeze({
+  folgaAntesS: 0.12,
+  folgaDepoisS: 0.15,
+  esticarFimMaxS: 0.35,
+  recuarInicioMaxS: 0.2,
+  respiroMaxS: 0.4,
+  toleranciaS: 0.02,
+  margemPalavraS: 0.03,
+});
+
 export const FALA = Object.freeze({ memoriaMinimaGb: 8, modeloGrande: 'large-v3-turbo', modeloPequeno: 'small' });
 
 // Duração medida (ffprobe) dos 14 sons de kit/sfx.

@@ -4,11 +4,12 @@ import { daRaiz } from '../lib/caminhos.mjs';
 import { abrirProjeto, mudarEtapa, exigirArquivo } from '../lib/projeto.mjs';
 import { lerJson } from '../lib/json.mjs';
 import { validarCom } from '../lib/validar.mjs';
-import { falha, reprovado } from '../lib/saida.mjs';
+import { falha, reprovado, aviso } from '../lib/saida.mjs';
 import { ffmpegOk, filtrosDisponiveis, sondar, resumoDoVideo } from '../lib/ffmpeg.mjs';
 import { MASTER, SOM } from '../lib/regras.mjs';
 import { arred, linhas } from '../lib/texto.mjs';
 import { progresso } from '../lib/executar.mjs';
+import { ajustarTrechos } from '../lib/ajuste-de-corte.mjs';
 
 const r3 = (n) => arred(n, 3);
 
@@ -38,6 +39,17 @@ export function conferirTrechos(dados, duracao) {
   return problemas;
 }
 
+// A transcrição do bruto traz o mapa da fala. Sem ela, ou se for de outro vídeo, o corte
+// segue com os trechos como estão e avisa.
+const TOLERANCIA_DURACAO_S = 0.5;
+function mapaDaFala(projeto, duracao) {
+  const arq = projeto.arq('transcricao-bruta.json');
+  if (!fs.existsSync(arq)) return { transcricao: null, motivo: 'sem transcricao-bruta.json' };
+  const transcricao = lerJson(arq);
+  if (Math.abs((transcricao.duracao_s ?? 0) - duracao) > TOLERANCIA_DURACAO_S) return { transcricao: null, motivo: 'transcrição de outro vídeo' };
+  return { transcricao, motivo: null };
+}
+
 export default async function cortar({ opcoes }) {
   const projeto = abrirProjeto(opcoes);
   const origem = lerJson(exigirArquivo(projeto.arq('bruto', 'origem.json')));
@@ -47,14 +59,20 @@ export default async function cortar({ opcoes }) {
   const info = resumoDoVideo(await sondar(bruto));
   const problemas = [...erros.map((e) => ({ onde: e.caminho, problema: e.problema })), ...conferirTrechos(trechos, info.duracao)];
   if (problemas.length) reprovado('TRECHOS_INVALIDOS', { problemas });
+  const mapa = mapaDaFala(projeto, info.duracao);
+  const ajuste = mapa.transcricao
+    ? ajustarTrechos(trechos.trechos, mapa.transcricao, info.duracao)
+    : { trechos: trechos.trechos, ajustes: [], problemas: [], avisos: [aviso('SEM_MAPA_DE_FALA', { motivo: mapa.motivo })] };
+  if (ajuste.problemas.length) reprovado('TRECHOS_INVALIDOS', { problemas: ajuste.problemas });
   if (!info.tem_audio) falha('VIDEO_SEM_SOM', {});
   if (info.hdr) {
     const filtros = await filtrosDisponiveis();
     if (!filtros.has('zscale') || !filtros.has('tonemap')) falha('HDR_SEM_ZSCALE', {});
   }
-  const grafo = grafoDeCorte(trechos.trechos, { hdr: info.hdr });
+  const grafo = grafoDeCorte(ajuste.trechos, { hdr: info.hdr });
   const arqGrafo = projeto.arq('corte', 'grafo.txt');
   fs.mkdirSync(projeto.arq('corte'), { recursive: true });
+  fs.writeFileSync(projeto.arq('corte', 'trechos-ajustados.json'), `${JSON.stringify({ fonte: 'bruto', trechos: ajuste.trechos, ajustes: ajuste.ajustes }, null, 2)}\n`, 'utf8');
   fs.writeFileSync(arqGrafo, linhas(grafo).join('\n'), 'utf8');
   progresso('Cortando as pausas e os erros...');
   await ffmpegOk(
@@ -69,11 +87,12 @@ export default async function cortar({ opcoes }) {
   );
   const take = resumoDoVideo(await sondar(projeto.arq('take.mp4')));
   mudarEtapa(projeto, 'corte');
-  const total = trechos.trechos.reduce((s, t) => s + (t.fim - t.inicio), 0);
+  const total = ajuste.trechos.reduce((s, t) => s + (t.fim - t.inicio), 0);
   return {
     ok: true,
-    resumo: `Take pronto: ${Math.round(take.duracao * 10) / 10} s, em ${trechos.trechos.length} trechos.`,
-    arquivos: { take: projeto.rel('take.mp4'), voz: projeto.rel('voz.wav') },
-    dados: { duracao_s: take.duracao, trechos: trechos.trechos.length, soma_trechos_s: r3(total), hdr_convertido: info.hdr },
+    resumo: `Take pronto: ${Math.round(take.duracao * 10) / 10} s, em ${ajuste.trechos.length} trechos.`,
+    avisos: ajuste.avisos,
+    arquivos: { take: projeto.rel('take.mp4'), voz: projeto.rel('voz.wav'), trechos_ajustados: projeto.rel('corte', 'trechos-ajustados.json') },
+    dados: { duracao_s: take.duracao, trechos: ajuste.trechos.length, soma_trechos_s: r3(total), hdr_convertido: info.hdr, ajustes: ajuste.ajustes },
   };
 }
