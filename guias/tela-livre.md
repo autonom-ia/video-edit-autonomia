@@ -130,4 +130,28 @@ Cada efeito precisa de uma função. Use os que a cena pede:
 - **Desenho que se traça:** linha, seta ou gráfico que se desenha na palavra (`DrawSVGPlugin`).
 - **Digitação real:** texto que se digita na caixa do app, com som de teclado só durante a digitação e só se a pessoa não estiver falando o texto.
 
+## Princípios de movimento (a régua para conferir)
+
+Vêm dos 12 princípios de animação da Disney (livro *The Illusion of Life*, 1981) e de leis de usabilidade, adaptados para vídeo. São para conferir a tela nos quadros, não uma lista para encher a tela de efeito.
+
+- **Antecipação:** antes de um movimento grande, um recuo curto (~0,1 s) para o lado oposto. O cartão desce 8 px antes de subir.
+- **Peso no impacto:** o que cai ou bate amassa uns 5% e volta. Só em forma (botão, selo, bola); nunca em texto nem no rosto.
+- **Uma coisa por vez:** só um elemento se mexe forte de cada vez; o resto fica parado ou respirando. O olho segue o que se mexe.
+- **Continua depois de parar:** o que vem junto (sombra, etiqueta, ícone) chega 0,05 a 0,1 s depois do principal (`stagger`).
+- **Acelera e desacelera:** nunca velocidade constante (`ease: 'none'`), a não ser em contador ou rolagem mecânica.
+- **Arcos:** o que viaja longe faz curva, não linha reta (`MotionPathPlugin`).
+- **Ação secundária:** um detalhe pequeno reforça a ação principal (o check pisca quando a linha é riscada).
+- **Tempo:** coisa pequena de interface (botão, ícone, check) em 0,2 a 0,35 s; cartão e tela inteira em 0,5 a 0,7 s. Mais de 1 s só em revelação de propósito.
+- **Exagero com sentido:** só no momento-chave (a palavra de ênfase, o erro na tela), uma vez por cena.
+- **Volume:** uma rotação leve (`rotationY` de 8 a 15 graus) dá profundidade a cartão e aparelho.
+- **Quanto mais repete, menos anima:** o terceiro cartão do mesmo tipo entra mais simples que o primeiro. O que aparece o tempo todo (legenda, série) não pula.
+
+Quando a tela imita um app:
+
+- **Alvo grande:** botão e campo desenhados grandes. No celular de quem assiste, botão pequeno não se lê.
+- **Poucas opções:** até 4 itens por vez. Mais que isso, divida em duas telas ou agrupe.
+- **Blocos de até 4:** a memória curta segura uns 4 blocos (os "7" de Miller, de 1956, são estimativa antiga). Número longo aparece separado: `11 9876-5432`, nunca `11987654321`.
+- **Resposta em até 0,4 s:** depois de um clique mostrado na tela, algo reage em até 0,4 s. Clique sem resposta parece app travado.
+- **Parecido com o que a pessoa conhece:** padrões de app comum, sem inventar interface. Vale junto com a seção "App real" acima.
+
 Estilos por nicho, com imagens e movimentos de cada profissão: `guias/nichos/`. As cores e as letras continuam as da marca do aluno; o nicho dá o repertório.
