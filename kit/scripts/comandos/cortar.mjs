@@ -10,10 +10,11 @@ import { MASTER, SOM } from '../lib/regras.mjs';
 import { arred, linhas } from '../lib/texto.mjs';
 import { progresso } from '../lib/executar.mjs';
 import { ajustarTrechos } from '../lib/ajuste-de-corte.mjs';
+import { medirRosto, resumoDoRosto, cortePeloRosto, medirRostoDoTake } from '../lib/rosto.mjs';
 
 const r3 = (n) => arred(n, 3);
 
-export function grafoDeCorte(trechos, { hdr = false } = {}) {
+export function grafoDeCorte(trechos, { hdr = false, cortarX = null } = {}) {
   const partes = [];
   const pares = [];
   trechos.forEach((t, i) => {
@@ -24,7 +25,9 @@ export function grafoDeCorte(trechos, { hdr = false } = {}) {
   });
   partes.push(`${pares.join('')}concat=n=${trechos.length}:v=1:a=1[vc][ac]`);
   const cor = hdr ? 'zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,' : '';
-  partes.push(`[vc]${cor}fps=${MASTER.fps},scale=${MASTER.largura}:${MASTER.altura}:force_original_aspect_ratio=increase,crop=${MASTER.largura}:${MASTER.altura},setsar=1,format=yuv420p[v]`);
+    // Vídeo deitado: o recorte 9:16 vai para onde está o rosto (cortarX); sem medida, fica no meio.
+  const recorte = cortarX === null ? `${MASTER.largura}:${MASTER.altura}` : `${MASTER.largura}:${MASTER.altura}:${cortarX}:0`;
+  partes.push(`[vc]${cor}fps=${MASTER.fps},scale=${MASTER.largura}:${MASTER.altura}:force_original_aspect_ratio=increase,crop=${recorte},setsar=1,format=yuv420p[v]`);
   partes.push(`[ac]highpass=f=80,afftdn=nf=-25,loudnorm=I=${SOM.vozLufs}:TP=-3:LRA=11,aresample=${MASTER.taxaAudio},aformat=channel_layouts=stereo,asplit=2[a][voz]`);
   return partes.join(';\n');
 }
@@ -50,6 +53,16 @@ function mapaDaFala(projeto, duracao) {
   return { transcricao, motivo: null };
 }
 
+// Vídeo deitado: mede o rosto no bruto, só dentro dos trechos, para saber onde recortar.
+async function corteDoDeitado(projeto, bruto, info, trechos, avisos) {
+  if (!(info.largura > info.altura)) return null;
+  progresso('Procurando o rosto para recortar o vídeo deitado...');
+  const r = await medirRosto(bruto, projeto.arq('corte', 'rosto-bruto.json'), { trechos, rotacao: info.rotacao });
+  const x = r.medida ? cortePeloRosto(resumoDoRosto(r.medida), info.largura, info.altura) : null;
+  if (x === null) avisos.push(aviso('ROSTO_NAO_MEDIDO', { onde: 'bruto', detalhe: r.erro || 'rosto pouco visível' }));
+  return x;
+}
+
 export default async function cortar({ opcoes }) {
   const projeto = abrirProjeto(opcoes);
   const origem = lerJson(exigirArquivo(projeto.arq('bruto', 'origem.json')));
@@ -69,9 +82,11 @@ export default async function cortar({ opcoes }) {
     const filtros = await filtrosDisponiveis();
     if (!filtros.has('zscale') || !filtros.has('tonemap')) falha('HDR_SEM_ZSCALE', {});
   }
-  const grafo = grafoDeCorte(ajuste.trechos, { hdr: info.hdr });
-  const arqGrafo = projeto.arq('corte', 'grafo.txt');
+  const avisos = [...ajuste.avisos];
   fs.mkdirSync(projeto.arq('corte'), { recursive: true });
+  const cortarX = await corteDoDeitado(projeto, bruto, info, ajuste.trechos, avisos);
+  const grafo = grafoDeCorte(ajuste.trechos, { hdr: info.hdr, cortarX });
+  const arqGrafo = projeto.arq('corte', 'grafo.txt');
   fs.writeFileSync(projeto.arq('corte', 'trechos-ajustados.json'), `${JSON.stringify({ fonte: 'bruto', trechos: ajuste.trechos, ajustes: ajuste.ajustes }, null, 2)}\n`, 'utf8');
   fs.writeFileSync(arqGrafo, linhas(grafo).join('\n'), 'utf8');
   progresso('Cortando as pausas e os erros...');
@@ -86,13 +101,15 @@ export default async function cortar({ opcoes }) {
     'CORTE_FALHOU',
   );
   const take = resumoDoVideo(await sondar(projeto.arq('take.mp4')));
+  progresso('Medindo onde fica o seu rosto...');
+  const rosto = await medirRostoDoTake(projeto, avisos);
   mudarEtapa(projeto, 'corte');
   const total = ajuste.trechos.reduce((s, t) => s + (t.fim - t.inicio), 0);
   return {
     ok: true,
     resumo: `Take pronto: ${Math.round(take.duracao * 10) / 10} s, em ${ajuste.trechos.length} trechos.`,
-    avisos: ajuste.avisos,
+    avisos,
     arquivos: { take: projeto.rel('take.mp4'), voz: projeto.rel('voz.wav'), trechos_ajustados: projeto.rel('corte', 'trechos-ajustados.json') },
-    dados: { duracao_s: take.duracao, trechos: ajuste.trechos.length, soma_trechos_s: r3(total), hdr_convertido: info.hdr, ajustes: ajuste.ajustes },
+    dados: { duracao_s: take.duracao, trechos: ajuste.trechos.length, soma_trechos_s: r3(total), hdr_convertido: info.hdr, ajustes: ajuste.ajustes, rosto, recorte_deitado_x: cortarX },
   };
 }

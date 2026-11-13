@@ -12,6 +12,8 @@
   tl.set('.tela', { opacity: 0, visibility: 'hidden' }, 0);
   if (existe('#cta-selo')) tl.set('#cta-selo', { opacity: 0, visibility: 'hidden' }, 0);
   tl.set('#zoom', { scale: 1 }, 0);
+  // zoom em volta do centro do rosto (medido no take); sem medida, vale o do estilo.css
+  if (D.zoomOrigem) tl.set('#zoom', { transformOrigin: D.zoomOrigem.x + 'px ' + D.zoomOrigem.y + 'px' }, 0);
 
   // faixa clara, rosto e legenda andam juntos: a costura sobe e desce suave
   D.faixas.forEach(function (f) {

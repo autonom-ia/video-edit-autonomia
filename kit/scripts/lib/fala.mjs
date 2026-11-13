@@ -62,17 +62,18 @@ export function ambienteDaFala(env = process.env, versoes = lerVersoes()) {
 
 // Argumentos do uv. Sem "--python" fixo: vale UV_PYTHON do ambiente (no Windows ARM é o Python x86_64
 // com que o instalador sincronizou o ambiente). "--frozen" usa o uv.lock versionado, sem resolver de novo.
-export function argumentosDoUv(argumentos, env = process.env) {
+export function argumentosDoUv(argumentos, env = process.env, script = SCRIPT) {
   const base = ['run', '--project', RAIZ, '--frozen'];
   if (env.UV_PYTHON) base.push('--python', env.UV_PYTHON);
-  return [...base, '--quiet', 'python', SCRIPT, ...argumentos];
+  return [...base, '--quiet', 'python', script, ...argumentos];
 }
 
-async function uv(argumentos, timeoutMs, { semInternet = false } = {}) {
+// Roda um script de kit/py no ambiente Python do estúdio (o mesmo da transcrição).
+export async function uv(argumentos, timeoutMs, { semInternet = false, script = SCRIPT } = {}) {
   const extra = ambienteDaFala();
   // Depois do preparar-fala o modelo já está no computador: a transcrição não precisa de internet.
   if (semInternet) extra.HF_HUB_OFFLINE = '1';
-  const r = await rodar(binario('uv'), argumentosDoUv(argumentos), {
+  const r = await rodar(binario('uv'), argumentosDoUv(argumentos, process.env, script), {
     env: ambienteFilhos(extra),
     cwd: RAIZ,
     timeoutMs,

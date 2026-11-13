@@ -167,9 +167,17 @@
     "texto": "Uma parte do estúdio não está funcionando.",
     "acao": "Veja dados.itens com ok falso e rode o passo do instalador correspondente (skill consertar)."
   },
+  "LEGENDA_NA_BOCA": {
+    "texto": "A legenda ia ficar em cima do seu rosto. Vou mudar de lugar.",
+    "acao": "Use dados.sugerida em legenda_rosto_y do cenas.json (ou apague o campo: o kit usa a sugerida) e rode ./estudio montar de novo. dados.rosto_de e dados.rosto_ate são a faixa dos olhos ao lábio. Não mostre isso ao aluno."
+  },
   "LEGENDA_REPROVADA": {
     "texto": "O texto do post precisa de um ajuste.",
     "acao": "Veja dados.problemas e corrija postagem.txt pelos guias/postagem.md."
+  },
+  "LEGENDA_SEM_LUGAR": {
+    "texto": "O rosto ocupa quase a tela toda: a legenda vai encostar nele.",
+    "acao": "Confira na folha de quadros. Se cobrir a boca, prefira cenas com faixa (35 ou 50) nessas falas."
   },
   "LIMITE_OPENVERSE": {
     "texto": "O site de músicas grátis pediu uma pausa. Volto a tentar em alguns minutos.",
@@ -306,6 +314,10 @@
   "RESPIRO_LONGO": {
     "texto": "Ficou uma pausa longa dentro de um trecho.",
     "acao": "Divida o trecho dados.trecho em dois, pulando a pausa de dados.duracao_s s que começa em dados.em_s (tempo do bruto), e rode ./estudio cortar de novo. Se a pausa for de propósito (suspense), deixe."
+  },
+  "ROSTO_NAO_MEDIDO": {
+    "texto": "Não consegui medir onde fica o seu rosto. O vídeo sai, mas confira a legenda e o zoom.",
+    "acao": "Veja dados.onde e dados.detalhe. Sem rosto.json deste take: rode ./estudio cortar de novo. Rosto pouco visível: escolha legenda_rosto_y olhando a folha de quadros."
   },
   "ROSTO_PEQUENO": {
     "texto": "Este efeito deixa o seu rosto pequeno por um tempo, o que foge do método do estúdio.",

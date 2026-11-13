@@ -53,6 +53,20 @@ export const FAIXA = Object.freeze({
 // dentro da zona segura: a legenda tem até ~75 px, então o topo vai até 1424 (Issue #13).
 export const LEGENDA_ROSTO_Y = Object.freeze({ min: 250, max: 1424 });
 
+// Medida do rosto (YuNet, kit/py/rosto.py). As proporções são da caixa do rosto, que vai da
+// testa ao queixo: o lábio de baixo fica ~0,12 da altura abaixo dos cantos da boca e o alto da
+// cabeça (cabelo, boné) ~0,3 acima da caixa. Faixa proibida da legenda: dos olhos ao lábio.
+export const ROSTO = Object.freeze({
+  intervaloS: 0.5,
+  presencaMinima: 0.6,
+  labioAbaixoDaBoca: 0.12,
+  cabecaAcimaDaCaixa: 0.3,
+  testaAcimaDosOlhos: 0.12,
+  alturaLegendaPx: 75,
+  folgaLegendaPx: 24,
+  zoomPico: 1.16,
+});
+
 export const LEGENDA = Object.freeze({
   maxPalavras: 3,
   maxCaracteres: 22,

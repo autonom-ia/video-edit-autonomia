@@ -11,7 +11,8 @@ import { estiloCss } from '../lib/amostra.mjs';
 import { escaparHtml, preencher } from '../lib/texto.mjs';
 import { conferirTabela } from './telas.mjs';
 import { lerTelaDeArquivo, pluginsCitados, tipoDeMidia } from '../lib/telas-livres.mjs';
-import { MIDIA, RITMO, RECORTE } from '../lib/regras.mjs';
+import { MIDIA, RITMO, RECORTE, FAIXA } from '../lib/regras.mjs';
+import { lerRosto, legendaSugerida, conferirLegendaNoRosto, origemDoZoom } from '../lib/rosto.mjs';
 import { arquivosDoEfeito } from '../lib/efeitos.mjs';
 import { conferirRecortes, assinaturaDoTake, medidasDaPessoa, cenaForaDoTake } from '../lib/recorte.mjs';
 
@@ -126,6 +127,17 @@ function copiarEfeitos(efeitosInfo, comp) {
   return tags.join('\n');
 }
 
+// Altura da legenda com o rosto cheio: a do cenas.json, senão a sugerida pela medida do rosto.
+// Legenda entre os olhos e o lábio reprova; sem lugar bom em lugar nenhum, só avisa.
+function legendaComRosto(dados, resumo, avisos) {
+  const sugerida = legendaSugerida(resumo);
+  const y = dados.legenda_rosto_y ?? sugerida ?? FAIXA.legendaY[0];
+  const problema = conferirLegendaNoRosto(y, resumo);
+  if (problema && problema.sugerida !== null) reprovado('LEGENDA_NA_BOCA', problema);
+  if (problema) avisos.push(aviso('LEGENDA_SEM_LUGAR', problema));
+  return y;
+}
+
 export default async function montar({ opcoes }) {
   const projeto = abrirProjeto(opcoes);
   const marca = lerMarca();
@@ -179,10 +191,14 @@ export default async function montar({ opcoes }) {
 
   const recortes = copiarRecortes(projeto, dados, take, assets);
   const medidas = medidasDaPessoa(projeto.arq(RECORTE.pasta), assinaturaDoTake(take));
-  const montagem = montarComposicao({ dados, transcricao, marca, duracao: info.duracao, livres: deArquivo.livres, midias: deArquivo.midias, recortes, medidas });
+  const rosto = lerRosto(projeto.arq('rosto.json'), assinaturaDoTake(take));
+  const avisosDoRosto = rosto ? [] : [aviso('ROSTO_NAO_MEDIDO', { onde: 'montar', detalhe: 'sem rosto.json deste take (rode ./estudio cortar de novo)' })];
+  const legendaRostoY = legendaComRosto(dados, rosto?.resumo, avisosDoRosto);
+  const zoomOrigem = origemDoZoom(rosto?.resumo);
+  const montagem = montarComposicao({ dados, transcricao, marca, duracao: info.duracao, livres: deArquivo.livres, midias: deArquivo.midias, recortes, medidas, legendaRostoY, zoomOrigem });
   const tagsDeEfeito = copiarEfeitos(montagem.efeitos.info, comp);
   const semMedida = montagem.efeitos.info.filter((e) => e.pessoa && e.pessoa.medida === false).map((e) => e.id);
-  const avisosDoMontar = semMedida.length ? [...avisos, aviso('EFEITO_SEM_MEDIDA', { cenas: semMedida })] : avisos;
+  const avisosDoMontar = [...avisos, ...avisosDoRosto, ...(semMedida.length ? [aviso('EFEITO_SEM_MEDIDA', { cenas: semMedida })] : [])];
   for (const efeito of new Set(montagem.sons.map((s) => s.efeito))) {
     fs.copyFileSync(path.join(KIT, 'sfx', `${efeito}.wav`), path.join(assets, 'sfx', `${efeito}.wav`));
   }
