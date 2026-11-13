@@ -8,6 +8,9 @@ import { rodar, ultimasLinhas } from './executar.mjs';
 import { caminhoDoNavegador } from './hyperframes.mjs';
 import { falha } from './saida.mjs';
 import { escaparHtml } from './texto.mjs';
+import { codigoDoNavegador } from './area-protegida.mjs';
+
+const NAVEGADOR = 'o navegador escondido';
 
 const TEMPO_LIMITE = 60000;
 let cacheChrome = null;
@@ -81,7 +84,7 @@ export async function fotografarHtml(arquivoHtml, png, { largura = 1080, altura 
   if (fs.existsSync(png)) fs.rmSync(png);
   const extra = transparente ? ['--default-background-color=00000000'] : [];
   const r = await chamar([...argsBase(largura, altura), ...extra, `--screenshot=${png}`, pathToFileURL(arquivoHtml).href]);
-  if (!fs.existsSync(png)) falha('CHROME_NAO_ABRIU', { detalhe: ultimasLinhas(r.erro, 6) });
+  if (!fs.existsSync(png)) falha(codigoDoNavegador(r.erro), { programa: NAVEGADOR, detalhe: ultimasLinhas(r.erro, 6) });
   return png;
 }
 
@@ -89,13 +92,13 @@ export async function imprimirPdf(arquivoHtml, pdf) {
   fs.mkdirSync(path.dirname(pdf), { recursive: true });
   if (fs.existsSync(pdf)) fs.rmSync(pdf);
   const r = await chamar([...argsBase(1240, 1754), '--no-pdf-header-footer', '--print-to-pdf-no-header', `--print-to-pdf=${pdf}`, pathToFileURL(arquivoHtml).href]);
-  if (!fs.existsSync(pdf)) falha('CHROME_NAO_ABRIU', { detalhe: ultimasLinhas(r.erro, 6) });
+  if (!fs.existsSync(pdf)) falha(codigoDoNavegador(r.erro), { programa: NAVEGADOR, detalhe: ultimasLinhas(r.erro, 6) });
   return pdf;
 }
 
 export async function lerDom(arquivoHtml, { largura = 1080, altura = 1920 } = {}) {
   const r = await chamar([...argsBase(largura, altura), '--dump-dom', pathToFileURL(arquivoHtml).href]);
-  if (r.codigo !== 0 && !r.saida) falha('CHROME_NAO_ABRIU', { detalhe: ultimasLinhas(r.erro, 6) });
+  if (r.codigo !== 0 && !r.saida) falha(codigoDoNavegador(r.erro), { programa: NAVEGADOR, detalhe: ultimasLinhas(r.erro, 6) });
   return r.saida;
 }
 

@@ -5,6 +5,16 @@ import { ffmpegOk, loudness, sondar } from './ffmpeg.mjs';
 import { grafoDaTrilha, grafoDaMixagem, grafoFinal, ganhoDaTrilha, avaliarCelular, distanciaAceita, FILTRO_CELULAR, inicioDaTrilha, planejarTrechos } from './mixer.mjs';
 import { SOM } from './regras.mjs';
 import { arred } from './texto.mjs';
+import { falha } from './saida.mjs';
+
+const TENTATIVAS = 4;
+// Abaixo disso o limitador já espreme a voz. Melhor falhar e avisar do que entregar o som achatado.
+const TETO_MINIMO_DBFS = -6;
+
+// Dentro do alvo de entrega: volume a ±0,3 LU de −14 (folga para a conferência de ±0,5) e pico no teto.
+function noAlvo(medida) {
+  return Math.abs(SOM.alvoLufs - medida.lufs) <= SOM.toleranciaLufs * 0.6 && medida.pico_dbtp <= SOM.picoMaxDbtp;
+}
 
 const r2 = (n) => arred(n, 2);
 
@@ -64,20 +74,32 @@ export async function mixar({ pastaTmp, semTrilha, voz, musica, duracao, esquema
   await ffmpegOk(['-y', ...entradas({ semTrilha, voz, musica, precisaLaco }), '-/filter_complex', arqGrafo, '-map', '[a]', '-t', String(duracao), '-ar', '48000', '-ac', '2', wav], 'MIXAGEM_FALHOU');
   const antes = await loudness(wav);
   let ganhoFinal = r2(SOM.alvoLufs - antes.lufs);
+  let teto = SOM.limiterDbfs;
   let resultado = null;
-  for (let tentativa = 0; tentativa < 3; tentativa += 1) {
-    await ffmpegOk(
-      ['-y', '-i', semTrilha, '-i', wav, '-filter_complex', grafoFinal(ganhoFinal), '-map', '0:v:0', '-map', '[a]', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '256k', '-ar', '48000', '-ac', '2', '-movflags', '+faststart', saida],
-      'MIXAGEM_FALHOU',
-    );
-    resultado = await loudness(saida);
-    const erro = SOM.alvoLufs - resultado.lufs;
-    if (Math.abs(erro) <= SOM.toleranciaLufs * 0.6 && resultado.pico_dbtp <= SOM.picoMaxDbtp) break;
-    if (resultado.pico_dbtp > SOM.picoMaxDbtp) ganhoFinal = r2(ganhoFinal - (resultado.pico_dbtp - SOM.picoMaxDbtp) - 0.2);
-    else ganhoFinal = r2(ganhoFinal + erro);
+  try {
+    for (let tentativa = 0; tentativa < TENTATIVAS; tentativa += 1) {
+      await ffmpegOk(
+        ['-y', '-i', semTrilha, '-i', wav, '-filter_complex', grafoFinal(ganhoFinal, teto), '-map', '0:v:0', '-map', '[a]', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '256k', '-ar', '48000', '-ac', '2', '-movflags', '+faststart', saida],
+        'MIXAGEM_FALHOU',
+      );
+      resultado = await loudness(saida);
+      if (noAlvo(resultado)) break;
+      // Pico alto se resolve baixando o teto do limitador; volume fora se resolve no ganho.
+      // Mexer só no ganho para conter o pico derruba o volume, e o laço fica oscilando.
+      if (resultado.pico_dbtp > SOM.picoMaxDbtp) teto = r2(Math.max(TETO_MINIMO_DBFS, teto - (resultado.pico_dbtp - SOM.picoMaxDbtp) - 0.2));
+      ganhoFinal = r2(ganhoFinal + (SOM.alvoLufs - resultado.lufs));
+    }
+    if (!noAlvo(resultado)) {
+      falha('MIXAGEM_FORA_DO_ALVO', { lufs: resultado.lufs, pico_dbtp: resultado.pico_dbtp, alvo_lufs: SOM.alvoLufs, pico_max_dbtp: SOM.picoMaxDbtp, teto_limitador_dbfs: teto });
+    }
+  } catch (erro) {
+    // Arquivo pela metade ou fora do alvo não pode ficar para o creditar achar depois.
+    fs.rmSync(saida, { force: true });
+    throw erro;
+  } finally {
+    fs.rmSync(wav, { force: true });
   }
-  fs.rmSync(wav, { force: true });
-  const info = { lufs: resultado.lufs, pico_dbtp: resultado.pico_dbtp, ganho_final_db: ganhoFinal, lufs_voz: lufsVoz };
+  const info = { lufs: resultado.lufs, pico_dbtp: resultado.pico_dbtp, ganho_final_db: ganhoFinal, teto_limitador_dbfs: teto, lufs_voz: lufsVoz };
   if (medida) {
     const vozFinal = lufsVoz + ganhoFinal;
     const trilhaFinal = medida.lufsTrilha + medida.ganho + ganhoFinal;

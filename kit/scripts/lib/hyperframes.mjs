@@ -5,6 +5,7 @@ import { RAIZ } from './caminhos.mjs';
 import { rodar, ultimasLinhas } from './executar.mjs';
 import { ambienteFilhos } from './ambiente.mjs';
 import { falha } from './saida.mjs';
+import { codigoDoNavegador } from './area-protegida.mjs';
 
 export const BIN_HYPERFRAMES = path.join(RAIZ, 'node_modules', 'hyperframes', 'bin', 'hyperframes.mjs');
 
@@ -64,7 +65,8 @@ export async function renderizar(pastaComp, saida, qualidade) {
   if (r.codigo !== 0 || !fs.existsSync(saida)) {
     const detalhe = ultimasLinhas(`${r.saida}\n${r.erro}`, 10);
     const semNavegador = detalhe.toLowerCase().includes('browser') || detalhe.toLowerCase().includes('chrome');
-    falha(semNavegador ? 'CHROME_NAO_ABRIU' : 'RENDER_FALHOU', { detalhe });
+    const codigo = codigoDoNavegador(detalhe);
+    falha(codigo === 'AREA_PROTEGIDA' || semNavegador ? codigo : 'RENDER_FALHOU', { detalhe });
   }
   return saida;
 }
@@ -76,6 +78,9 @@ export async function fotografar(pastaComp, tempos, pastaSaida) {
     cwd: pastaComp,
     timeoutMs: 20 * 60 * 1000,
   });
-  if (r.codigo !== 0) falha('CHROME_NAO_ABRIU', { detalhe: ultimasLinhas(`${r.saida}\n${r.erro}`, 8) });
+  if (r.codigo !== 0) {
+    const detalhe = ultimasLinhas(`${r.saida}\n${r.erro}`, 8);
+    falha(codigoDoNavegador(detalhe), { detalhe });
+  }
   return fs.readdirSync(pastaSaida).filter((n) => n.toLowerCase().endsWith('.png')).map((n) => path.join(pastaSaida, n));
 }

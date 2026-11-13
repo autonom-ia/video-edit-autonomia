@@ -1,5 +1,6 @@
 // Prévia em qualidade de rascunho, sem música. Antes, confere a marca e o espaço.
-import { abrirProjeto, mudarEtapa } from '../lib/projeto.mjs';
+import { abrirProjeto, lerEstado, mudarEtapa } from '../lib/projeto.mjs';
+import { gateDoAluno } from '../lib/decisoes.mjs';
 import { reprovado, falha, aviso } from '../lib/saida.mjs';
 import { renderizar } from '../lib/hyperframes.mjs';
 import { abrir } from '../lib/abrir.mjs';
@@ -18,6 +19,7 @@ export async function conferirAntesDoRender(projeto) {
 
 export default async function previa({ opcoes }) {
   const projeto = abrirProjeto(opcoes);
+  if (!gateDoAluno(lerEstado(projeto), 'cenas', 'aprovado')) falha('CENAS_NAO_APROVADAS', {});
   const avisos = await conferirAntesDoRender(projeto);
   progresso('Fazendo a prévia...');
   const saida = projeto.arq('previa.mp4');

@@ -63,7 +63,7 @@ test('grafo da mixagem: base + trilha abafada pela voz; sem trilha vira só a ba
   );
   assert.equal(
     grafoFinal(1.5),
-    '[1:a]volume=1.5dB,alimiter=limit=0.94:attack=5:release=80:level=disabled,aformat=sample_rates=48000:channel_layouts=stereo[a]',
+    '[1:a]volume=1.5dB,alimiter=limit=0.794:attack=5:release=80:level=disabled,aformat=sample_rates=48000:channel_layouts=stereo[a]',
   );
 });
 

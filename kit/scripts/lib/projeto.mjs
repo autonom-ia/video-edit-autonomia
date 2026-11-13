@@ -11,7 +11,7 @@ export const ETAPAS = [
   'telas', 'montagem', 'previa', 'trilha', 'qa', 'revisao', 'final', 'postagem', 'medicao', 'concluido',
 ];
 
-export const GATES = ['pauta', 'gancho', 'cenas', 'previa', 'trilha'];
+export const GATES = ['pauta', 'gancho', 'cenas', 'previa', 'trilha', 'postar_assim'];
 
 export function abrirProjeto(opcoes) {
   const nome = exigir(opcoes, 'projeto');
@@ -33,8 +33,10 @@ export function estadoNovo(nome, titulo, caminho) {
     titulo,
     caminho,
     etapa: caminho === 'A' ? 'pauta' : 'gravacao',
-    gates: { pauta: null, gancho: null, cenas: null, previa: null, trilha: null },
+    gates: { pauta: null, gancho: null, cenas: null, previa: null, trilha: null, postar_assim: null },
+    respostas: {},
     rodadas: { roteiro: 0, video: 0 },
+    avaliacoes: [],
     notas: [],
     atualizado_em: new Date().toISOString(),
   };

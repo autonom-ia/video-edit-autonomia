@@ -84,8 +84,10 @@ export function grafoDaMixagem({ trechos, duracao, ganhoDb, esquema, semMusica =
   return `${grafoDaTrilha({ trechos, duracao, ganhoDb, esquema })};${base};[base][musd]amix=inputs=2:normalize=0:duration=first[a]`;
 }
 
-export function grafoFinal(ganhoDb) {
-  return `[1:a]volume=${r3(ganhoDb)}dB,alimiter=limit=${SOM.limiter}:attack=5:release=80:level=disabled,aformat=sample_rates=48000:channel_layouts=stereo[a]`;
+// Ganho final e limitador. O teto vem em dBFS e vira o fator linear que o alimiter usa.
+export function grafoFinal(ganhoDb, tetoDbfs = SOM.limiterDbfs) {
+  const limite = r3(10 ** (tetoDbfs / 20));
+  return `[1:a]volume=${r3(ganhoDb)}dB,alimiter=limit=${limite}:attack=5:release=80:level=disabled,aformat=sample_rates=48000:channel_layouts=stereo[a]`;
 }
 
 // Ganho para levar a trilha a 14 dB abaixo da voz, com teto.

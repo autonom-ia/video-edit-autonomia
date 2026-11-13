@@ -59,11 +59,19 @@ export const LEGENDA = Object.freeze({
   maxEnfasePorCena: 1,
 });
 
+// Avaliador independente: nota mínima para entregar sem o aluno dizer "postar assim".
+export const AVALIACAO = Object.freeze({
+  notaMinima: 8.5,
+  rodadasMax: 3,
+});
+
 export const SOM = Object.freeze({
   alvoLufs: -14,
   toleranciaLufs: 0.5,
   picoMaxDbtp: -1.0,
-  limiter: 0.94,
+  // Teto do limitador final, em dBFS de amostra. Fica 1 dB abaixo do pico máximo
+  // porque o limitador não vê o pico verdadeiro e o AAC sobe o pico depois.
+  limiterDbfs: -2.0,
   vozLufs: -20,
   trilhaAbaixoDaVozDb: 14,
   trilhaAceitaMinDb: 12,

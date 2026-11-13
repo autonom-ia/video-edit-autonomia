@@ -687,6 +687,10 @@ passo_baixador() {
     xattr -d com.apple.quarantine "$FERR/bin/yt-dlp" >/dev/null 2>&1
     if ! rodar_bin "$FERR/bin/yt-dlp" --version; then
       [ "$RB_BLOQUEADO" = "1" ] && { R_DADOS='{"nome":"baixador de vídeos"}'; falhou MAC_BLOQUEOU; return 1; }
+      # Na área protegida do Codex o baixador não consegue criar o semáforo de que precisa.
+      if [ -n "${CODEX_SANDBOX:-}" ] || grep -qF 'semctl: Operation not permitted' "$LOG" 2>/dev/null; then
+        R_DADOS='{"nome":"baixador de vídeos"}'; falhou AREA_PROTEGIDA; return 1
+      fi
       R_DADOS='{"nome":"baixador de vídeos"}'; falhou DESCONHECIDO; return 1
     fi
     v="$RB_SAIDA"
