@@ -162,7 +162,24 @@ export const LIMITES_TELA = Object.freeze({
   prompt: { prompt: 40, resposta: 25 },
   notificacao: { texto: 35, apps: ['Mensagens', 'E-mail', 'Agenda'] },
   cta: { frase: 8 },
+  // Fim de série: contador grande e itens marcados, em duas colunas.
+  checklist: { titulo: 6, item: 4, itensMin: 2, itensMax: 20 },
 });
+
+// Efeitos de cena (kit/efeitos): um por cena, sempre com o rosto cheio (faixa 0).
+export const EFEITOS_DE_CENA = Object.freeze({
+  // No máximo 1 efeito de cena a cada 5 s de vídeo: efeito demais vira vitrine e cansa.
+  segundosPorEfeito: 5,
+  // O "porque" liga o efeito ao trecho da fala; menos que isso não explica nada.
+  porqueMinPalavras: 4,
+});
+
+// Série numerada (cenas.json, "serie"): cabeçalho com número, nome do item e barra de progresso.
+export const SERIE = Object.freeze({ titulo: 5, item: 3, itensMin: 2, itensMax: 20 });
+
+// Recorte da pessoa (./estudio recortar): um WebM com transparência por cena que pede recorte.
+// crf: qualidade do VP9 com transparência (menor = melhor; 18 fica igual ao take a olho nu).
+export const RECORTE = Object.freeze({ pasta: 'recorte', crf: 18 });
 
 // Mídia preparada pelo comando "midia" (gravação de tela, vídeo de apoio, imagem).
 export const MIDIA = Object.freeze({

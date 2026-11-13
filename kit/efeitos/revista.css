@@ -1,0 +1,21 @@
+/* Capa de revista: papel atrás da pessoa, título enorme atrás da cabeça, chamadas na frente. */
+.ef-revista .rv-papel { position: absolute; inset: 0; background:
+  radial-gradient(80% 50% at 50% 30%, color-mix(in srgb, var(--papel) 70%, #ffffff), transparent 75%),
+  var(--papel); }
+.ef-revista .rv-titulo { position: absolute; left: 40px; right: 40px; text-align: center; white-space: nowrap;
+  font: var(--peso-titulo) 300px/0.86 var(--fonte-titulo); letter-spacing: -.05em; text-transform: uppercase; color: var(--principal); }
+.ef-revista .rv-titulo span { display: inline-block; }
+.ef-revista .rv-topo { position: absolute; left: 70px; right: 250px; top: 262px; display: flex; justify-content: space-between;
+  font: 800 24px/1 var(--fonte-leitura); letter-spacing: .14em; text-transform: uppercase; color: var(--tinta);
+  border-bottom: 3px solid var(--tinta); padding-bottom: 10px; }
+.ef-revista .rv-chamada { position: absolute; width: 330px; font: var(--peso-titulo) 52px/1.0 var(--fonte-titulo); letter-spacing: -.02em; color: var(--tinta);
+  text-transform: uppercase; text-shadow: 0 2px 0 color-mix(in srgb, var(--papel) 80%, #fff); }
+.ef-revista .rv-chamada small { display: block; font: 800 22px/1.2 var(--fonte-leitura); letter-spacing: .14em; color: var(--principal); margin-bottom: 8px; }
+.ef-revista .rv-esq { left: 70px; }
+.ef-revista .rv-dir { right: 250px; text-align: right; }
+.ef-revista .rv-selo { position: absolute; right: 250px; top: 300px; width: 190px; height: 190px; border-radius: 50%; display: grid; place-items: center; text-align: center;
+  background: var(--principal); color: var(--papel); font: var(--peso-titulo) 44px/0.95 var(--fonte-titulo); text-transform: uppercase; padding: 20px; transform: rotate(-12deg);
+  box-shadow: 0 14px 34px rgba(0,0,0,.28); }
+.ef-revista .rv-barras { position: absolute; left: 70px; top: 1330px; width: 150px; height: 96px; background: #fff; padding: 10px 12px 22px; box-shadow: 0 6px 16px rgba(0,0,0,.18);
+  background-image: repeating-linear-gradient(90deg, var(--tinta) 0 3px, transparent 3px 5px, var(--tinta) 5px 6px, transparent 6px 10px, var(--tinta) 10px 14px, transparent 14px 16px);
+  background-clip: content-box; }

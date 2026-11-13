@@ -1,11 +1,12 @@
 // Validação da tabela de cenas (cenas.json), com os limites da spec D.4 e D.6.
 import { contarPalavras, normalizar, contemTermo } from './texto.mjs';
-import { RITMO, LIMITES_TELA, TITULO_GANCHO, FAIXA, ROSTO_NENHUM_MAX_PCT, LEGENDA_ROSTO_Y } from './regras.mjs';
+import { RITMO, LIMITES_TELA, TITULO_GANCHO, FAIXA, ROSTO_NENHUM_MAX_PCT, LEGENDA_ROSTO_Y, EFEITOS_DE_CENA, SERIE } from './regras.mjs';
 import { aviso } from './saida.mjs';
 import { lerTelaDeArquivo } from './telas-livres.mjs';
+import { validarEfeito, fichaDoEfeito } from './efeitos.mjs';
 
-const CHAVES_TOPO = ['versao', 'duracao_alvo_s', 'direcao_de_arte', 'titulo_gancho', 'legenda_rosto_y', 'apps_reais', 'cenas', 'telas', 'cta'];
-const CHAVES_CENA = ['id', 'fala', 'inicio', 'fim', 'rosto', 'faixa', 'zoom', 'tela', 'enfase', 'sons', 'virada', 'reconstrucao'];
+const CHAVES_TOPO = ['versao', 'duracao_alvo_s', 'direcao_de_arte', 'titulo_gancho', 'legenda_rosto_y', 'apps_reais', 'serie', 'cenas', 'telas', 'cta'];
+const CHAVES_CENA = ['id', 'fala', 'inicio', 'fim', 'rosto', 'faixa', 'zoom', 'tela', 'enfase', 'sons', 'virada', 'reconstrucao', 'efeito'];
 const CHAVES_TELA = ['id', 'tipo', 'campos', 'entra', 'sai'];
 const CAMPOS = {
   card: ['texto'],
@@ -17,6 +18,7 @@ const CAMPOS = {
   prompt: ['prompt', 'resposta'],
   notificacao: ['app', 'texto'],
   cta: ['palavra', 'frase'],
+  checklist: ['titulo', 'itens'],
   // Desenhada pelo assistente: HTML, CSS e animação num arquivo do projeto.
   livre: ['arquivo', 'descricao', 'entrada'],
   // Gravação de tela, vídeo de apoio ou imagem, preparada pelo comando "midia".
@@ -65,6 +67,8 @@ export function palavrasDaTela(tela) {
   }
   if (TELAS_DE_ARQUIVO.includes(tela.tipo)) return 0;
   if (tela.tipo === 'numero') return contarPalavras(`${c.numero || ''} ${c.apoio || ''}`);
+  // O checklist é recapitulação: lê-se o contador e o título, não cada item.
+  if (tela.tipo === 'checklist') return contarPalavras(c.titulo || '') + 2;
   return contarPalavras(partes.join(' '));
 }
 
@@ -137,6 +141,13 @@ export function validarTela(tela, onde, { pastaProjeto = null } = {}) {
       if (!txt(c.palavra) || !c.palavra.trim() || contarPalavras(c.palavra) !== 1) problemas.push({ onde, problema: '"palavra" do pedido precisa ser uma palavra só' });
       limite(problemas, onde, 'frase', c.frase ?? '', L.frase);
       break;
+    case 'checklist': {
+      if (c.titulo !== undefined) limite(problemas, onde, 'titulo', c.titulo, L.titulo);
+      const itens = Array.isArray(c.itens) ? c.itens : [];
+      if (itens.length < L.itensMin || itens.length > L.itensMax) problemas.push({ onde, problema: `checklist precisa de ${L.itensMin} a ${L.itensMax} itens`, tipo: 'limite' });
+      itens.forEach((it, i) => limite(problemas, onde, `itens[${i}]`, it, L.item));
+      break;
+    }
     case 'livre':
     case 'midia': {
       if (!txt(c.descricao) || !c.descricao.trim()) problemas.push({ onde, problema: '"descricao" diz em uma frase o que a tela mostra (vai para o avaliador)' });
@@ -236,6 +247,7 @@ export function validarCenas(dados, { briefing = null, pastaProjeto = null } = {
       if (!EFEITOS.includes(s.efeito)) problemas.push({ onde, problema: `efeito de som desconhecido: "${s.efeito}"` });
       if (!num(s.em)) problemas.push({ onde, problema: `sons[${k}] precisa de "em" em segundos` });
     });
+    if (c.efeito !== undefined) problemas.push(...validarEfeito(c.efeito, c, `${onde}.efeito`, { pastaProjeto }));
     if (c.tela !== null && c.tela !== undefined && !idsTela.has(c.tela)) problemas.push({ onde, problema: `a tela "${c.tela}" não existe na lista de telas` });
     if (c.faixa === 100) {
       if (!c.tela) problemas.push({ onde, problema: 'faixa 100 só pode aparecer com uma tela' });
@@ -253,6 +265,8 @@ export function validarCenas(dados, { briefing = null, pastaProjeto = null } = {
     if (dur > RITMO.paradoMaxS && !temMovimento) avisos.push(aviso('TRECHO_PARADO', { cena: c.id, segundos: Math.round(dur * 10) / 10 }));
     anterior = c;
   });
+  validarEfeitosJuntos(cenas, telas, total, problemas, avisos);
+  validarSerie(dados.serie, total, problemas);
   if (dados.cta) {
     chavesDesconhecidas(dados.cta, ['palavra', 'em'], 'cta', problemas);
     if (!txt(dados.cta.palavra) || dados.cta.palavra.includes(' ') || !dados.cta.palavra.trim()) problemas.push({ onde: 'cta', problema: 'a palavra do pedido precisa ser uma palavra só, sem espaço' });
@@ -266,6 +280,65 @@ export function validarCenas(dados, { briefing = null, pastaProjeto = null } = {
     avisos.push(aviso('ROSTO_POUCO', { porcentagem: Math.round((semRosto / total) * 100) }));
   }
   return { problemas, avisos };
+}
+
+// Até quando o gancho escrito fica no ar: o fim da primeira cena, ou logo depois da primeira troca
+// de faixa, entre 1,5 e 3,5 s.
+export function fimDoGancho(cenas) {
+  const primeira = (cenas && cenas[0]) || {};
+  let fim = primeira.fim || 3;
+  const mudaFaixa = (cenas || []).find((c) => c.faixa !== primeira.faixa);
+  if (mudaFaixa) fim = Math.min(fim, mudaFaixa.inicio + 0.3);
+  return Math.max(1.5, Math.min(fim, 3.5));
+}
+
+// Série numerada: título e itens com o segundo em que cada um começa.
+function validarSerie(serie, duracaoTotal, problemas) {
+  if (serie === undefined) return;
+  const onde = 'serie';
+  if (!serie || typeof serie !== 'object' || Array.isArray(serie)) {
+    problemas.push({ onde, problema: '"serie" precisa ser um objeto {"titulo", "itens"}' });
+    return;
+  }
+  chavesDesconhecidas(serie, ['titulo', 'itens'], onde, problemas);
+  if (serie.titulo !== undefined) limite(problemas, onde, 'titulo', serie.titulo, SERIE.titulo);
+  const itens = Array.isArray(serie.itens) ? serie.itens : [];
+  if (itens.length < SERIE.itensMin || itens.length > SERIE.itensMax) problemas.push({ onde, problema: `a série precisa de ${SERIE.itensMin} a ${SERIE.itensMax} itens`, tipo: 'limite' });
+  let anterior = -Infinity;
+  itens.forEach((it, k) => {
+    const o = `serie.itens[${k}]`;
+    chavesDesconhecidas(it, ['nome', 'em'], o, problemas);
+    limite(problemas, o, 'nome', it && it.nome, SERIE.item);
+    if (!it || !num(it.em)) problemas.push({ onde: o, problema: 'item da série precisa de "em" em segundos' });
+    else {
+      if (it.em <= anterior) problemas.push({ onde: o, problema: 'os itens da série vão em ordem de tempo' });
+      if (duracaoTotal > 0 && it.em >= duracaoTotal) problemas.push({ onde: o, problema: 'o item começa depois do fim do vídeo' });
+      anterior = it.em;
+    }
+  });
+}
+
+// Regras que olham todos os efeitos juntos: quantidade, repetição, gancho, telas e rosto pequeno.
+function validarEfeitosJuntos(cenas, telas, total, problemas, avisos) {
+  const comEfeito = cenas.filter((c) => c.efeito && fichaDoEfeito(c.efeito.nome));
+  if (!comEfeito.length) return;
+  const maximo = Math.max(1, Math.floor(total / EFEITOS_DE_CENA.segundosPorEfeito));
+  if (comEfeito.length > maximo) {
+    problemas.push({ onde: 'cenas', problema: `${comEfeito.length} efeitos de cena; o máximo para ${Math.round(total)} s é ${maximo} (1 a cada ${EFEITOS_DE_CENA.segundosPorEfeito} s). Efeito demais vira vitrine` });
+  }
+  const fimGancho = fimDoGancho(cenas);
+  let anterior = null;
+  for (const c of cenas) {
+    const nome = c.efeito && fichaDoEfeito(c.efeito.nome) ? c.efeito.nome : null;
+    if (nome && anterior === nome) problemas.push({ onde: `cena ${c.id}`, problema: `o efeito "${nome}" repete o da cena anterior` });
+    anterior = nome;
+    if (!nome) continue;
+    if (num(c.inicio) && c.inicio < fimGancho - 0.01) problemas.push({ onde: `cena ${c.id}`, problema: `efeito de cena só depois do gancho (${fimGancho.toFixed(2)} s): o quadro 0 é do título` });
+    const ficha = fichaDoEfeito(nome);
+    if (ficha.rosto_pequeno) avisos.push(aviso('ROSTO_PEQUENO', { cena: c.id, efeito: nome }));
+    const tela = telas.find((t) => num(t.entra) && num(t.sai) && t.entra < c.fim && t.sai > c.inicio);
+    if (tela) avisos.push(aviso('EFEITO_COM_TELA', { cena: c.id, efeito: nome, tela: tela.id }));
+  }
 }
 
 export function faixaNoInstante(cenas, t) {

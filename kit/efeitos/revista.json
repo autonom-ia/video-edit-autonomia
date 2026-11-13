@@ -1,0 +1,20 @@
+{
+  "nome": "revista",
+  "titulo": "Capa de revista",
+  "funcao": "Apresentar quem fala como autoridade, ou anunciar um tema grande: o nome vira o título de uma capa de revista atrás da cabeça, com chamadas nas laterais. Bom ao abrir um bloco ou numa virada de assunto. Não use em fala técnica nem duas vezes no mesmo vídeo.",
+  "referencia": "Reel de referência 'Magazine Cover' (estudado, não copiado). Direção de arte própria nas cores da marca.",
+  "recorte": true,
+  "rosto_pequeno": false,
+  "duracao": { "min": 1.6, "max": 5 },
+  "campos": {
+    "titulo": { "tipo": "texto", "palavras": 2, "obrigatorio": false },
+    "topo_titulo": { "tipo": "numero", "min": 250, "max": 1000, "obrigatorio": false },
+    "chamadas": { "tipo": "lista", "itens": [1, 3], "palavras": 4, "obrigatorio": false },
+    "selo": { "tipo": "texto", "palavras": 2, "obrigatorio": false },
+    "edicao": { "tipo": "texto", "palavras": 5, "obrigatorio": false }
+  },
+  "sons": [
+    { "efeito": "impacto-medio", "em": 0.05, "volume": 0.8 },
+    { "efeito": "brilho", "em": 0.35, "volume": 0.5 }
+  ]
+}

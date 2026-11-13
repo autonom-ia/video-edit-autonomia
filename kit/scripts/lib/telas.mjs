@@ -48,6 +48,13 @@ function corpo(tela, marca) {
       return `<div class="notif"><span class="notif-icone">${ICONES[c.app] || ICONES.Mensagens}</span><span class="notif-corpo"><span class="notif-linha"><b>${e(c.app)}</b><small>agora</small></span><span class="notif-texto">${e(c.texto)}</span></span></div>`;
     case 'cta':
       return `<div class="cartao centro">${c.frase ? `<div class="cta-frase">${e(c.frase)}</div>` : ''}<div class="cta-palavra">${e(c.palavra)}</div>${marca && marca.arroba ? `<div class="cta-arroba">${e(marca.arroba)}</div>` : ''}</div>`;
+    case 'checklist': {
+      const itens = c.itens || [];
+      const numeros = itens.map((_, k) => `<span class="chk-n" id="${id}-n${k}">${k + 1}</span>`).join('');
+      return `<div class="cartao chk${itens.length > 8 ? ' chk-duas' : ''}"><div class="chk-topo"><span class="chk-conta"><span class="chk-n chk-zero" id="${id}-n">0</span>${numeros}</span><span class="chk-total">/ ${itens.length}</span>${c.titulo ? `<span class="chk-titulo">${e(c.titulo)}</span>` : ''}</div><ol class="chk-lista">${itens
+        .map((it, k) => `<li class="item" id="${id}-i${k}"><i class="chk-caixa"><svg viewBox="0 0 24 24" class="chk-v" id="${id}-v${k}"><path d="M5 12.5l4.2 4.2L19 7"/></svg></i><span>${e(it)}</span></li>`)
+        .join('')}</ol></div>`;
+    }
     default:
       return '';
   }
@@ -64,7 +71,7 @@ export function htmlDaTela(tela, { tamanho = 'm', solta = false, marca = null, f
 
 export function itensDaTela(tela) {
   const c = tela.campos || {};
-  if (tela.tipo === 'lista' || tela.tipo === 'passos') return (c.itens || []).length;
+  if (tela.tipo === 'lista' || tela.tipo === 'passos' || tela.tipo === 'checklist') return (c.itens || []).length;
   if (tela.tipo === 'conversa') return (c.mensagens || []).length;
   return 0;
 }

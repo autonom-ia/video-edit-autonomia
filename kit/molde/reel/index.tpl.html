@@ -11,11 +11,21 @@
   </head>
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-duration="{{DURACAO}}" data-width="1080" data-height="1920" data-fps="30">
+      <div id="ef-fundos">
+{{EF_FUNDO}}
+      </div>
       <div id="cam">
         <div id="zoom">
           <video id="take" class="clip" src="assets/take.mp4" data-start="0" data-duration="{{DURACAO}}" data-track-index="0" data-has-audio="true" playsinline></video>
+          <div id="ef-atras">
+{{EF_ATRAS}}
+          </div>
+{{RECORTES}}
           <div id="sombra-rosto"></div>
         </div>
+      </div>
+      <div id="ef-frentes">
+{{EF_FRENTE}}
       </div>
 
       <div id="faixa" class="clip" data-start="0" data-duration="{{DURACAO}}" data-track-index="1" data-track-kind="graphics" data-layout-allow-overflow data-layout-allow-overlap></div>
@@ -35,6 +45,8 @@
 
       {{CTA}}
 
+      {{SERIE}}
+
       <div id="capshost" class="clip" data-start="0" data-duration="{{DURACAO}}" data-track-index="6" data-track-kind="captions" data-layout-allow-overlap>
         <div id="caps">
 {{LEGENDAS}}
@@ -45,6 +57,7 @@
     </div>
 
     <script id="dados-reel" type="application/json">{{DADOS}}</script>
+{{EFEITOS}}
     <script src="animacao.js"></script>
   </body>
 </html>

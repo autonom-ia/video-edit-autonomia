@@ -79,10 +79,70 @@
       var passoR = Math.min(0.07, Math.max(0.02, (t.sai - inicioR - 0.5) / Math.max(1, rws.length)));
       rws.forEach(function (w, k) { tl.fromTo(w, { opacity: 0 }, { opacity: 1, duration: 0.12 }, inicioR + k * passoR); });
     }
+    if (t.tipo === 'checklist') {
+      // contador sobe junto com cada item marcado
+      tl.set(t.sel + ' .chk-n', { opacity: 0 }, 0);
+      tl.set(t.sel + ' .chk-zero', { opacity: 1 }, 0);
+      tl.set(t.sel + ' .chk-v', { scale: 0, transformOrigin: '50% 50%' }, 0);
+      t.itens.forEach(function (it, k) {
+        var tk = it.t + 0.12;
+        tl.fromTo(t.sel + ' #' + t.id + '-v' + k, { scale: 0 }, { scale: 1, duration: 0.22, ease: 'back.out(2.6)' }, tk);
+        tl.set(k === 0 ? t.sel + ' .chk-zero' : t.sel + ' #' + t.id + '-n' + (k - 1), { opacity: 0 }, tk);
+        tl.set(t.sel + ' #' + t.id + '-n' + k, { opacity: 1 }, tk);
+        tl.fromTo(t.sel + ' #' + t.id + '-n' + k, { scale: 1.25 }, { scale: 1, duration: 0.25, ease: 'expo.out' }, tk);
+      });
+    }
     if (t.tipo === 'numero') tl.fromTo(t.sel + ' .num-grande', { scale: 1.14 }, { scale: 1, duration: 0.5, ease: 'expo.out' }, t.entra);
     if (!t.entradaPropria) tl.to(t.sel, { opacity: 0, y: -24, scale: 0.97, filter: 'blur(6px)', duration: 0.35, ease: 'power2.in' }, t.sai);
     tl.set(t.sel, { visibility: 'hidden' }, t.sai + 0.36);
   });
+
+  // efeitos de cena (kit/efeitos): cada um registra window.__efeito['<nome>'] = function (tl, c) {...}
+  // e anima só dentro da própria cena. Ao fim da cena, o rosto volta ao normal.
+  var efeitos = window.__efeito || {};
+  if ((D.efeitos || []).length) {
+    tl.set('#cam', { scale: 1, rotation: 0, x: 0, clipPath: 'none', filter: 'none', borderRadius: 0 }, 0);
+    tl.set('#take', { scale: 1, x: 0, y: 0, filter: 'none' }, 0);
+  }
+  (D.efeitos || []).forEach(function (e) {
+    var camadas = ['#ef-' + e.id + '-fundo', '#ef-' + e.id + '-atras', '#ef-' + e.id + '-frente'];
+    tl.set(camadas, { visibility: 'hidden' }, 0);
+    tl.set(camadas, { visibility: 'visible' }, e.inicio);
+    if (e.recorte) tl.set(e.recorte, { opacity: 0 }, 0);
+    var anima = efeitos[e.nome];
+    if (typeof anima === 'function') {
+      anima(tl, {
+        id: e.id, nome: e.nome, inicio: e.inicio, fim: e.fim, golpe: e.golpe, dur: e.fim - e.inicio, p: e.p || {}, marca: e.marca || {},
+        fundo: document.querySelector(camadas[0]), atras: document.querySelector(camadas[1]), frente: document.querySelector(camadas[2]),
+        sel: { fundo: camadas[0], atras: camadas[1], frente: camadas[2], cam: '#cam', zoom: '#zoom', take: '#take', sombra: '#sombra-rosto' },
+        recorte: e.recorte, foto: e.foto, pessoa: e.pessoa || { topo: 620, esquerda: 300, direita: 780 },
+      });
+    }
+    tl.set(camadas, { visibility: 'hidden' }, e.fim);
+    tl.set('#cam', { scale: 1, rotation: 0, x: 0, clipPath: 'none', filter: 'none', borderRadius: 0 }, e.fim);
+    tl.set('#take', { scale: 1, x: 0, y: 0, filter: 'none' }, e.fim);
+    tl.set('#sombra-rosto', { opacity: 1 }, e.fim);
+    if (e.recorte) tl.set(e.recorte, { opacity: 0 }, e.fim);
+  });
+
+  // série numerada: o número e o nome trocam a cada item, a barra enche um segmento por vez
+  if (D.serie && existe('#serie')) {
+    var S = D.serie;
+    tl.set('#serie', { opacity: 0, visibility: 'hidden' }, 0);
+    tl.set('.serie-num, .serie-nome', { opacity: 0 }, 0);
+    tl.set('.serie-seg', { '--enche': 0 }, 0);
+    tl.set('#serie', { visibility: 'visible' }, S.itens[0].em);
+    tl.fromTo('#serie', { opacity: 0, y: -18 }, { opacity: 1, y: 0, duration: 0.35, ease: P }, S.itens[0].em);
+    S.itens.forEach(function (it, k) {
+      if (k > 0) {
+        tl.to(['#serie-n' + (k - 1), '#serie-i' + (k - 1)], { opacity: 0, y: -14, duration: 0.16, ease: 'power2.in' }, it.em - 0.08);
+      }
+      tl.fromTo(['#serie-n' + k, '#serie-i' + k], { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.26, ease: P }, it.em + 0.04);
+      tl.to('#serie-s' + k, { '--enche': 1, duration: 0.35, ease: 'power2.out' }, it.em);
+    });
+    tl.to('#serie', { opacity: 0, y: -18, duration: 0.3, ease: 'power2.in' }, Math.max(S.itens[S.itens.length - 1].em + 0.5, S.fim - 0.3));
+    tl.set('#serie', { visibility: 'hidden' }, S.fim + 0.05);
+  }
 
   // pedido no fim
   if (D.cta && existe('#cta-selo')) {
