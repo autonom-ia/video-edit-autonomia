@@ -1,6 +1,6 @@
 {
   "name": "estudio-de-reels",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "private": true,
   "type": "module",
   "description": "Estúdio de Reels: do vídeo gravado no celular ao Reel pronto, guiado por um assistente de IA.",

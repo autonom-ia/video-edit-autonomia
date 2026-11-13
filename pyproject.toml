@@ -1,6 +1,6 @@
 [project]
 name = "estudio-de-reels-fala"
-version = "1.1.1"
+version = "1.2.0"
 description = "Ouvido de texto do Estúdio de Reels: transcrição em português com tempo por palavra."
 requires-python = ">=3.12,<3.13"
 dependencies = [
