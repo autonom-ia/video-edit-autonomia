@@ -63,6 +63,7 @@ Você escreve `projetos/<P>/cenas.json` e, ao lado, `cenas.md` (a mesma coisa em
 | `versao` | Sempre `1`. |
 | `duracao_alvo_s` | Duração esperada em segundos (médio: 30 a 45; curto: até 30). |
 | `direcao_de_arte` | Lista de trechos `{"de", "ate", "domina", "porque"}`: o que domina a tela em cada trecho e por quê. Escreva antes das cenas. |
+| `legenda_rosto_y` | Opcional. Topo da legenda com o rosto cheio, de 250 a 1424 (padrão 1424). Olhe um quadro do take: abaixo da boca se couber; se o rosto estiver baixo e a boca passar de ~1350, acima da cabeça, sem cobrir o gancho, tela solta ou selo do pedido. Veja a regra 39 de `guias/regras-de-producao.md`. |
 | `titulo_gancho` | `{"texto", "publico"}`: o gancho escrito do quadro 0 (até 10 palavras) e, se quiser, quem é o público (até 12 palavras ou `""`). Obrigatório. |
 | `apps_reais` | Opcional. Lista `{"nome", "referencia", "porque", "citado_como"}` (o último, opcional: como o aluno chamou o app na fala) dos apps que o aluno usa de verdade e cita na fala. Libera o nome e as cores deles neste vídeo. Veja `guias/tela-livre.md`. |
 | `cenas` | A lista de cenas, em ordem. |
@@ -81,7 +82,7 @@ Você escreve `projetos/<P>/cenas.json` e, ao lado, `cenas.md` (a mesma coisa em
 | `zoom` | `abertura` (só na primeira cena), `punch` (na ênfase), `lento` (fala longa) ou `nenhum`. |
 | `tela` | O `id` de uma tela da lista `telas`, ou `null`. |
 | `enfase` | No máximo 1: `[{"palavra", "inicio"}]`. A palavra tem que estar na `fala`. O `inicio` é preenchido pelo `alinhar`. |
-| `sons` | `[{"efeito", "em", "volume"}]`. `efeito` é um dos 14 nomes abaixo. `volume` 1,4 nas viradas, 0,6 a 1,0 nos demais. |
+| `sons` | `[{"efeito", "em", "volume"}]`. `efeito` é um dos 14 nomes abaixo. `em` é o segundo em que o som bate. `volume` 1,4 nas viradas, 0,6 a 1,0 nos demais. Som da chegada de uma tela: ponha no `entra` dela (até 1 quadro depois); o estúdio leva para o quadro em que ela aparece (4 quadros antes). Som mais longe do `entra` fica onde você pôs. Whoosh, swish e zip demoram a crescer: o estúdio começa antes para o pico cair no `em`. |
 | `virada` | `true` quando a cena muda o rumo da fala. Leva golpe de som. |
 | `reconstrucao` | `true` quando a cena foi remontada a partir de outra tomada ou fora da ordem gravada. |
 
@@ -89,7 +90,7 @@ Efeitos: `impacto-forte`, `impacto-medio`, `whoosh-rapido`, `whoosh-medio`, `swi
 
 ### Cada tela
 
-`{"id": "t01", "tipo": "...", "campos": {...}, "entra": 2.3, "sai": 5.8}`. `sai` menos `entra` é no máximo 4 s. Toda troca de tela precisa de um som a até 0,15 s dela.
+`{"id": "t01", "tipo": "...", "campos": {...}, "entra": 2.3, "sai": 5.8}`. `sai` menos `entra` é no máximo 4 s. O estúdio põe um som na chegada de cada tela, no quadro em que ela aparece; o QA reprova se nenhum som bater a até 2 quadros dele.
 
 Palavras contadas por espaço:
 

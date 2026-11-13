@@ -23,6 +23,11 @@
         "type": "number",
         "minimum": 0
       },
+      "golpe": {
+        "type": "number",
+        "minimum": 0,
+        "description": "Segundo em que o som bate (pico). Nos sons de passagem, o inicio vem antes."
+      },
       "volume": {
         "type": "number",
         "minimum": 0,

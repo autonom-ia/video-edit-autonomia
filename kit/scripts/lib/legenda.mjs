@@ -40,7 +40,9 @@ export function tempoDosGrupos(grupos) {
   });
 }
 
-export function legendaY(faixa) {
+// rostoY: legenda_rosto_y do cenas.json, só para o rosto cheio (faixa 0).
+export function legendaY(faixa, rostoY) {
+  if (faixa === 0 && typeof rostoY === 'number') return rostoY;
   return FAIXA.legendaY[faixa] ?? FAIXA.legendaY[0];
 }
 

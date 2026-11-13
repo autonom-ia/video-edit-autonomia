@@ -1,10 +1,10 @@
 // Validação da tabela de cenas (cenas.json), com os limites da spec D.4 e D.6.
 import { contarPalavras, normalizar, contemTermo } from './texto.mjs';
-import { RITMO, LIMITES_TELA, TITULO_GANCHO, FAIXA, ROSTO_NENHUM_MAX_PCT } from './regras.mjs';
+import { RITMO, LIMITES_TELA, TITULO_GANCHO, FAIXA, ROSTO_NENHUM_MAX_PCT, LEGENDA_ROSTO_Y } from './regras.mjs';
 import { aviso } from './saida.mjs';
 import { lerTelaDeArquivo } from './telas-livres.mjs';
 
-const CHAVES_TOPO = ['versao', 'duracao_alvo_s', 'direcao_de_arte', 'titulo_gancho', 'apps_reais', 'cenas', 'telas', 'cta'];
+const CHAVES_TOPO = ['versao', 'duracao_alvo_s', 'direcao_de_arte', 'titulo_gancho', 'legenda_rosto_y', 'apps_reais', 'cenas', 'telas', 'cta'];
 const CHAVES_CENA = ['id', 'fala', 'inicio', 'fim', 'rosto', 'faixa', 'zoom', 'tela', 'enfase', 'sons', 'virada', 'reconstrucao'];
 const CHAVES_TELA = ['id', 'tipo', 'campos', 'entra', 'sai'];
 const CAMPOS = {
@@ -188,6 +188,10 @@ export function validarCenas(dados, { briefing = null, pastaProjeto = null } = {
   const avisos = [];
   if (!dados || typeof dados !== 'object') return { problemas: [{ onde: 'cenas.json', problema: 'arquivo vazio ou inválido' }], avisos };
   chavesDesconhecidas(dados, CHAVES_TOPO, 'cenas.json', problemas);
+  const ly = dados.legenda_rosto_y;
+  if (ly !== undefined && !(typeof ly === 'number' && ly >= LEGENDA_ROSTO_Y.min && ly <= LEGENDA_ROSTO_Y.max)) {
+    problemas.push({ onde: 'legenda_rosto_y', problema: `a altura da legenda com o rosto cheio vai de ${LEGENDA_ROSTO_Y.min} a ${LEGENDA_ROSTO_Y.max} (zona segura); veio ${JSON.stringify(ly)}` });
+  }
   const tg = dados.titulo_gancho;
   if (!tg || !txt(tg.texto) || !tg.texto.trim()) problemas.push({ onde: 'titulo_gancho', problema: 'falta o título do gancho (texto escrito no quadro 0)' });
   else {

@@ -30,7 +30,7 @@ export function legendaDeExemplo(texto, enfase = '') {
   return `<div class="cap"><span class="capin">${spans.join(' ')}</span></div>`;
 }
 
-export function paginaDeAmostra({ marca, faixa = 0, tela = '', legenda = '', gancho = '', cta = '', rotulo = '', fundo = '' }) {
+export function paginaDeAmostra({ marca, faixa = 0, tela = '', legenda = '', gancho = '', cta = '', rotulo = '', fundo = '', legendaRostoY }) {
   const molde = fs.readFileSync(path.join(KIT, 'molde', 'amostra.tpl.html'), 'utf8');
   const altura = FAIXA.alturaPx[faixa];
   const cor = corDaLegenda(faixa, marca);
@@ -46,7 +46,7 @@ export function paginaDeAmostra({ marca, faixa = 0, tela = '', legenda = '', gan
     GANCHO: gancho,
     TELA: tela,
     CTA: cta,
-    LEGENDA_Y: legendaY(faixa),
+    LEGENDA_Y: legendaY(faixa, legendaRostoY),
     LEGENDA_COR: cor.texto,
     LEGENDA_SOMBRA: cor.sombra,
     LEGENDA: legenda,

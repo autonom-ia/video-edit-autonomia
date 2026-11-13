@@ -114,7 +114,7 @@ Na tabela:
 - letra legível no celular: título a partir de uns 60 px, texto a partir de uns 34 px;
 - contraste: texto claro sobre fundo escuro ou o contrário, nunca meio-termo;
 - nada parado mais de 2 s;
-- legenda e rosto livres. A legenda fica por cima da tela: deixe espaço onde ela passa (veja `guias/camadas.md`, regra 39);
+- legenda e rosto livres. A legenda fica por cima da tela: deixe espaço onde ela passa (na tela cheia, de y 1424 a 1500; veja `guias/regras-de-producao.md`, regra 39);
 - som em cada movimento: o estúdio põe um som na entrada da tela. Para cada batida dentro dela (clique, digitação, notificação), ponha um efeito em `sons` da cena.
 
 ## Repertório (do método bolo de camadas, do Cauhi)
