@@ -19,6 +19,7 @@ Os textos integrais das licenças das peças versionadas, e das que exigem aviso
 | Nunito | Fonte de título e leitura (par de fontes) | SIL OFL 1.1 | Google Fonts, https://github.com/google/fonts/tree/main/ofl/nunito | `licencas/OFL-nunito.txt` e `kit/fontes/nunito/OFL.txt` |
 | bolo-de-camadas | Método das 5 camadas de edição, adaptado no molde de composição (`kit/molde/reel/`) e nos guias `guias/camadas.md` e `guias/tela-livre.md` (repertório de movimento); estilos por nicho copiados em `guias/nichos/`, só com um cabeçalho a mais | MIT, © 2026 Cauhi (cauhi.com) | https://github.com/pcauhi/bolo-de-camadas | `licencas/MIT-bolo-de-camadas.txt` |
 | instagram-agent-skill | Fórmulas de gancho e regras de naturalidade, traduzidas e adaptadas nos guias (`guias/ganchos.md`, `guias/naturalidade.md`) | MIT, © 2026 Jake Schincariol | https://github.com/Jakeschincariol/instagram-agent-skill | `licencas/MIT-instagram-agent-skill.txt` |
+| Registro de peças do HyperFrames | Tempo, curvas e técnica de várias peças (camcorder-hud, paper-collage-reveal, headline-slam, vfx-shatter, vfx-liquid-glass, camera-dolly-zoom e outras; a lista por efeito está no campo `referencia` de cada `kit/efeitos/*.json`), refeitos do zero em CSS, SVG e GSAP nos efeitos de cena. Nenhum arquivo do registro foi copiado | Apache 2.0 | https://github.com/heygen-com/hyperframes (registry) | `licencas/Apache-2.0-hyperframes.txt` |
 
 As fontes são variáveis (`*-Variable.ttf`). Foram copiadas sem modificação.
 

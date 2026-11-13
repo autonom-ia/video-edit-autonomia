@@ -133,3 +133,9 @@ Um efeito de cena muda o rosto inteiro por uma cena: capa de revista com o nome 
 3. **Poucos.** No máximo 1 a cada 5 s, nunca o mesmo em seguida, nunca no gancho, nunca com tela por cima. Muitas vezes o melhor vídeo tem dois ou três.
 4. **Recorte.** Efeito com `recorte: true` precisa da pessoa recortada do fundo. Rode `./estudio recortar --projeto <P>` depois de alinhar e antes de montar. Ele recorta só as cenas com esse efeito, leva alguns minutos (avise o aluno) e mede onde está a cabeça, para o efeito pôr o texto atrás dela. Mudou o tempo da cena ou o take: rode de novo (o `montar` reprova com `RECORTE_FALTANDO`). `--cenas c03,c05` recorta outras cenas para testar.
 5. **Confira nos quadros** (passo 7 da skill `fazer-video`): o texto atrás da cabeça está atrás mesmo? O rosto ficou livre? A saída é limpa antes da próxima cena?
+6. **Ao criar ou mudar um efeito**, estes limites do render do HyperFrames já custaram rodadas (testados na 0.9.20):
+   - `backdrop-filter` não enxerga o vídeo: o vidro só vê o fundo vazio da página. Para entortar o take, use filtro SVG (`feDisplacementMap`) no próprio `#cam`, como o efeito `vidro`.
+   - `clip-path` com canto arredondado no vídeo é ignorado. Para cartão de canto redondo, recorte uma `div` por fora do vídeo, ou use canto reto.
+   - Borda e sombra num elemento do tamanho do quadro inteiro, dentro do `#cam`, não aparecem. Desenhe a moldura numa camada separada (`c.fundo` ou `c.frente`).
+   - `inset(0 0 0 0)` é encurtado pelo navegador para `inset(0px)` e o tween de `clipPath` quebra. Escreva os quatro valores com unidade diferente de zero, ou anime de `inset(0.01px ...)`.
+   - O render pula para cada quadro (`seek`), sem rodar callback: só `tl.set`, `tl.to`, `tl.fromTo`. Nada de `onUpdate`, `Math.random`, `Date` nem `repeat: -1`.

@@ -2,7 +2,7 @@
   "nome": "vidro",
   "titulo": "Vidro líquido",
   "funcao": "Uma lente de vidro atravessa o quadro na frente do rosto, entortando e clareando a imagem. Use quando a fala fala de algo novo, bonito ou 'de outro nível' (um recurso, uma ferramenta, um resultado limpo); com 'texto', a lente leva até 3 palavras para cima da cabeça. Não use em fala séria ou triste, nem em cena em que o rosto precisa de atenção total.",
-  "referencia": "Reel de referência 'Liquid Glass' (estudado, não copiado) e a técnica de vidro com refração da peça vfx-liquid-glass do registro do HyperFrames (Apache-2.0), refeita sem Three.js: backdrop-filter com filtro SVG feDisplacementMap. Direção de arte própria nas cores da marca.",
+  "referencia": "Reel de referência 'Liquid Glass' (estudado, não copiado) e a técnica de vidro com refração da peça vfx-liquid-glass do registro do HyperFrames (Apache-2.0), refeita sem Three.js: filtro SVG feDisplacementMap aplicado no próprio take (o backdrop-filter não enxerga o vídeo no render). Direção de arte própria nas cores da marca.",
   "recorte": false,
   "rosto_pequeno": false,
   "duracao": { "min": 1.5, "max": 5 },

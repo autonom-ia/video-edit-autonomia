@@ -72,9 +72,9 @@
     var passoFrente = nf > 1 ? Math.min(165, (baseFrente - 330) / (nf - 1)) : 0;
     var yFrente = [];
     for (var f = 0; f < nf; f++) yFrente.push(baseFrente - passoFrente * (nf - 1 - f));
-    // linhas de trás: a primeira raspa o alto da cabeça (lê quase inteira, a cabeça morde o meio);
-    // as outras cruzam atrás da testa e dos olhos e aparecem só nas laterais
-    var yAtras = [T + 22, T + 200, T + 370];
+    // linhas de trás: a primeira fica logo acima da cabeça (o boné só morde a borda de baixo, a frase
+    // lê inteira); as outras cruzam atrás da testa e dos olhos e aparecem só nas laterais
+    var yAtras = [T - 12, T + 200, T + 370];
 
     // ordem de entrada intercalada: frente, trás, frente, trás...
     var ordem = [];
