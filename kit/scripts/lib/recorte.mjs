@@ -127,6 +127,14 @@ export function pessoaComTrilha(bytes, fps = 30) {
   return { topo, esquerda, direita, trilha, medida: true };
 }
 
+// A primeira cena com efeito (ou pedida em --cenas) que termina depois do fim do take, ou null.
+// Cortar ou medir além do fim desalinharia o recorte; o efeito mostraria o take parado.
+export function cenaForaDoTake(cenas, extras, duracaoDoTake) {
+  const pedidas = new Set(extras || []);
+  const c = (cenas || []).find((x) => (x.efeito || pedidas.has(x.id)) && noQuadro(x.fim) > duracaoDoTake + 0.5 / MASTER.fps);
+  return c ? { cena: c.id, fim: noQuadro(c.fim), duracao_do_take: Math.round(duracaoDoTake * 1000) / 1000 } : null;
+}
+
 export function arquivosDoTrecho(pastaRecorte, id) {
   return { video: path.join(pastaRecorte, `${id}.webm`), foto: path.join(pastaRecorte, `${id}.png`), fundo: path.join(pastaRecorte, `${id}-fundo.png`) };
 }

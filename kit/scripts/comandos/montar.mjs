@@ -13,7 +13,7 @@ import { conferirTabela } from './telas.mjs';
 import { lerTelaDeArquivo, pluginsCitados, tipoDeMidia } from '../lib/telas-livres.mjs';
 import { MIDIA, RITMO, RECORTE } from '../lib/regras.mjs';
 import { arquivosDoEfeito } from '../lib/efeitos.mjs';
-import { conferirRecortes, assinaturaDoTake, medidasDaPessoa } from '../lib/recorte.mjs';
+import { conferirRecortes, assinaturaDoTake, medidasDaPessoa, cenaForaDoTake } from '../lib/recorte.mjs';
 
 // Tela que passa do fim do vídeo, ou gravação mais curta que o tempo da tela (congelaria).
 export function conferirDuracoes(telas, duracaoVideo, duracaoDasMidias) {
@@ -133,6 +133,8 @@ export default async function montar({ opcoes }) {
   const transcricao = lerJson(exigirArquivo(projeto.arq('transcricao.json')));
   const take = exigirArquivo(projeto.arq('take.mp4'));
   const info = resumoDoVideo(await sondar(take));
+  const foraDoTake = cenaForaDoTake(dados.cenas, [], info.duracao);
+  if (foraDoTake) falha('EFEITO_FORA_DO_TAKE', foraDoTake);
   const gsap = path.join(RAIZ, 'node_modules', 'gsap', 'dist', 'gsap.min.js');
   if (!fs.existsSync(gsap)) falha('MONTADOR_FALTANDO', { detalhe: 'gsap' });
 

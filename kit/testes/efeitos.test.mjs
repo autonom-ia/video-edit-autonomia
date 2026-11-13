@@ -90,7 +90,7 @@ test('o conferente de escopo de CSS pega bloco aninhado, prefixo parecido e irm�
 });
 
 test('animação de efeito é determinística: sem callback, acaso, relógio ou rede', () => {
-  const proibidos = ['onUpdate', 'onComplete', 'onStart', 'onRepeat', 'onReverseComplete', '.call(', 'delayedCall', 'gsap.ticker', 'utils.random', 'Math.random', 'Date.now', 'new Date', 'performance.now', 'setTimeout', 'setInterval', 'requestAnimationFrame', 'repeat: -1', 'http://', 'https://', 'fetch(', 'XMLHttpRequest', 'WebSocket', 'import('];
+  const proibidos = ['onUpdate', 'onComplete', 'onStart', 'onRepeat', 'onReverseComplete', '.call(', 'delayedCall', 'gsap.ticker', 'random(', 'Date.now', 'new Date', 'performance.now', 'setTimeout', 'setInterval', 'requestAnimationFrame', 'repeat: -1', 'http://', 'https://', 'fetch(', 'XMLHttpRequest', 'WebSocket', 'import('];
   for (const nome of Object.keys(catalogo())) {
     const { js, css } = arquivosDoEfeito(nome);
     // o endereço do padrão SVG (xmlns) não é rede
@@ -274,6 +274,16 @@ test('trilha da pessoa: uma medida a cada 15 quadros, a primeira vira a principa
   // quadro vazio no meio fica fora da trilha
   const meio = pessoaComTrilha(Buffer.concat([quadro(70), Buffer.alloc(largura * altura, 0), quadro(90)]), 30);
   assert.deepEqual(meio.trilha.map((x) => x.t), [0, 1]);
+});
+
+test('cena com efeito que passa do fim do take é apontada; sem efeito, não', async () => {
+  const { cenaForaDoTake } = await import('../scripts/lib/recorte.mjs');
+  const d = longo();
+  d.cenas[4].efeito = revista();
+  assert.equal(cenaForaDoTake(d.cenas, [], 18).cena, 'c05');
+  assert.equal(cenaForaDoTake(d.cenas, [], 20), null);
+  assert.equal(cenaForaDoTake(longo().cenas, [], 18), null);
+  assert.equal(cenaForaDoTake(longo().cenas, ['c05'], 18).cena, 'c05');
 });
 
 test('id de cena: só letras sem acento, números, - e _; sem repetir', () => {

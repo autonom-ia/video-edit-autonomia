@@ -34,8 +34,9 @@ export async function sondar(arquivo) {
 export async function contarQuadros(arquivo) {
   const r = await rodar(ffprobeBin(), ['-v', 'error', '-count_frames', '-select_streams', 'v:0', '-show_entries', 'stream=nb_read_frames', '-of', 'csv=p=0', arquivo], { timeoutMs: 10 * 60 * 1000 });
   if (r.naoAchou) falha('FERRAMENTA_FALTANDO', { ferramenta: 'ffprobe' });
-  const n = Number(String(r.saida).trim());
-  if (r.codigo !== 0 || !Number.isInteger(n)) falha('VIDEO_NAO_LIDO', { detalhe: ultimasLinhas(r.erro, 4) });
+  const texto = String(r.saida).trim();
+  const n = Number(texto);
+  if (r.codigo !== 0 || !texto || !Number.isInteger(n)) falha('VIDEO_NAO_LIDO', { detalhe: ultimasLinhas(r.erro, 4) });
   return n;
 }
 

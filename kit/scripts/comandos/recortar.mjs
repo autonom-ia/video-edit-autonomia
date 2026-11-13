@@ -16,7 +16,7 @@ import { falha } from '../lib/saida.mjs';
 import { progresso, ultimasLinhas } from '../lib/executar.mjs';
 import { escreverJson } from '../lib/json.mjs';
 import { RECORTE, MASTER } from '../lib/regras.mjs';
-import { cenasSoParaMedir, trechosDoRecorte, conferirRecortes, assinaturaDoTake, arquivosDoTrecho, lerManifesto, MANIFESTO, AMOSTRA_ALFA, pessoaNoAlfa, pessoaComTrilha, PASSO_DA_TRILHA, PESSOA_PADRAO } from '../lib/recorte.mjs';
+import { cenaForaDoTake, cenasSoParaMedir, trechosDoRecorte, conferirRecortes, assinaturaDoTake, arquivosDoTrecho, lerManifesto, MANIFESTO, AMOSTRA_ALFA, pessoaNoAlfa, pessoaComTrilha, PASSO_DA_TRILHA, PESSOA_PADRAO } from '../lib/recorte.mjs';
 
 // A pessoa a cada PASSO_DA_TRILHA quadros (0,5 s), para efeitos que acompanham a cabeça.
 async function medirTrilha(video, temp, id) {
@@ -74,11 +74,12 @@ export default async function recortar({ opcoes }) {
   const desconhecidas = extras.filter((id) => !dados.cenas.some((c) => c.id === id));
   if (desconhecidas.length) falha('ARGUMENTO_INVALIDO', { argumento: '--cenas', valor: desconhecidas.join(','), opcoes: dados.cenas.map((c) => c.id) });
   const trechos = trechosDoRecorte(dados.cenas, extras);
-  if (!trechos.length) return { ok: true, resumo: 'Nenhuma cena pede recorte. Nada a fazer.', avisos, dados: { recortados: [], prontos: [] } };
+  // efeito sem recorte também precisa da cabeça medida: só não há nada a fazer sem cena com efeito
+  if (!trechos.length && !cenasSoParaMedir(dados.cenas, trechos).length) return { ok: true, resumo: 'Nenhuma cena tem efeito. Nada a fazer.', avisos, dados: { recortados: [], prontos: [] } };
   const duracaoDoTake = Number((await sondar(take)).format?.duration);
   if (!Number.isFinite(duracaoDoTake)) falha('VIDEO_NAO_LIDO', { detalhe: 'o take não informa a duração' });
-  const fora = trechos.find((t) => t.fim > duracaoDoTake + 0.5 / MASTER.fps);
-  if (fora) falha('RECORTE_FORA_DO_TAKE', { cena: fora.id, fim: fora.fim, duracao_do_take: Math.round(duracaoDoTake * 1000) / 1000 });
+  const fora = cenaForaDoTake(dados.cenas, extras, duracaoDoTake);
+  if (fora) falha('EFEITO_FORA_DO_TAKE', fora);
   fs.mkdirSync(pasta, { recursive: true });
   const assinatura = assinaturaDoTake(take);
   const { faltando } = conferirRecortes(projeto.pasta, dados.cenas, assinatura);

@@ -103,6 +103,10 @@
     "texto": "Um efeito de cena do kit está sem o arquivo de animação.",
     "acao": "Veja dados.efeito. Reinstale o estúdio pelo link da versão mais nova."
   },
+  "EFEITO_FORA_DO_TAKE": {
+    "texto": "Uma cena com efeito termina depois do fim do vídeo gravado.",
+    "acao": "Veja dados.cena. Corrija o \"fim\" da cena no cenas.json (rode alinhar de novo) e recorte outra vez."
+  },
   "EFEITO_SEM_ENFASE": {
     "texto": "Um efeito de cena bate na palavra de ênfase, mas a cena não tem ênfase: o golpe vai cair no começo da cena.",
     "acao": "Veja dados.cena. Ponha em \"enfase\" a palavra forte daquele trecho (rode alinhar de novo) ou troque o efeito."
@@ -286,10 +290,6 @@
   "RECORTE_FALTANDO": {
     "texto": "Falta o recorte da pessoa (ou ele está velho) para um efeito que precisa dele.",
     "acao": "Rode ./estudio recortar --projeto <P> avisando que leva alguns minutos. Depois monte de novo."
-  },
-  "RECORTE_FORA_DO_TAKE": {
-    "texto": "Uma cena com efeito termina depois do fim do vídeo gravado.",
-    "acao": "Veja dados.cena. Corrija o \"fim\" da cena no cenas.json (rode alinhar de novo) e recorte outra vez."
   },
   "REDE_FALHOU": {
     "texto": "Não consegui falar com a internet.",
