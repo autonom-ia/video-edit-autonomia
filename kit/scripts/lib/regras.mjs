@@ -56,6 +56,9 @@ export const LEGENDA_ROSTO_Y = Object.freeze({ min: 250, max: 1424 });
 // Medida do rosto (YuNet, kit/py/rosto.py). As proporções são da caixa do rosto, que vai da
 // testa ao queixo: o lábio de baixo fica ~0,12 da altura abaixo dos cantos da boca e o alto da
 // cabeça (cabelo, boné) ~0,3 acima da caixa. Faixa proibida da legenda: dos olhos ao lábio.
+// Zoom: a boca é conferida no maior zoom do vídeo (abertura, 1,26), porque legenda na boca é
+// defeito; o alto da cabeça, no punch (1,16), porque na abertura (0,8 s, durante o gancho) a
+// legenda encostar no cabelo é menos ruim que subir até o gancho escrito.
 export const ROSTO = Object.freeze({
   intervaloS: 0.5,
   presencaMinima: 0.6,
@@ -64,7 +67,8 @@ export const ROSTO = Object.freeze({
   testaAcimaDosOlhos: 0.12,
   alturaLegendaPx: 75,
   folgaLegendaPx: 24,
-  zoomPico: 1.16,
+  zoomBoca: Math.max(ZOOM.abertura.de, ZOOM.punch.pico),
+  zoomCabeca: ZOOM.punch.pico,
 });
 
 export const LEGENDA = Object.freeze({

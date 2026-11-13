@@ -45,20 +45,20 @@ export function resumoDoRosto(medida, regras = ROSTO) {
 
 const medidaBoa = (resumo, regras) => Boolean(resumo?.centro) && resumo.presenca >= regras.presencaMinima;
 
-// Onde um ponto do take vai parar no pico do zoom em volta do centro do rosto.
-const noZoom = (y, resumo, regras) => resumo.centro.y + (y - resumo.centro.y) * regras.zoomPico;
+// Onde um ponto do take vai parar com o zoom em volta do centro do rosto.
+const noZoom = (y, resumo, zoom) => resumo.centro.y + (y - resumo.centro.y) * zoom;
 
 // Faixa da tela (y de cima e de baixo) que a legenda não pode cobrir: dos olhos ao lábio.
 export function faixaDoRosto(resumo, regras = ROSTO) {
   if (!medidaBoa(resumo, regras)) return null;
-  return { de: Math.round(noZoom(resumo.olhos_y, resumo, regras)), ate: Math.round(noZoom(resumo.labio_y, resumo, regras)) };
+  return { de: Math.round(noZoom(resumo.olhos_y, resumo, regras.zoomBoca)), ate: Math.round(noZoom(resumo.labio_y, resumo, regras.zoomBoca)) };
 }
 
 export function legendaSugerida(resumo, regras = ROSTO) {
   if (!medidaBoa(resumo, regras)) return null;
-  const abaixo = Math.round(noZoom(resumo.labio_y, resumo, regras) + regras.folgaLegendaPx);
+  const abaixo = Math.round(noZoom(resumo.labio_y, resumo, regras.zoomBoca) + regras.folgaLegendaPx);
   if (abaixo <= LEGENDA_ROSTO_Y.max) return Math.max(LEGENDA_ROSTO_Y.min, abaixo);
-  const acima = Math.round(noZoom(resumo.cabeca_y, resumo, regras) - regras.alturaLegendaPx - regras.folgaLegendaPx);
+  const acima = Math.round(noZoom(resumo.cabeca_y, resumo, regras.zoomCabeca) - regras.alturaLegendaPx - regras.folgaLegendaPx);
   return acima >= LEGENDA_ROSTO_Y.min ? acima : null;
 }
 
@@ -69,6 +69,9 @@ export function conferirLegendaNoRosto(legendaY, resumo, regras = ROSTO) {
   const cobre = legendaY < faixa.ate && faixa.de < legendaY + regras.alturaLegendaPx;
   return cobre ? { legenda_rosto_y: legendaY, rosto_de: faixa.de, rosto_ate: faixa.ate, sugerida: legendaSugerida(resumo, regras) } : null;
 }
+
+// Medida boa (rosto em boa parte do vídeo)? Sem ela o kit segue sem sugestão nem conferência.
+export const rostoMedido = (resumo, regras = ROSTO) => medidaBoa(resumo, regras);
 
 export function origemDoZoom(resumo, regras = ROSTO) {
   if (!medidaBoa(resumo, regras)) return null;

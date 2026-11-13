@@ -88,6 +88,10 @@
           }
         }
       }
+    },
+    "relogio": {
+      "description": "\"arquivo\": tempos no relógio do arquivo (transcrição feita do bruto/som.wav). Só com ele o ./estudio cortar usa o mapa da fala.",
+      "type": "string"
     }
   }
 }

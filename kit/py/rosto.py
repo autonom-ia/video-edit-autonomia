@@ -39,10 +39,11 @@ def preparar_quadro(bgr):
 
 
 def decodificar(saidas):
-    """Caixas, pontos e confiança de cada posição da grade, como o FaceDetectorYN do OpenCV."""
+    """Caixas, pontos e confiança de cada posição da grade, como o FaceDetectorYN do OpenCV.
+    "saidas" vem por nome (cls_8, obj_8, bbox_8, kps_8...), não pela ordem no arquivo."""
     caixas, pontos, notas = [], [], []
-    for k, passo in enumerate(PASSOS):
-        cls, obj, bbox, kps = (saidas[k][0], saidas[3 + k][0], saidas[6 + k][0], saidas[9 + k][0])
+    for passo in PASSOS:
+        cls, obj, bbox, kps = (saidas[f"{nome}_{passo}"][0] for nome in ("cls", "obj", "bbox", "kps"))
         colunas = LADO // passo
         idx = np.arange(cls.shape[0])
         col, lin = idx % colunas, idx // colunas
@@ -80,7 +81,8 @@ def sem_repetidos(caixas, notas):
 
 def maior_rosto(sessao, bgr, escala):
     """O maior rosto do quadro encolhido, com as posições de volta em pixels do vídeo."""
-    saidas = sessao.run(None, {"input": preparar_quadro(bgr)})
+    nomes = [o.name for o in sessao.get_outputs()]
+    saidas = dict(zip(nomes, sessao.run(nomes, {"input": preparar_quadro(bgr)})))
     caixas, pontos, notas = decodificar(saidas)
     boas = notas >= CONFIANCA_MINIMA
     if not boas.any():

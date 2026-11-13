@@ -2,7 +2,8 @@
 // (bruto de 42 s, 23 pedaços de fala medidos pelo Silero VAD).
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { ajustarTrechos } from '../scripts/lib/ajuste-de-corte.mjs';
+import { ajustarTrechos, mapaComPalavras } from '../scripts/lib/ajuste-de-corte.mjs';
+import { sobrepostos } from '../scripts/comandos/cortar.mjs';
 import { CORTE_FALA } from '../scripts/lib/regras.mjs';
 
 const FALA_REAL = [
@@ -103,4 +104,25 @@ test('o vídeo real inteiro passa sem reprovação e sem sobrepor trechos', () =
   const respiros = r.avisos.filter((a) => a.codigo === 'RESPIRO_LONGO').map((a) => [a.dados.trecho, a.dados.em_s]);
   assert.deepEqual(respiros, [[1, 7.808], [1, 9.088], [7, 26.016], [8, 30.336]]);
   assert.deepEqual([...new Set(codigos(r))], ['RESPIRO_LONGO']);
+});
+
+test('palavra que o detector perdeu não é apagada ao aparar o silêncio (achado do revisor)', () => {
+  // "não" de 10,00 a 10,40 s fora do mapa; o trecho começa em 10,20 e a próxima fala é em 10,90.
+  const fala = [{ inicio: 10.9, fim: 12 }];
+  const palavras = [{ texto: 'não', inicio: 10.0, fim: 10.4 }, { texto: 'sei', inicio: 10.9, fim: 11.3 }];
+  const r = ajustarTrechos([{ inicio: 10.2, fim: 12.2 }], transcricao(fala, palavras), DURACAO);
+  // A palavra entra no mapa; o início caiu perto do começo dela e é recuado até antes dela.
+  assert.ok(perto(r.trechos[0].inicio, 10.0 - CORTE_FALA.folgaAntesS), `início ${r.trechos[0].inicio}`);
+  assert.deepEqual(r.problemas, []);
+});
+
+test('mapaComPalavras só acrescenta palavra que não encosta em fala', () => {
+  const fala = [{ inicio: 1, fim: 2 }];
+  const palavras = [{ texto: 'a', inicio: 1.5, fim: 1.8 }, { texto: 'b', inicio: 3, fim: 3.2 }];
+  assert.deepEqual(mapaComPalavras(fala, palavras), [{ inicio: 1, fim: 2 }, { inicio: 3, fim: 3.2 }]);
+});
+
+test('trechos com pedaço em comum reprovam; ordem trocada sem pedaço em comum passa', () => {
+  assert.equal(sobrepostos([{ inicio: 10, fim: 12 }, { inicio: 11, fim: 14 }]).length, 1);
+  assert.deepEqual(sobrepostos([{ inicio: 20, fim: 22 }, { inicio: 1, fim: 5 }, { inicio: 5, fim: 8 }]), []);
 });

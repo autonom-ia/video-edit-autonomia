@@ -36,6 +36,13 @@ test('a medida usa o pior caso: o lábio mais baixo e a cabeça mais alta do ví
   assert.equal(resumo.cabeca_y, soAlto.cabeca_y);
 });
 
+test('a boca é conferida no maior zoom (abertura 1,26), não só no punch', () => {
+  const resumo = resumoDoRosto(medida([subir(ROSTO_BAIXO, 700)]));
+  const faixa = faixaDoRosto(resumo);
+  const labioNoPunch = Math.round(resumo.centro.y + (resumo.labio_y - resumo.centro.y) * 1.16);
+  assert.ok(faixa.ate > labioNoPunch, `faixa até ${faixa.ate}, punch ${labioNoPunch}`);
+});
+
 test('zoom cresce do centro do rosto', () => {
   const resumo = resumoDoRosto(medida([ROSTO_BAIXO]));
   assert.deepEqual(origemDoZoom(resumo), { x: 528, y: 1395 });

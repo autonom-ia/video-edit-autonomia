@@ -12,7 +12,7 @@ import { progresso } from '../lib/executar.mjs';
 import { ajustarTrechos } from '../lib/ajuste-de-corte.mjs';
 import { medirRosto, resumoDoRosto, cortePeloRosto, medirRostoDoTake } from '../lib/rosto.mjs';
 import { vozLimpa } from '../lib/voz-limpa.mjs';
-import { somDoBruto } from '../lib/som-do-bruto.mjs';
+import { somDoBruto, RELOGIO_DO_ARQUIVO } from '../lib/som-do-bruto.mjs';
 
 const r3 = (n) => arred(n, 3);
 
@@ -45,6 +45,18 @@ export function conferirTrechos(dados, duracao) {
     if (t.inicio < 0 || t.fim > duracao + 0.05) problemas.push({ onde: `trechos[${i}]`, problema: `fora do vídeo (que tem ${duracao} s)` });
   });
   if (!(dados.trechos || []).length) problemas.push({ onde: 'trechos', problema: 'nenhum trecho escolhido' });
+  return [...problemas, ...sobrepostos(dados.trechos || [])];
+}
+
+// Dois trechos com o mesmo pedaço do bruto repetem a fala no take. A ordem da lista pode ser
+// qualquer uma (o gancho pode vir do fim); o que não pode é pedaço em comum.
+export function sobrepostos(trechos) {
+  const problemas = [];
+  trechos.forEach((a, i) => {
+    trechos.slice(i + 1).forEach((b, k) => {
+      if (a.inicio < b.fim && b.inicio < a.fim) problemas.push({ onde: `trechos[${i}] e trechos[${i + 1 + k}]`, problema: 'pegam o mesmo pedaço do vídeo; a fala sairia repetida' });
+    });
+  });
   return problemas;
 }
 
@@ -55,6 +67,7 @@ function mapaDaFala(projeto, duracao) {
   const arq = projeto.arq('transcricao-bruta.json');
   if (!fs.existsSync(arq)) return { transcricao: null, motivo: 'sem transcricao-bruta.json' };
   const transcricao = lerJson(arq);
+  if (transcricao.relogio !== RELOGIO_DO_ARQUIVO) return { transcricao: null, motivo: 'transcrição antiga, de antes do mapa da fala' };
   if (Math.abs((transcricao.duracao_s ?? 0) - duracao) > TOLERANCIA_DURACAO_S) return { transcricao: null, motivo: 'transcrição de outro vídeo' };
   return { transcricao, motivo: null };
 }
@@ -92,7 +105,7 @@ export default async function cortar({ opcoes }) {
   fs.mkdirSync(projeto.arq('corte'), { recursive: true });
   const cortarX = await corteDoDeitado(projeto, bruto, info, ajuste.trechos, avisos);
   progresso('Limpando o ruído de fundo da sua voz...');
-  const limpa = await vozLimpa(projeto.arq('corte'), await somDoBruto(projeto, bruto, origem), origem);
+  const limpa = await vozLimpa(projeto.arq('corte'), await somDoBruto(projeto, bruto));
   if (limpa.erro) avisos.push(aviso('VOZ_SEM_LIMPEZA', { detalhe: limpa.erro }));
   const grafo = grafoDeCorte(ajuste.trechos, { hdr: info.hdr, cortarX, vozLimpa: Boolean(limpa.arquivo) });
   const arqGrafo = projeto.arq('corte', 'grafo.txt');

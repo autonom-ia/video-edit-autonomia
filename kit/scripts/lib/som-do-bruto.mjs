@@ -7,20 +7,27 @@ import { ffmpegOk } from './ffmpeg.mjs';
 import { lerJson } from './json.mjs';
 
 const TAXA = 48000;
+// Marca gravada na transcrição feita deste WAV (o cortar só confia no mapa da fala com ela).
+export const RELOGIO_DO_ARQUIVO = 'arquivo';
 
-const fichaDoBruto = (origem) => ({ arquivo: origem.arquivo, tamanho: origem.tamanho, modificado: origem.modificado });
-const mesma = (a, b) => Boolean(a && b) && Object.keys(b).every((k) => a[k] === b[k]);
+// A ficha vem do próprio arquivo no disco: bruto trocado no mesmo caminho refaz o som.
+export function fichaDoArquivo(caminho) {
+  const st = fs.statSync(caminho);
+  return { caminho, tamanho: st.size, modificado_ms: Math.round(st.mtimeMs) };
+}
+
+export const mesmaFicha = (a, b) => Boolean(a && b) && Object.keys(b).every((k) => JSON.stringify(a[k]) === JSON.stringify(b[k]));
 
 // "first_pts=0" completa com silêncio o começo que falta: a amostra 0 é o instante 0 do arquivo.
 export function argumentosDoSom(bruto, saida) {
   return ['-y', '-i', bruto, '-map', '0:a:0', '-af', 'aresample=async=1:first_pts=0', '-ac', '1', '-ar', String(TAXA), '-c:a', 'pcm_s16le', saida];
 }
 
-export async function somDoBruto(projeto, bruto, origem) {
+export async function somDoBruto(projeto, bruto) {
   const wav = projeto.arq('bruto', 'som.wav');
   const arqFicha = projeto.arq('bruto', 'som.json');
-  const ficha = fichaDoBruto(origem);
-  if (fs.existsSync(wav) && mesma(lerJson(arqFicha, null), ficha)) return wav;
+  const ficha = fichaDoArquivo(bruto);
+  if (fs.existsSync(wav) && mesmaFicha(lerJson(arqFicha, null), ficha)) return wav;
   const temporario = projeto.arq('bruto', 'som.parcial.wav');
   await ffmpegOk(argumentosDoSom(bruto, temporario), 'SOM_DO_BRUTO_FALHOU');
   fs.renameSync(temporario, wav);

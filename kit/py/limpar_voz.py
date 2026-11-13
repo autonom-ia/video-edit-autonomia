@@ -28,15 +28,34 @@ TAXA = 48000
 JANELA = 960  # 20 ms a 48 kHz (o modelo recebe 481 faixas de frequência)
 PASSO = JANELA // 2
 ATRASO_QUADROS = 4  # a saída do modelo vem ~4 passos atrasada em relação à entrada
+BLOCO_QUADROS = 2048  # STFT em blocos: bruto de 10 min não estoura a memória
 
 
-def caminho_do_modelo(so_local: bool) -> Path:
+class ModeloNaoConfere(RuntimeError):
+    pass
+
+
+def baixar(so_local: bool, de_novo: bool = False) -> Path:
     from huggingface_hub import hf_hub_download
 
-    caminho = Path(hf_hub_download(REPO, ARQUIVO, revision=REVISAO, local_files_only=so_local))
+    caminho = Path(hf_hub_download(REPO, ARQUIVO, revision=REVISAO, local_files_only=so_local, force_download=de_novo))
     if hashlib.sha256(caminho.read_bytes()).hexdigest() != SHA256:
-        raise RuntimeError("o modelo de limpeza de voz baixado não confere (sha256)")
+        raise ModeloNaoConfere("o modelo de limpeza de voz não confere (sha256)")
     return caminho
+
+
+def caminho_do_modelo() -> Path:
+    """Modelo do cache; sem ele (instalação antiga), baixa; corrompido, baixa de novo."""
+    from huggingface_hub.errors import LocalEntryNotFoundError
+
+    try:
+        return baixar(so_local=True)
+    except LocalEntryNotFoundError:
+        print("modelo de limpeza fora do cache: baixando", file=sys.stderr)
+        return baixar(so_local=False)
+    except ModeloNaoConfere:
+        print("modelo de limpeza corrompido no cache: baixando de novo", file=sys.stderr)
+        return baixar(so_local=False, de_novo=True)
 
 
 def janela_vorbis(n: int) -> np.ndarray:
@@ -49,8 +68,13 @@ def espectro(x: np.ndarray, janela: np.ndarray) -> np.ndarray:
     """STFT centrada (borda refletida), como a do librosa: (quadros, faixas) complexo."""
     x = np.pad(x, JANELA // 2, mode="reflect")
     quadros = 1 + (len(x) - JANELA) // PASSO
-    idx = np.arange(JANELA)[None, :] + PASSO * np.arange(quadros)[:, None]
-    return np.fft.rfft(x[idx] * janela, axis=1).astype(np.complex64)
+    saida = np.empty((quadros, JANELA // 2 + 1), dtype=np.complex64)
+    base = np.arange(JANELA)[None, :]
+    for de in range(0, quadros, BLOCO_QUADROS):
+        ate = min(quadros, de + BLOCO_QUADROS)
+        idx = base + PASSO * np.arange(de, ate)[:, None]
+        saida[de:ate] = np.fft.rfft(x[idx] * janela, axis=1)
+    return saida
 
 
 def onda(spec: np.ndarray, janela: np.ndarray) -> np.ndarray:
@@ -86,7 +110,8 @@ def limpar(audio: np.ndarray, modelo: Path, limite_db: float) -> np.ndarray:
     sessao, estado = sessao_e_estado(modelo)
     nomes_in = [i.name for i in sessao.get_inputs()]
     nomes_out = [o.name for o in sessao.get_outputs()]
-    spec = espectro(np.pad(audio, (0, JANELA)), janela)
+    # 3 janelas de folga no fim: o modelo atrasa 2 janelas, e sem folga os últimos 20 ms sairiam zerados.
+    spec = espectro(np.pad(audio, (0, JANELA * 3)), janela)
     ri = np.stack([spec.real, spec.imag], axis=-1)[None].astype(np.float32)  # (1, quadros, faixas, 2)
     saidas = []
     for t in range(ri.shape[1]):
@@ -126,7 +151,7 @@ def main() -> int:
     p.add_argument("--limite-db", type=float, default=24.0)
     a = p.parse_args()
     if a.preparar:
-        caminho_do_modelo(so_local=False)
+        caminho_do_modelo()
         print(json.dumps({"ok": True}))
         return 0
     if not a.entrada or not a.saida:
@@ -137,12 +162,7 @@ def main() -> int:
     from faster_whisper.audio import decode_audio
 
     audio = decode_audio(str(a.entrada), sampling_rate=TAXA)
-    try:
-        modelo = caminho_do_modelo(so_local=True)
-    except Exception:
-        # Instalação antiga, sem o modelo: baixa agora (precisa de internet uma vez).
-        modelo = caminho_do_modelo(so_local=False)
-    limpo = limpar(audio, modelo, a.limite_db)
+    limpo = limpar(audio, caminho_do_modelo(), a.limite_db)
     a.saida.parent.mkdir(parents=True, exist_ok=True)
     gravar_wav(a.saida, limpo)
     print(json.dumps({"ok": True, "duracao_s": round(len(limpo) / TAXA, 3)}))

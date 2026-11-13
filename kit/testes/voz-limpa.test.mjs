@@ -3,7 +3,10 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { grafoDeCorte } from '../scripts/comandos/cortar.mjs';
-import { argumentosDoSom } from '../scripts/lib/som-do-bruto.mjs';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import { argumentosDoSom, mesmaFicha } from '../scripts/lib/som-do-bruto.mjs';
 import { fichaDaLimpeza } from '../scripts/lib/voz-limpa.mjs';
 import { LIMPEZA } from '../scripts/lib/regras.mjs';
 
@@ -28,10 +31,16 @@ test('o som do bruto sai no relógio do arquivo (começo completado com silênci
   assert.deepEqual(args.slice(args.indexOf('-ac'), args.indexOf('-ac') + 4), ['-ac', '1', '-ar', '48000']);
 });
 
-test('a voz limpa é refeita quando muda o bruto ou o limite', () => {
-  const origem = { arquivo: '2-videos-brutos/a.MOV', tamanho: 10, modificado: '2026-11-13T10:00:00Z', largura: 1080 };
-  const ficha = fichaDaLimpeza(origem);
-  assert.deepEqual(ficha, { arquivo: origem.arquivo, tamanho: 10, modificado: origem.modificado, limite_db: LIMPEZA.limiteDb });
-  assert.notDeepEqual(fichaDaLimpeza({ ...origem, tamanho: 11 }), ficha);
-  assert.notDeepEqual(fichaDaLimpeza(origem, 12), ficha);
+test('a voz limpa é refeita quando muda o som, o limite ou a versão da limpeza', () => {
+  const pasta = fs.mkdtempSync(path.join(os.tmpdir(), 'voz-limpa-'));
+  const som = path.join(pasta, 'som.wav');
+  fs.writeFileSync(som, 'abc');
+  const ficha = fichaDaLimpeza(som);
+  assert.equal(ficha.limite_db, LIMPEZA.limiteDb);
+  assert.equal(ficha.script.length, 64, 'hash do limpar_voz.py');
+  assert.ok(mesmaFicha(ficha, fichaDaLimpeza(som)));
+  assert.ok(!mesmaFicha(ficha, fichaDaLimpeza(som, 12)), 'outro limite');
+  fs.writeFileSync(som, 'abcd');
+  assert.ok(!mesmaFicha(ficha, fichaDaLimpeza(som)), 'outro som no mesmo caminho');
+  fs.rmSync(pasta, { recursive: true });
 });
