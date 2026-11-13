@@ -2,7 +2,8 @@
    Determinístico: só tweens e sets na linha do tempo, nada de callback. */
 (function () {
   window.__efeito = window.__efeito || {};
-  var esc = function (t) { var d = document.createElement('div'); d.textContent = t == null ? '' : String(t); return d.innerHTML; };
+  // escapa para texto e para atributo (aspas também): o que o aluno escreve nunca vira HTML
+  var esc = function (t) { var d = document.createElement('div'); d.textContent = t == null ? '' : String(t); return d.innerHTML.split('"').join('&quot;').split("'").join('&#39;'); };
 
   var ALTURA = 116, VAO = 22;   // altura de cada pílula e o espaço entre elas
   // Tempos fixos, iguais aos da ficha: o pop de cada selo ("em": 0.14, "repetir" com passo 0.42)

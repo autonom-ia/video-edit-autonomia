@@ -2,7 +2,8 @@
    Determinístico: só tweens e sets na linha do tempo, números fixos, nada de callback. */
 (function () {
   window.__efeito = window.__efeito || {};
-  var esc = function (t) { var d = document.createElement('div'); d.textContent = t == null ? '' : String(t); return d.innerHTML; };
+  // escapa para texto e para atributo (aspas também): o que o aluno escreve nunca vira HTML
+  var esc = function (t) { var d = document.createElement('div'); d.textContent = t == null ? '' : String(t); return d.innerHTML.split('"').join('&quot;').split("'").join('&#39;'); };
 
   // prédios do fundo e da frente: [x, largura, topo], listas fixas (largura total 1200 para dar folga ao pan)
   var FUNDO = [[-20, 120, 930], [90, 90, 1010], [170, 140, 860], [300, 110, 960], [400, 160, 900], [550, 100, 1000], [640, 150, 880], [780, 120, 970], [890, 170, 840], [1050, 150, 950]];

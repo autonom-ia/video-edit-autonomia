@@ -6,6 +6,8 @@ import path from 'node:path';
 import { KIT } from './caminhos.mjs';
 import { contarPalavras } from './texto.mjs';
 import { EFEITOS_DE_CENA, MIDIA } from './regras.mjs';
+import { caminhoNoProjeto } from './telas-livres.mjs';
+import { lerJson } from './json.mjs';
 
 export const PASTA_EFEITOS = path.join(KIT, 'efeitos');
 const TIPOS_DE_CAMPO = ['texto', 'lista', 'numero', 'escolha', 'arquivo'];
@@ -23,11 +25,20 @@ export function problemasDaFicha(ficha, arquivo) {
   for (const campo of ['titulo', 'funcao', 'referencia']) if (!txt(ficha[campo]) || !ficha[campo].trim()) p.push(`${arquivo}: falta "${campo}"`);
   if (typeof ficha.recorte !== 'boolean') p.push(`${arquivo}: "recorte" precisa ser true ou false`);
   if (typeof ficha.rosto_pequeno !== 'boolean') p.push(`${arquivo}: "rosto_pequeno" precisa ser true ou false`);
+  if (ficha.nao_na_ultima_cena !== undefined && typeof ficha.nao_na_ultima_cena !== 'boolean') p.push(`${arquivo}: "nao_na_ultima_cena" precisa ser true ou false`);
   const d = ficha.duracao || {};
   if (!num(d.min) || !num(d.max) || d.min <= 0 || d.max < d.min) p.push(`${arquivo}: "duracao" precisa de "min" e "max" em segundos`);
   for (const [nome, campo] of Object.entries(ficha.campos || {})) {
     if (CHAVES_FIXAS.includes(nome)) p.push(`${arquivo}: o campo "${nome}" é reservado`);
-    if (!campo || !TIPOS_DE_CAMPO.includes(campo.tipo)) p.push(`${arquivo}: campo "${nome}" com tipo desconhecido`);
+    if (!campo || !TIPOS_DE_CAMPO.includes(campo.tipo)) {
+      p.push(`${arquivo}: campo "${nome}" com tipo desconhecido`);
+      continue;
+    }
+    if (campo.tipo === 'escolha' && !(Array.isArray(campo.opcoes) && campo.opcoes.length)) p.push(`${arquivo}: campo "${nome}" (escolha) precisa de "opcoes"`);
+    if (campo.tipo === 'lista' && campo.itens !== undefined && !(Array.isArray(campo.itens) && campo.itens.length === 2 && campo.itens.every(num) && campo.itens[0] <= campo.itens[1])) {
+      p.push(`${arquivo}: campo "${nome}" (lista) tem "itens" como [mínimo, máximo]`);
+    }
+    if (campo.opcoes !== undefined && !(Array.isArray(campo.opcoes) && campo.opcoes.every(txt))) p.push(`${arquivo}: "opcoes" do campo "${nome}" precisa ser uma lista de textos`);
   }
   for (const s of ficha.sons || []) {
     if (!txt(s.efeito)) p.push(`${arquivo}: som sem "efeito"`);
@@ -48,7 +59,8 @@ export function catalogo() {
   const lista = {};
   if (fs.existsSync(PASTA_EFEITOS)) {
     for (const arquivo of fs.readdirSync(PASTA_EFEITOS).filter((n) => n.endsWith('.json')).sort()) {
-      const ficha = JSON.parse(fs.readFileSync(path.join(PASTA_EFEITOS, arquivo), 'utf8'));
+      // ficha quebrada é erro do kit: reprova com o nome do arquivo, não com um erro de programação
+      const ficha = lerJson(path.join(PASTA_EFEITOS, arquivo));
       lista[ficha.nome] = ficha;
     }
   }
@@ -56,8 +68,10 @@ export function catalogo() {
   return cache;
 }
 
+// Object.hasOwn: "constructor" ou "__proto__" no cenas.json não podem achar coisa do Object.prototype.
 export function fichaDoEfeito(nome) {
-  return catalogo()[nome] || null;
+  const lista = catalogo();
+  return typeof nome === 'string' && Object.hasOwn(lista, nome) ? lista[nome] : null;
 }
 
 // Arquivos que o montar copia para a composição.
@@ -112,7 +126,12 @@ function validarCampo(nome, campo, valor, onde, problemas, pastaProjeto) {
       }
       const ext = path.extname(valor).toLowerCase();
       if (!MIDIA.imagem.includes(ext)) problemas.push({ onde, problema: `"${nome}" precisa ser uma imagem (${MIDIA.imagem.join(', ')})` });
-      if (pastaProjeto && !fs.existsSync(path.join(pastaProjeto, ...partes))) problemas.push({ onde, problema: `o arquivo "${valor}" não existe no projeto` });
+      if (pastaProjeto) {
+        // mesmo critério do montar: atalho (link simbólico) não é copiado, então não vale aqui
+        const completo = caminhoNoProjeto(pastaProjeto, valor);
+        if (!completo) problemas.push({ onde, problema: `"${nome}" precisa ser um arquivo de verdade dentro de ${MIDIA.pasta}/ (atalho não vale)` });
+        else if (!fs.existsSync(completo)) problemas.push({ onde, problema: `o arquivo "${valor}" não existe no projeto` });
+      }
       break;
     }
     default:

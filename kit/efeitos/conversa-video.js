@@ -7,12 +7,14 @@
    do vídeo não aceita canto redondo. */
 (function () {
   window.__efeito = window.__efeito || {};
-  var esc = function (t) { var d = document.createElement('div'); d.textContent = t == null ? '' : String(t); return d.innerHTML; };
+  // escapa para texto e para atributo (aspas também): o que o aluno escreve nunca vira HTML
+  var esc = function (t) { var d = document.createElement('div'); d.textContent = t == null ? '' : String(t); return d.innerHTML.split('"').join('&quot;').split("'").join('&#39;'); };
 
   // o cartão do vídeo na conversa (o take inteiro encolhido); o zoom do kit (1,1) já está na conta
   var CARTAO = { scale: 0.36, x: -176, y: 0 };
   var RAIO = 72;       // canto do cartão, em px do quadro antes de encolher
-  var NOMINAL = 3.45;  // duração do efeito completo; cena mais curta comprime tudo
+  var NOMINAL = 3.45;  // duração do efeito completo; a ficha pede cena de 3,5 s ou mais, então os sons
+                       // da ficha (em segundos fixos) batem com o movimento; o k < 1 só protege prévia fora da regra
 
   window.__efeito['conversa-video'] = function (tl, c) {
     var t0 = c.inicio;

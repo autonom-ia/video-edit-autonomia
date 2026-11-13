@@ -103,6 +103,10 @@
     "texto": "Um efeito de cena do kit está sem o arquivo de animação.",
     "acao": "Veja dados.efeito. Reinstale o estúdio pelo link da versão mais nova."
   },
+  "EFEITO_SEM_ENFASE": {
+    "texto": "Um efeito de cena bate na palavra de ênfase, mas a cena não tem ênfase: o golpe vai cair no começo da cena.",
+    "acao": "Veja dados.cena. Ponha em \"enfase\" a palavra forte daquele trecho (rode alinhar de novo) ou troque o efeito."
+  },
   "EFEITO_SEM_MEDIDA": {
     "texto": "Um efeito de cena vai mirar no lugar típico do rosto, sem medida do seu vídeo.",
     "acao": "Rode ./estudio recortar --projeto <P> (mede o rosto nas cenas com efeito em poucos minutos) e monte de novo."
@@ -271,6 +275,10 @@
     "texto": "A conferência final achou um problema. Vou corrigir.",
     "acao": "Leia dados.reprovados, corrija pela causa (volume: mixar de novo; tela sem som: montar de novo; formato: render de novo) e rode qa de novo."
   },
+  "RECORTE_DESALINHADO": {
+    "texto": "O recorte saiu com um número de quadros diferente do esperado; a pessoa ficaria fora do tempo.",
+    "acao": "Veja dados.detalhe. Rode ./estudio recortar --projeto <P> --tudo. Se repetir, avise quem mantém o estúdio."
+  },
   "RECORTE_FALHOU": {
     "texto": "Não consegui recortar a pessoa do fundo.",
     "acao": "Veja dados.detalhe. Na primeira vez o recorte baixa um modelo (~170 MB) e precisa de internet. Tente de novo; se repetir, troque o efeito por um que não precise de recorte."
@@ -278,6 +286,10 @@
   "RECORTE_FALTANDO": {
     "texto": "Falta o recorte da pessoa (ou ele está velho) para um efeito que precisa dele.",
     "acao": "Rode ./estudio recortar --projeto <P> avisando que leva alguns minutos. Depois monte de novo."
+  },
+  "RECORTE_FORA_DO_TAKE": {
+    "texto": "Uma cena com efeito termina depois do fim do vídeo gravado.",
+    "acao": "Veja dados.cena. Corrija o \"fim\" da cena no cenas.json (rode alinhar de novo) e recorte outra vez."
   },
   "REDE_FALHOU": {
     "texto": "Não consegui falar com a internet.",

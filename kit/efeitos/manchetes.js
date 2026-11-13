@@ -3,7 +3,8 @@
    com a pessoa recortada por cima). Determinístico: posições, tremores e derivas vêm de listas fixas. */
 (function () {
   window.__efeito = window.__efeito || {};
-  var esc = function (t) { var d = document.createElement('div'); d.textContent = t == null ? '' : String(t); return d.innerHTML; };
+  // escapa para texto e para atributo (aspas também): o que o aluno escreve nunca vira HTML
+  var esc = function (t) { var d = document.createElement('div'); d.textContent = t == null ? '' : String(t); return d.innerHTML.split('"').join('&quot;').split("'").join('&#39;'); };
 
   var BATIDA = 0.15; // segundos entre uma faixa e a próxima
   var ENTRA = 0.42; // duração da entrada de cada faixa

@@ -8,7 +8,8 @@
    Determinístico: só tl.set e tweens, nada de callback. */
 (function () {
   window.__efeito = window.__efeito || {};
-  var esc = function (t) { var d = document.createElement('div'); d.textContent = t == null ? '' : String(t); return d.innerHTML; };
+  // escapa para texto e para atributo (aspas também): o que o aluno escreve nunca vira HTML
+  var esc = function (t) { var d = document.createElement('div'); d.textContent = t == null ? '' : String(t); return d.innerHTML.split('"').join('&quot;').split("'").join('&#39;'); };
 
   var PASSO = 1 / 60;
   var PARADA_MAIS_BAIXA = 620; // com texto, a lente não estaciona abaixo deste y (fica acima da cabeça)

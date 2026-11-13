@@ -25,7 +25,8 @@ export function eventosDeFaixa(cenas, marca, rostoY) {
       eventos.push({ t: 0, faixa: c.faixa, d: 0 });
       atual = c.faixa;
     } else if (c.faixa !== atual) {
-      eventos.push({ t: r3(c.inicio), faixa: c.faixa, d: FAIXA.transicaoS[c.faixa] });
+      // cena com efeito entra em corte seco: o efeito é dono do #cam e a costura não pode brigar com ele
+      eventos.push({ t: r3(c.inicio), faixa: c.faixa, d: c.efeito ? 0 : FAIXA.transicaoS[c.faixa] });
       atual = c.faixa;
     }
   }
@@ -235,7 +236,7 @@ export function montarEfeitos(dados, { recortes = {}, marca = null, medidas = []
       recorte: temRecorte ? `#rec-${c.id}` : null,
       foto: temRecorte ? `assets/recorte/${c.id}.png` : null,
       fundoSemPessoa: temRecorte ? `assets/recorte/${c.id}-fundo.png` : null,
-      pessoa: temRecorte && recortes[c.id].pessoa ? { ...recortes[c.id].pessoa, medida: true } : pessoaDaCena(c.id, c.inicio, medidas),
+      pessoa: temRecorte ? recortes[c.id].pessoa : pessoaDaCena(c.id, c.inicio, medidas),
       p: resolverCampos(c.efeito, ficha),
       marca: marca ? { nome: marca.nome || '', arroba: marca.arroba || '' } : { nome: '', arroba: '' },
     });

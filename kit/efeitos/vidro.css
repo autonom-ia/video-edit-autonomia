@@ -24,6 +24,6 @@
   -webkit-mask-composite: xor; mask-composite: exclude; }
 .ef-vidro .vd-cor { position: absolute; inset: 0; border-radius: inherit;
   box-shadow: inset -8px -6px 14px -6px color-mix(in srgb, var(--principal) 75%, transparent), inset 8px 6px 14px -8px color-mix(in srgb, var(--destaque) 70%, transparent); }
-.ef-vidro .vd-texto { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; white-space: nowrap; padding: 0 50px 6px; line-height: 1.02 !important;
-  font-family: var(--fonte-titulo); font-weight: var(--peso-titulo); line-height: 1; letter-spacing: -.02em; color: var(--tinta);
+.ef-vidro .vd-texto { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; white-space: nowrap; padding: 0 50px 6px;
+  font-family: var(--fonte-titulo); font-weight: var(--peso-titulo); line-height: 1.02; letter-spacing: -.02em; color: var(--tinta);
   text-shadow: 0 1px 0 rgba(255,255,255,.6), 0 0 18px rgba(255,255,255,.55); }

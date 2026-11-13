@@ -5,6 +5,7 @@
   "referencia": "Reel de referência 'Zoom Through Cut' (estudado, não copiado). Tempo e curva de 'zoom-through-transition' e o estouro de 'flash-through-white', do registro do HyperFrames (Apache-2.0), refeitos em CSS e GSAP sem shader. Direção de arte própria nas cores da marca.",
   "recorte": false,
   "rosto_pequeno": false,
+  "nao_na_ultima_cena": true,
   "duracao": {
     "min": 1.2,
     "max": 8

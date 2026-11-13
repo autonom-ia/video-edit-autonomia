@@ -1,7 +1,8 @@
 /* Capa de revista. Determinístico: só tweens e sets na linha do tempo, nada de callback. */
 (function () {
   window.__efeito = window.__efeito || {};
-  var esc = function (t) { var d = document.createElement('div'); d.textContent = t == null ? '' : String(t); return d.innerHTML; };
+  // escapa para texto e para atributo (aspas também): o que o aluno escreve nunca vira HTML
+  var esc = function (t) { var d = document.createElement('div'); d.textContent = t == null ? '' : String(t); return d.innerHTML.split('"').join('&quot;').split("'").join('&#39;'); };
 
   window.__efeito.revista = function (tl, c) {
     var p = c.p;
@@ -10,7 +11,7 @@
     var tamanho = Math.max(150, Math.min(300, Math.floor(1000 / Math.max(3, titulo.length) * 1.55)));
     // a metade de baixo do título fica atrás da cabeça (posição medida no recorte)
     var topo = typeof p.topo_titulo === 'number' ? p.topo_titulo : Math.max(330, Math.round(c.pessoa.topo - tamanho * 0.5));
-    var letras = titulo.split('').map(function (ch) { return '<span>' + (ch === ' ' ? '&nbsp;' : esc(ch)) + '</span>'; }).join('');
+    var letras = Array.from(titulo).map(function (ch) { return '<span>' + (ch === ' ' ? '&nbsp;' : esc(ch)) + '</span>'; }).join('');
     c.atras.innerHTML = '<div class="rv-papel"></div><div class="rv-titulo" style="top:' + topo + 'px;font-size:' + tamanho + 'px">' + letras + '</div>';
 
     // chamadas empilhadas à esquerda do rosto, sem encostar nele

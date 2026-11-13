@@ -10,17 +10,17 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { abrirProjeto, exigirArquivo } from '../lib/projeto.mjs';
 import { conferirTabela } from './telas.mjs';
-import { ffmpegOk } from '../lib/ffmpeg.mjs';
+import { ffmpegOk, sondar, contarQuadros } from '../lib/ffmpeg.mjs';
 import { hyperframes } from '../lib/hyperframes.mjs';
 import { falha } from '../lib/saida.mjs';
 import { progresso, ultimasLinhas } from '../lib/executar.mjs';
 import { escreverJson } from '../lib/json.mjs';
 import { RECORTE, MASTER } from '../lib/regras.mjs';
-import { cenasSoParaMedir, trechosDoRecorte, conferirRecortes, assinaturaDoTake, arquivosDoTrecho, lerManifesto, MANIFESTO, AMOSTRA_ALFA, pessoaNoAlfa, pessoaComTrilha, PASSO_DA_TRILHA } from '../lib/recorte.mjs';
+import { cenasSoParaMedir, trechosDoRecorte, conferirRecortes, assinaturaDoTake, arquivosDoTrecho, lerManifesto, MANIFESTO, AMOSTRA_ALFA, pessoaNoAlfa, pessoaComTrilha, PASSO_DA_TRILHA, PESSOA_PADRAO } from '../lib/recorte.mjs';
 
 // A pessoa a cada PASSO_DA_TRILHA quadros (0,5 s), para efeitos que acompanham a cabeça.
-async function medirTrilha(video, pasta, id) {
-  const bruto = path.join(pasta, `${id}-trilha.raw`);
+async function medirTrilha(video, temp, id) {
+  const bruto = path.join(temp, `${id}-trilha.raw`);
   const { largura, altura } = AMOSTRA_ALFA;
   await ffmpegOk(['-y', '-c:v', 'libvpx-vp9', '-i', video, '-vf', `select=not(mod(n\\,${PASSO_DA_TRILHA})),alphaextract,scale=${largura}:${altura}`, '-fps_mode', 'passthrough', '-f', 'rawvideo', '-pix_fmt', 'gray', bruto]);
   const bytes = fs.readFileSync(bruto);
@@ -31,21 +31,38 @@ async function medirTrilha(video, pasta, id) {
 const { largura: LARGURA, altura: ALTURA } = MASTER;
 
 // Lê o canal de transparência de um quadro (decodificador libvpx: o nativo descarta o alfa).
-async function medirPessoa(video, pasta, id, quadro = 0) {
-  const bruto = path.join(pasta, `${id}-alfa.raw`);
+// Quadro sem ninguém: lugar típico com "medida": false (o montar avisa).
+async function medirPessoa(video, temp, id, quadro = 0) {
+  const bruto = path.join(temp, `${id}-alfa.raw`);
   const { largura, altura } = AMOSTRA_ALFA;
   await ffmpegOk(['-y', '-c:v', 'libvpx-vp9', '-i', video, '-vf', `trim=start_frame=${quadro}:end_frame=${quadro + 1},alphaextract,scale=${largura}:${altura}`, '-frames:v', '1', '-f', 'rawvideo', '-pix_fmt', 'gray', bruto]);
   const alfa = fs.readFileSync(bruto);
   fs.rmSync(bruto, { force: true });
-  return pessoaNoAlfa(alfa);
+  const achada = pessoaNoAlfa(alfa);
+  return achada ? { ...achada, medida: true } : { ...PESSOA_PADRAO, medida: false };
 }
 
-// Corta o trecho do take no quadro exato, com o número certo de quadros, sem som.
+// Corta o trecho do take no quadro exato, sem som. Devolve os quadros que saíram de verdade: se o
+// pedaço vier menor que o pedido, a máscara das cenas seguintes sairia fora do tempo, então reprova.
 async function cortarPedaco(take, trecho, destino, escala) {
   const quadros = Math.round((trecho.fim - trecho.inicio) * MASTER.fps);
   const filtro = escala ? [`fps=${MASTER.fps}`, `scale=${escala}`].join(',') : `fps=${MASTER.fps}`;
   await ffmpegOk(['-y', '-ss', String(trecho.inicio), '-i', take, '-frames:v', String(quadros), '-an', '-vf', filtro, '-c:v', 'libx264', '-crf', '12', '-pix_fmt', 'yuv420p', destino]);
+  const saiu = await contarQuadros(destino);
+  if (saiu !== quadros) falha('RECORTE_DESALINHADO', { detalhe: `cena ${trecho.id}: ${saiu} quadros, esperado ${quadros}` });
   return quadros;
+}
+
+// Grava num arquivo ao lado e só troca o definitivo quando o ffmpeg termina: arquivo pela metade
+// nunca fica com o nome de pronto.
+async function gravarNoLugar(destino, gravar) {
+  const parcial = `${destino}.parcial${path.extname(destino)}`;
+  try {
+    await gravar(parcial);
+    fs.renameSync(parcial, destino);
+  } finally {
+    fs.rmSync(parcial, { force: true });
+  }
 }
 
 export default async function recortar({ opcoes }) {
@@ -58,6 +75,10 @@ export default async function recortar({ opcoes }) {
   if (desconhecidas.length) falha('ARGUMENTO_INVALIDO', { argumento: '--cenas', valor: desconhecidas.join(','), opcoes: dados.cenas.map((c) => c.id) });
   const trechos = trechosDoRecorte(dados.cenas, extras);
   if (!trechos.length) return { ok: true, resumo: 'Nenhuma cena pede recorte. Nada a fazer.', avisos, dados: { recortados: [], prontos: [] } };
+  const duracaoDoTake = Number((await sondar(take)).format?.duration);
+  if (!Number.isFinite(duracaoDoTake)) falha('VIDEO_NAO_LIDO', { detalhe: 'o take não informa a duração' });
+  const fora = trechos.find((t) => t.fim > duracaoDoTake + 0.5 / MASTER.fps);
+  if (fora) falha('RECORTE_FORA_DO_TAKE', { cena: fora.id, fim: fora.fim, duracao_do_take: Math.round(duracaoDoTake * 1000) / 1000 });
   fs.mkdirSync(pasta, { recursive: true });
   const assinatura = assinaturaDoTake(take);
   const { faltando } = conferirRecortes(projeto.pasta, dados.cenas, assinatura);
@@ -103,21 +124,26 @@ export default async function recortar({ opcoes }) {
     const mascara = path.join(temp, 'junto.webm');
     const r = await hyperframes(['remove-background', junto, '-o', mascara, '--quality', 'fast'], { timeoutMs: 2 * 60 * 60 * 1000 });
     if (r.codigo !== 0 || !fs.existsSync(mascara)) falha('RECORTE_FALHOU', { detalhe: ultimasLinhas(`${r.saida}\n${r.erro}`, 8) });
+    const naMascara = await contarQuadros(mascara);
+    if (naMascara !== quadro) falha('RECORTE_DESALINHADO', { detalhe: `a máscara tem ${naMascara} quadros, esperado ${quadro}` });
 
     for (const p of pedacos) {
       progresso(`Aplicando o recorte na cena ${p.id}...`);
       const arq = arquivosDoTrecho(pasta, p.id);
+      // antes de sobrescrever, a cena sai do manifesto: se parar no meio, ela fica "faltando", nunca "pronta"
+      manifesto = { ...manifesto, trechos: Object.fromEntries(Object.entries(manifesto.trechos).filter(([id]) => id !== p.id)) };
+      escreverJson(path.join(pasta, MANIFESTO), manifesto);
       const filtro = `[1:v]trim=start_frame=${p.de}:end_frame=${p.ate},setpts=PTS-STARTPTS,alphaextract,scale=${LARGURA}:${ALTURA}:flags=bicubic[a];[0:v][a]alphamerge,format=yuva420p`;
-      await ffmpegOk(['-y', '-i', p.grande, '-c:v', 'libvpx-vp9', '-i', mascara, '-filter_complex', filtro, '-c:v', 'libvpx-vp9', '-pix_fmt', 'yuva420p', '-deadline', 'realtime', '-cpu-used', '8', '-row-mt', '1', '-crf', String(RECORTE.crf), '-b:v', '0', '-an', arq.video]);
-      await ffmpegOk(['-y', '-i', p.grande, '-frames:v', '1', arq.foto]);
+      await gravarNoLugar(arq.video, (saida) => ffmpegOk(['-y', '-i', p.grande, '-c:v', 'libvpx-vp9', '-i', mascara, '-filter_complex', filtro, '-c:v', 'libvpx-vp9', '-pix_fmt', 'yuva420p', '-deadline', 'realtime', '-cpu-used', '8', '-row-mt', '1', '-crf', String(RECORTE.crf), '-b:v', '0', '-an', saida]));
+      await gravarNoLugar(arq.foto, (saida) => ffmpegOk(['-y', '-i', p.grande, '-frames:v', '1', saida]));
       // o primeiro quadro com a pessoa vazada (transparente), um pouco alargada para não sobrar borda
-      await ffmpegOk(['-y', '-i', arq.foto, '-c:v', 'libvpx-vp9', '-i', arq.video, '-filter_complex', '[1:v]trim=end_frame=1,alphaextract,dilation,dilation,dilation,negate[a];[0:v][a]alphamerge', '-frames:v', '1', arq.fundo]);
-      const pessoa = await medirTrilha(arq.video, pasta, p.id);
+      await gravarNoLugar(arq.fundo, (saida) => ffmpegOk(['-y', '-i', arq.foto, '-c:v', 'libvpx-vp9', '-i', arq.video, '-filter_complex', '[1:v]trim=end_frame=1,alphaextract,dilation,dilation,dilation,negate[a];[0:v][a]alphamerge', '-frames:v', '1', saida]));
+      const pessoa = await medirTrilha(arq.video, temp, p.id);
       manifesto = { ...manifesto, trechos: { ...manifesto.trechos, [p.id]: { inicio: p.inicio, fim: p.fim, pessoa } } };
       escreverJson(path.join(pasta, MANIFESTO), manifesto);
     }
     for (const m of soMedir) {
-      const pessoa = await medirPessoa(mascara, pasta, m.id, m.de);
+      const pessoa = await medirPessoa(mascara, temp, m.id, m.de);
       manifesto = { ...manifesto, pessoas: { ...manifesto.pessoas, [m.id]: { inicio: m.inicio, pessoa } } };
     }
     escreverJson(path.join(pasta, MANIFESTO), manifesto);

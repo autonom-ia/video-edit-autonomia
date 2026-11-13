@@ -132,10 +132,16 @@ export function escaparHtml(texto) {
   return saida;
 }
 
+// Troca {{CHAVE}} do molde numa passagem só: o texto já inserido (que pode vir do aluno) nunca é
+// procurado de novo, então um "{{TELAS}}" escrito pelo aluno fica como texto.
 export function preencher(molde, trocas) {
-  let saida = molde;
-  for (const [chave, valor] of Object.entries(trocas)) {
-    saida = saida.split(`{{${chave}}}`).join(String(valor));
+  const partes = String(molde).split('{{');
+  let saida = partes[0];
+  for (const parte of partes.slice(1)) {
+    const fim = parte.indexOf('}}');
+    const chave = fim >= 0 ? parte.slice(0, fim) : null;
+    if (chave !== null && Object.hasOwn(trocas, chave)) saida += String(trocas[chave]) + parte.slice(fim + 2);
+    else saida += `{{${parte}`;
   }
   return saida;
 }

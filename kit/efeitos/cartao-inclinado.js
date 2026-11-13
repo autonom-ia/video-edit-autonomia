@@ -56,8 +56,9 @@
     tl.to(c.sel.cam, { rotation: GIRO + 1.4, scale: ESCALA - 0.012, duration: Math.max(0.2, escapa - t0 - entra), ease: 'sine.inOut' }, t0 + entra);
 
     // 2. golpe: a borda de cima desce até o queixo; o take é cortado ali e a pessoa recortada fica inteira
-    //    por cima, então a cabeça sai do cartão. (Os quatro números do corte são diferentes de propósito:
-    //    o navegador encurta "inset(0px 0px 0px 0px)" e a animação do texto se perderia.)
+    //    por cima, então a cabeça sai do cartão. Os quatro números do corte são diferentes porque o
+    //    navegador encurta "inset(0px 0px 0px 0px)" e o tween de clipPath quebra (limite do render,
+    //    registrado em guias/camadas.md, "Efeitos de cena", item 6).
     if (podeEscapar) {
       tl.set(c.recorte, { opacity: 1, clipPath: 'inset(0.4px ' + BORDA + 'px ' + (BORDA + 0.2) + 'px ' + (BORDA + 0.1) + 'px)' }, escapa);
       tl.fromTo(c.sel.take, { clipPath: corte(0.4) }, { clipPath: corte(escape), duration: desce, ease: 'power3.inOut' }, escapa);

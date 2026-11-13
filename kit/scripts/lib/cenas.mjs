@@ -221,9 +221,14 @@ export function validarCenas(dados, { briefing = null, pastaProjeto = null } = {
   let semRosto = 0;
   let total = 0;
   let cheiaInicio = null;
+  const idsCena = new Set();
   cenas.forEach((c, i) => {
     const onde = `cenas[${i}] (${c.id || 'sem id'})`;
     chavesDesconhecidas(c, CHAVES_CENA, onde, problemas);
+    // o id da cena vira nome de arquivo (recorte/<id>.webm) e seletor (#ef-<id>-fundo)
+    if (!txt(c.id) || !idSeguro(c.id)) problemas.push({ onde, problema: `"id" da cena só pode ter letras sem acento, números, "-" e "_" (veio ${JSON.stringify(c.id)})` });
+    else if (idsCena.has(c.id)) problemas.push({ onde, problema: `id de cena repetido: "${c.id}"` });
+    else idsCena.add(c.id);
     if (!num(c.inicio) || !num(c.fim)) {
       problemas.push({ onde, problema: 'cena precisa de "inicio" e "fim" em segundos' });
       return;
@@ -261,12 +266,12 @@ export function validarCenas(dados, { briefing = null, pastaProjeto = null } = {
     const rosto = c.rosto || (c.faixa === 100 ? 'nenhum' : c.faixa === 0 ? 'cheio' : 'dividido');
     if (rosto === 'nenhum') semRosto += dur;
     const mudouFaixa = anterior && anterior.faixa !== c.faixa;
-    const temMovimento = c.tela || enf.length || (Array.isArray(c.sons) && c.sons.length) || (c.zoom && c.zoom !== 'nenhum') || mudouFaixa;
+    const temMovimento = c.tela || c.efeito || enf.length || (Array.isArray(c.sons) && c.sons.length) || (c.zoom && c.zoom !== 'nenhum') || mudouFaixa;
     if (dur > RITMO.paradoMaxS && !temMovimento) avisos.push(aviso('TRECHO_PARADO', { cena: c.id, segundos: Math.round(dur * 10) / 10 }));
     anterior = c;
   });
   validarEfeitosJuntos(cenas, telas, total, problemas, avisos);
-  validarSerie(dados.serie, total, problemas);
+  validarSerie(dados.serie, total, cenas, problemas);
   if (dados.cta) {
     chavesDesconhecidas(dados.cta, ['palavra', 'em'], 'cta', problemas);
     if (!txt(dados.cta.palavra) || dados.cta.palavra.includes(' ') || !dados.cta.palavra.trim()) problemas.push({ onde: 'cta', problema: 'a palavra do pedido precisa ser uma palavra só, sem espaço' });
@@ -293,7 +298,7 @@ export function fimDoGancho(cenas) {
 }
 
 // Série numerada: título e itens com o segundo em que cada um começa.
-function validarSerie(serie, duracaoTotal, problemas) {
+function validarSerie(serie, duracaoTotal, cenas, problemas) {
   if (serie === undefined) return;
   const onde = 'serie';
   if (!serie || typeof serie !== 'object' || Array.isArray(serie)) {
@@ -305,6 +310,9 @@ function validarSerie(serie, duracaoTotal, problemas) {
   const itens = Array.isArray(serie.itens) ? serie.itens : [];
   if (itens.length < SERIE.itensMin || itens.length > SERIE.itensMax) problemas.push({ onde, problema: `a série precisa de ${SERIE.itensMin} a ${SERIE.itensMax} itens`, tipo: 'limite' });
   let anterior = -Infinity;
+  // o cabeçalho da série fica no alto, no mesmo lugar do título do gancho
+  const fimGancho = fimDoGancho(cenas);
+  if (itens[0] && num(itens[0].em) && itens[0].em < fimGancho - 0.01) problemas.push({ onde: 'serie.itens[0]', problema: `a série começa depois do gancho (${fimGancho.toFixed(2)} s): o alto da tela é do título` });
   itens.forEach((it, k) => {
     const o = `serie.itens[${k}]`;
     chavesDesconhecidas(it, ['nome', 'em'], o, problemas);
@@ -327,6 +335,7 @@ function validarEfeitosJuntos(cenas, telas, total, problemas, avisos) {
     problemas.push({ onde: 'cenas', problema: `${comEfeito.length} efeitos de cena; o máximo para ${Math.round(total)} s é ${maximo} (1 a cada ${EFEITOS_DE_CENA.segundosPorEfeito} s). Efeito demais vira vitrine` });
   }
   const fimGancho = fimDoGancho(cenas);
+  const ultima = cenas[cenas.length - 1];
   let anterior = null;
   for (const c of cenas) {
     const nome = c.efeito && fichaDoEfeito(c.efeito.nome) ? c.efeito.nome : null;
@@ -336,6 +345,10 @@ function validarEfeitosJuntos(cenas, telas, total, problemas, avisos) {
     if (num(c.inicio) && c.inicio < fimGancho - 0.01) problemas.push({ onde: `cena ${c.id}`, problema: `efeito de cena só depois do gancho (${fimGancho.toFixed(2)} s): o quadro 0 é do título` });
     const ficha = fichaDoEfeito(nome);
     if (ficha.rosto_pequeno) avisos.push(aviso('ROSTO_PEQUENO', { cena: c.id, efeito: nome }));
+    if (ficha.nao_na_ultima_cena && c === ultima) problemas.push({ onde: `cena ${c.id}`, problema: `o efeito "${nome}" leva para a cena seguinte; na última cena o vídeo acabaria no meio dele` });
+    // efeito que bate na palavra de ênfase (som em "golpe"): sem ênfase, o golpe cai no começo da cena
+    const usaGolpe = (ficha.sons || []).some((s) => s.em === 'golpe');
+    if (usaGolpe && !(Array.isArray(c.enfase) && c.enfase.length)) avisos.push(aviso('EFEITO_SEM_ENFASE', { cena: c.id, efeito: nome }));
     const tela = telas.find((t) => num(t.entra) && num(t.sai) && t.entra < c.fim && t.sai > c.inicio);
     if (tela) avisos.push(aviso('EFEITO_COM_TELA', { cena: c.id, efeito: nome, tela: tela.id }));
   }

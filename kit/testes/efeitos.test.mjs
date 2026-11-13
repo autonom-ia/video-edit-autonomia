@@ -6,8 +6,12 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { validarCenas } from '../scripts/lib/cenas.mjs';
 import { catalogo, problemasDaFicha, arquivosDoEfeito, PASTA_EFEITOS } from '../scripts/lib/efeitos.mjs';
-import { pessoaNoAlfa, AMOSTRA_ALFA, PESSOA_PADRAO, trechosDoRecorte, noQuadro } from '../scripts/lib/recorte.mjs';
-import { montarEfeitos, montarSerie, planejarSons } from '../scripts/lib/composicao.mjs';
+import vm from 'node:vm';
+import os from 'node:os';
+import { pessoaNoAlfa, AMOSTRA_ALFA, PESSOA_PADRAO, trechosDoRecorte, noQuadro, lerManifesto, MANIFESTO } from '../scripts/lib/recorte.mjs';
+import { montarEfeitos, montarSerie, planejarSons, eventosDeFaixa } from '../scripts/lib/composicao.mjs';
+import { fichaDoEfeito } from '../scripts/lib/efeitos.mjs';
+import { preencher } from '../scripts/lib/texto.mjs';
 import { htmlDaTela } from '../scripts/lib/telas.mjs';
 import { EFEITOS } from '../scripts/lib/cenas.mjs';
 
@@ -42,23 +46,57 @@ test('toda ficha de efeito é válida e tem a animação', () => {
   }
 });
 
+// Seletores de regra de um CSS, inclusive os de dentro de @media/@supports; os quadros de @keyframes
+// voltam como { quadro: true }. Conta chaves em vez de cortar por "}", que esconderia blocos aninhados.
+function seletoresDoCss(texto) {
+  let semComentario = '';
+  for (const pedaco of texto.split('/*')) semComentario += pedaco.includes('*/') ? pedaco.slice(pedaco.indexOf('*/') + 2) : pedaco;
+  const saida = [];
+  const pilha = [];
+  let cabeca = '';
+  for (const ch of semComentario) {
+    if (ch === '{') {
+      const c = cabeca.trim();
+      const dentroDeQuadros = pilha.length && pilha[pilha.length - 1].startsWith('@') && pilha[pilha.length - 1].includes('keyframes');
+      if (!c.startsWith('@')) for (const parte of c.split(',')) saida.push(dentroDeQuadros ? { quadro: true, texto: parte.trim() } : parte.trim());
+      pilha.push(c);
+      cabeca = '';
+    } else if (ch === '}') {
+      pilha.pop();
+      cabeca = '';
+    } else if (ch === ';') cabeca = '';
+    else cabeca += ch;
+  }
+  return saida;
+}
+
+// O seletor começa pela classe do efeito como palavra inteira e não usa irmão (~ ou +), que alcança
+// elementos fora da camada do efeito.
+function dentroDoEfeito(seletor, nome) {
+  if (typeof seletor === 'object') return true;
+  const raiz = `.ef-${nome}`;
+  if (!seletor.startsWith(raiz)) return false;
+  const depois = seletor.slice(raiz.length);
+  if (depois && ![' ', '.', ':', '[', '>'].includes(depois[0])) return false;
+  return !seletor.includes('~') && !seletor.includes('+');
+}
+
+test('o conferente de escopo de CSS pega bloco aninhado, prefixo parecido e irmão', () => {
+  const ruim = '@media (min-width:1px){ body{display:none} } .ef-x2 a{} .ef-x ~ #take{} @keyframes k { from{} 50%{} }';
+  const seletores = seletoresDoCss(ruim);
+  const fora = seletores.filter((s) => !dentroDoEfeito(s, 'x')).map((s) => s);
+  assert.deepEqual(fora, ['body', '.ef-x2 a', '.ef-x ~ #take']);
+  assert.ok(dentroDoEfeito('.ef-x .a:hover', 'x') && dentroDoEfeito('.ef-x', 'x'));
+});
+
 test('animação de efeito é determinística: sem callback, acaso, relógio ou rede', () => {
-  const proibidos = ['onUpdate', 'onComplete', 'onStart', '.call(', 'Math.random', 'Date.now', 'new Date', 'setTimeout', 'setInterval', 'requestAnimationFrame', 'repeat: -1', 'http://', 'https://', 'fetch('];
+  const proibidos = ['onUpdate', 'onComplete', 'onStart', 'onRepeat', 'onReverseComplete', '.call(', 'delayedCall', 'gsap.ticker', 'utils.random', 'Math.random', 'Date.now', 'new Date', 'performance.now', 'setTimeout', 'setInterval', 'requestAnimationFrame', 'repeat: -1', 'http://', 'https://', 'fetch(', 'XMLHttpRequest', 'WebSocket', 'import('];
   for (const nome of Object.keys(catalogo())) {
     const { js, css } = arquivosDoEfeito(nome);
     // o endereço do padrão SVG (xmlns) não é rede
     const texto = (fs.readFileSync(js, 'utf8') + (css ? fs.readFileSync(css, 'utf8') : '')).split('http://www.w3.org/').join('');
     for (const p of proibidos) assert.ok(!texto.includes(p), `${nome} usa ${p}`);
-    if (css) {
-      const seletores = fs.readFileSync(css, 'utf8').split('}').map((b) => b.split('{')[0].trim()).filter((s) => s && !s.startsWith('/*') && !s.startsWith('@'));
-      for (const s of seletores) {
-        const limpo = s.split('*/').pop().trim();
-        for (const parte of limpo.split(',').map((x) => x.trim())) {
-          const quadroChave = parte === 'from' || parte === 'to' || (parte.endsWith('%') && Number.isFinite(Number(parte.slice(0, -1))));
-          assert.ok(parte.startsWith(`.ef-${nome}`) || quadroChave, `${nome}.css: seletor fora de .ef-${nome}: ${parte}`);
-        }
-      }
-    }
+    if (css) for (const seletor of seletoresDoCss(fs.readFileSync(css, 'utf8'))) assert.ok(dentroDoEfeito(seletor, nome), `${nome}.css: seletor fora de .ef-${nome}: ${seletor}`);
   }
 });
 
@@ -110,7 +148,8 @@ test('cena curta ou longa demais para o efeito reprova', () => {
 
 test('efeito que encolhe o rosto ou disputa com tela gera aviso, não reprova', () => {
   const ficha = Object.values(catalogo()).find((f) => f.rosto_pequeno);
-  if (ficha) {
+  assert.ok(ficha, 'o kit tem efeito que encolhe o rosto');
+  {
     const d = longo();
     const campos = {};
     for (const [nome, campo] of Object.entries(ficha.campos || {})) {
@@ -146,7 +185,8 @@ test('recorte: mede o topo e as laterais da cabeça no canal de transparência',
   const alfa = Buffer.alloc(largura * altura, 0);
   for (let y = 80; y < altura; y += 1) for (let x = 35; x < 75; x += 1) alfa[y * largura + x] = 255;
   assert.deepEqual(pessoaNoAlfa(alfa), { topo: 800, esquerda: 350, direita: 750 });
-  assert.deepEqual(pessoaNoAlfa(Buffer.alloc(largura * altura, 0)), { ...PESSOA_PADRAO });
+  // quadro sem ninguém não vira medida falsa
+  assert.equal(pessoaNoAlfa(Buffer.alloc(largura * altura, 0)), null);
 });
 
 test('montar efeitos: três camadas por efeito, recorte só quando pronto', () => {
@@ -205,7 +245,9 @@ test('posição da pessoa: a da cena, senão a medida mais perto no tempo, senã
   assert.equal(pessoaDaCena('c03', 6, medidas).topo, 800);
   assert.equal(pessoaDaCena('c04', 12, medidas).topo, 900);
   assert.deepEqual(pessoaDaCena('c04', 12, []), { ...PESSOA_PADRAO, medida: false });
-  assert.equal(pessoaDaCena('c03', 6, medidas).medida, true);
+  // medida emprestada de outra cena é palpite: o montar avisa EFEITO_SEM_MEDIDA
+  assert.equal(pessoaDaCena('c03', 6, medidas).medida, false);
+  assert.equal(pessoaDaCena('c05', 14, medidas).medida, true);
   const d = longo();
   d.cenas[2].efeito = revista();
   d.cenas[3].efeito = { nome: 'qualquer', porque: 'x' };
@@ -223,5 +265,107 @@ test('trilha da pessoa: uma medida a cada 15 quadros, a primeira vira a principa
   const p = pessoaComTrilha(Buffer.concat([quadro(70), quadro(85)]), 30);
   assert.equal(p.topo, 700);
   assert.deepEqual(p.trilha.map((x) => [x.t, x.topo]), [[0, 700], [0.5, 850]]);
+  assert.equal(p.medida, true);
   assert.deepEqual(pessoaComTrilha(Buffer.alloc(0), 30).trilha, []);
+  // só quadros vazios: lugar típico, marcado como não medido
+  const vazio = pessoaComTrilha(Buffer.alloc(largura * altura * 2, 0), 30);
+  assert.equal(vazio.medida, false);
+  assert.equal(vazio.topo, PESSOA_PADRAO.topo);
+  // quadro vazio no meio fica fora da trilha
+  const meio = pessoaComTrilha(Buffer.concat([quadro(70), Buffer.alloc(largura * altura, 0), quadro(90)]), 30);
+  assert.deepEqual(meio.trilha.map((x) => x.t), [0, 1]);
+});
+
+test('id de cena: só letras sem acento, números, - e _; sem repetir', () => {
+  for (const id of ['c 3', "c'3", '../c3', '']) {
+    const d = longo();
+    d.cenas[2].id = id;
+    assert.ok(problemasDe(d).includes('"id" da cena'), `id ${JSON.stringify(id)} passou`);
+  }
+  const d = longo();
+  d.cenas[3].id = 'c03';
+  assert.ok(problemasDe(d).includes('id de cena repetido'));
+});
+
+test('nome de efeito que existe no Object.prototype é desconhecido, não derruba o validador', () => {
+  assert.equal(fichaDoEfeito('constructor'), null);
+  assert.equal(fichaDoEfeito('__proto__'), null);
+  const d = longo();
+  d.cenas[2].efeito = { nome: 'constructor', porque: 'nome estranho vindo do arquivo' };
+  assert.ok(problemasDe(d).includes('efeito desconhecido'));
+});
+
+test('série não começa no gancho; efeito que leva à cena seguinte não vai na última', () => {
+  const d = longo();
+  d.serie = { itens: [{ nome: 'Um', em: 1 }, { nome: 'Dois', em: 8 }] };
+  assert.ok(problemasDe(d).includes('a série começa depois do gancho'));
+  const fim = longo();
+  fim.cenas[4].fim = 16;
+  fim.cenas[4].efeito = { nome: 'atravessar', porque: 'fecha a ideia e pula para a próxima' };
+  assert.ok(problemasDe(fim).includes('na última cena'));
+});
+
+test('efeito que bate na ênfase avisa quando a cena não tem ênfase', () => {
+  const nome = Object.values(catalogo()).find((f) => (f.sons || []).some((s) => s.em === 'golpe') && !Object.values(f.campos || {}).some((c) => c.obrigatorio)).nome;
+  const d = longo();
+  d.cenas[2].fim = 6 + Math.min(fichaDoEfeito(nome).duracao.max, 3);
+  d.cenas[3].inicio = d.cenas[2].fim;
+  d.cenas[2].efeito = { nome, porque: 'marca a virada da fala aqui' };
+  assert.ok(avisosDe(d).includes('EFEITO_SEM_ENFASE'));
+  d.cenas[2].enfase = [{ palavra: 'parte' }];
+  assert.ok(!avisosDe(d).includes('EFEITO_SEM_ENFASE'));
+});
+
+test('efeito que usa c.golpe tem som em "golpe" (a regra de aviso depende disso)', () => {
+  for (const ficha of Object.values(catalogo())) {
+    const usa = fs.readFileSync(arquivosDoEfeito(ficha.nome).js, 'utf8').includes('c.golpe');
+    const somNoGolpe = (ficha.sons || []).some((s) => s.em === 'golpe');
+    assert.equal(usa, somNoGolpe, `${ficha.nome}: c.golpe no .js e som em "golpe" na ficha andam juntos`);
+  }
+});
+
+test('cena com efeito entra em corte seco de faixa (o efeito é dono do #cam)', () => {
+  const d = longo();
+  d.cenas[1].faixa = 50;
+  d.cenas[2].efeito = revista();
+  const ev = eventosDeFaixa(d.cenas, null, undefined);
+  const entrada = ev.find((e) => e.t === 6);
+  assert.equal(entrada.d, 0);
+  const semEfeito = eventosDeFaixa(longo().cenas.map((c, i) => (i === 1 ? { ...c, faixa: 50 } : c)), null, undefined);
+  assert.ok(semEfeito.find((e) => e.t === 6).d > 0);
+});
+
+test('preencher troca o molde numa passagem só: texto do aluno com {{CHAVE}} fica como texto', () => {
+  const molde = '<a>{{DADOS}}</a><b>{{TELAS}}</b>{{SOLTO';
+  assert.equal(preencher(molde, { DADOS: '{"t":"{{TELAS}}"}', TELAS: '<i></i>' }), '<a>{"t":"{{TELAS}}"}</a><b><i></i></b>{{SOLTO');
+});
+
+test('manifesto do recorte: ausente vira vazio; quebrado reprova em vez de apagar medidas', () => {
+  const pasta = fs.mkdtempSync(path.join(os.tmpdir(), 'manifesto-'));
+  try {
+    assert.equal(lerManifesto(pasta).take, '');
+    fs.writeFileSync(path.join(pasta, MANIFESTO), '{"take": "x", "tre');
+    assert.throws(() => lerManifesto(pasta), (e) => e.codigo === 'ARQUIVO_INVALIDO');
+  } finally {
+    fs.rmSync(pasta, { recursive: true, force: true });
+  }
+});
+
+test('gráfico: o número na tela arredonda antes de separar a casa decimal', () => {
+  const caixa = { window: {}, document: { createElement: () => ({}) } };
+  vm.runInNewContext(fs.readFileSync(arquivosDoEfeito('grafico').js, 'utf8'), caixa);
+  const formata = caixa.window.__efeito.grafico.formata;
+  assert.equal(formata(2.99, 1), '3,0');
+  assert.equal(formata(1.96, 1), '2,0');
+  assert.equal(formata(1250, 0), '1.250');
+  assert.equal(formata(-0.04, 1), '0,0');
+  assert.equal(formata(-12.34, 1), '-12,3');
+});
+
+test('texto do aluno escapa aspas também (vai para atributo, como src da imagem)', () => {
+  for (const nome of Object.keys(catalogo())) {
+    const js = fs.readFileSync(arquivosDoEfeito(nome).js, 'utf8');
+    if (!js.includes('var esc =')) continue;
+    assert.ok(js.includes(`split('"').join('&quot;')`), `${nome}: esc sem aspas`);
+  }
 });

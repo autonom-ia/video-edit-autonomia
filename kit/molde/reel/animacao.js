@@ -141,11 +141,21 @@
       tl.fromTo(['#serie-n' + k, '#serie-i' + k], { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.26, ease: P }, it.em + 0.04);
       tl.to('#serie-s' + k, { '--enche': 1, duration: 0.35, ease: 'power2.out' }, it.em);
     });
-    // tela no alto (cartão, lista, checklist...) ocupa o mesmo lugar: a série sai e volta depois
-    D.telas.forEach(function (t) {
-      if (t.sai <= S.itens[0].em || t.entrada >= S.fim) return;
+    // tela no alto (cartão, lista, checklist...) ocupa o mesmo lugar: a série sai e volta depois.
+    // Telas quase coladas viram um trecho só (a série não pisca entre elas nem volta por cima da segunda).
+    var VOLTA = 0.4;
+    var trechos = [];
+    D.telas.filter(function (t) { return t.sai > S.itens[0].em && t.entrada < S.fim; })
+      .map(function (t) { return { entrada: t.entrada, sai: t.sai }; })
+      .sort(function (x, y) { return x.entrada - y.entrada; })
+      .forEach(function (t) {
+        var ultimo = trechos[trechos.length - 1];
+        if (ultimo && t.entrada - 0.05 <= ultimo.sai + VOLTA + 0.25) ultimo.sai = Math.max(ultimo.sai, t.sai);
+        else trechos.push({ entrada: t.entrada, sai: t.sai });
+      });
+    trechos.forEach(function (t) {
       tl.to('#serie', { autoAlpha: 0, duration: 0.2, ease: 'power2.in' }, Math.max(S.itens[0].em, t.entrada - 0.05));
-      if (t.sai + 0.4 < S.fim - 0.3) tl.to('#serie', { autoAlpha: 1, duration: 0.25, ease: P }, t.sai + 0.4);
+      if (t.sai + VOLTA < S.fim - 0.3) tl.to('#serie', { autoAlpha: 1, duration: 0.25, ease: P }, t.sai + VOLTA);
     });
     tl.to('#serie', { opacity: 0, y: -18, duration: 0.3, ease: 'power2.in' }, Math.max(S.itens[S.itens.length - 1].em + 0.5, S.fim - 0.3));
     tl.set('#serie', { visibility: 'hidden' }, S.fim + 0.05);

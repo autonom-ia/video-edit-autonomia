@@ -5,7 +5,8 @@
    quadro não aparecem, e o corte do vídeo não aceita canto redondo. A moldura do SVG cobre os cantos do take. */
 (function () {
   window.__efeito = window.__efeito || {};
-  var esc = function (t) { var d = document.createElement('div'); d.textContent = t == null ? '' : String(t); return d.innerHTML; };
+  // escapa para texto e para atributo (aspas também): o que o aluno escreve nunca vira HTML
+  var esc = function (t) { var d = document.createElement('div'); d.textContent = t == null ? '' : String(t); return d.innerHTML.split('"').join('&quot;').split("'").join('&#39;'); };
 
   // tela do celular, em px do quadro (antes de encolher)
   var TELA = { x: 130, y: 70, w: 820, h: 1780, r: 112 };

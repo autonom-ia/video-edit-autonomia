@@ -2,7 +2,8 @@
    Determinístico: só tweens e sets na linha do tempo, números fixos, nada de callback. */
 (function () {
   window.__efeito = window.__efeito || {};
-  var esc = function (t) { var d = document.createElement('div'); d.textContent = t == null ? '' : String(t); return d.innerHTML; };
+  // escapa para texto e para atributo (aspas também): o que o aluno escreve nunca vira HTML
+  var esc = function (t) { var d = document.createElement('div'); d.textContent = t == null ? '' : String(t); return d.innerHTML.split('"').join('&quot;').split("'").join('&#39;'); };
 
   // pisca de lâmpada ligando (opacidade, duração), lista fixa
   var PISCA = [[0.85, 0.04], [0.15, 0.05], [1, 0.05], [0.45, 0.04], [1, 0.06]];

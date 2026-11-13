@@ -1,11 +1,11 @@
 {
   "nome": "conversa-video",
   "titulo": "Pedido no chat, resposta em vídeo",
-  "funcao": "Use só se o aluno pedir, porque o rosto fica pequeno no meio do efeito. O pedido se digita numa conversa com um assistente e o próprio vídeo vira a resposta, dentro do chat. Combina com fala sobre pedir algo para a IA, 'eu só escrevi isso' ou o resultado que chega pronto. Não use em fala sem pedido nem resultado, em cena com menos de 3 s (o pedido não dá tempo de ler) nem duas vezes no mesmo vídeo.",
+  "funcao": "Use só se o aluno pedir, porque o rosto fica pequeno no meio do efeito. O pedido se digita numa conversa com um assistente e o próprio vídeo vira a resposta, dentro do chat. Combina com fala sobre pedir algo para a IA, 'eu só escrevi isso' ou o resultado que chega pronto. Não use em fala sem pedido nem resultado, em cena com menos de 3,5 s (o pedido não dá tempo de ler) nem duas vezes no mesmo vídeo.",
   "referencia": "Reel de referência 'Chat Takeover' (estudado, não copiado). Ritmo da conversa (bolha entra, indicador, resposta) adaptado da peça 'chat-thread' do registro do HyperFrames (Apache-2.0). Assistente genérico, sem logo de app real, nas cores da marca.",
   "recorte": false,
   "rosto_pequeno": true,
-  "duracao": { "min": 1.5, "max": 6 },
+  "duracao": { "min": 3.5, "max": 6 },
   "campos": {
     "pedido": { "tipo": "texto", "palavras": 14, "obrigatorio": true }
   },

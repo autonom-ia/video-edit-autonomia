@@ -7,6 +7,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { MASTER, RECORTE } from './regras.mjs';
 import { cenasComRecorte } from './efeitos.mjs';
+import { lerJson } from './json.mjs';
 
 export const MANIFESTO = 'manifesto.json';
 
@@ -41,8 +42,9 @@ export function assinaturaDoTake(arquivo) {
   return `${tamanho}:${hash.digest('hex').slice(0, 32)}`;
 }
 
-// Onde está a pessoa no primeiro quadro do recorte, em pixels do quadro (1080x1920): topo da cabeça
+// Onde está a pessoa num quadro do recorte, em pixels do quadro (1080x1920): topo da cabeça
 // e as laterais da cabeça (os 400 px de cima). alfa: bytes do canal de transparência em LARGURA x ALTURA.
+// Quadro sem ninguém devolve null: quem chama decide o que fazer (nunca vira medida falsa).
 export const AMOSTRA_ALFA = Object.freeze({ largura: 108, altura: 192, escala: 10, minimoNaLinha: 3 });
 // Sem medida: o lugar típico de quem grava falando de perto com o celular em pé (medido em dois
 // takes reais: topo da cabeça entre 740 e 880). Melhor que isto, só rodando ./estudio recortar.
@@ -65,7 +67,7 @@ export function pessoaNoAlfa(alfa) {
   };
   let topo = -1;
   for (let y = 0; y < altura && topo < 0; y += 1) if (linha(y)) topo = y;
-  if (topo < 0) return { ...PESSOA_PADRAO };
+  if (topo < 0) return null;
   let esquerda = largura;
   let direita = 0;
   const fimCabeca = Math.min(altura, topo + Math.round(400 / escala));
@@ -84,51 +86,55 @@ export function cenasSoParaMedir(cenas, trechos) {
   return (cenas || []).filter((c) => c.efeito && !recortadas.has(c.id)).map((c) => ({ id: c.id, inicio: noQuadro(c.inicio) }));
 }
 
+// Uma medida guardada vale se a pessoa foi achada no quadro (manifesto antigo, sem "medida", também vale).
+const medidaValida = (pessoa) => Boolean(pessoa) && pessoa.medida !== false;
+
 // Todas as medidas válidas para este take, em ordem de tempo: [{ id, t, pessoa }].
 export function medidasDaPessoa(pastaRecorte, assinatura) {
   const m = lerManifesto(pastaRecorte);
   if (m.take !== assinatura) return [];
   const lista = [];
-  for (const [id, v] of Object.entries(m.trechos || {})) if (v.pessoa) lista.push({ id, t: v.inicio, pessoa: v.pessoa });
-  for (const [id, v] of Object.entries(m.pessoas || {})) if (v.pessoa) lista.push({ id, t: v.inicio, pessoa: v.pessoa });
+  for (const [id, v] of Object.entries(m.trechos || {})) if (medidaValida(v.pessoa)) lista.push({ id, t: v.inicio, pessoa: v.pessoa });
+  for (const [id, v] of Object.entries(m.pessoas || {})) if (medidaValida(v.pessoa)) lista.push({ id, t: v.inicio, pessoa: v.pessoa });
   return lista.sort((a, b) => a.t - b.t);
 }
 
-// A posição da pessoa numa cena: a medida da própria cena, senão a da cena medida mais perto no
-// tempo (o mesmo take, a pessoa quase não sai do lugar), senão o lugar típico.
+// A posição da pessoa numa cena: a medida da própria cena; senão, como melhor palpite, a da cena
+// medida mais perto no tempo (o mesmo take, a pessoa quase não sai do lugar); senão o lugar típico.
+// Só a medida da própria cena tem "medida": true. Palpite tem false, e o montar avisa EFEITO_SEM_MEDIDA
+// (rode ./estudio recortar, que mede todas as cenas com efeito).
 export function pessoaDaCena(id, t, medidas) {
-  // "medida": false avisa o efeito de que é só o lugar típico (rode ./estudio recortar para medir)
   const propria = medidas.find((m) => m.id === id);
   if (propria) return { ...propria.pessoa, medida: true };
   let melhor = null;
   for (const m of medidas) if (!melhor || Math.abs(m.t - t) < Math.abs(melhor.t - t)) melhor = m;
-  return melhor ? { ...melhor.pessoa, medida: true } : { ...PESSOA_PADRAO, medida: false };
+  return melhor ? { ...melhor.pessoa, trilha: undefined, medida: false } : { ...PESSOA_PADRAO, medida: false };
 }
 
 // Quadros de vários instantes, em sequência: devolve a medida do primeiro e a trilha no tempo
 // ([{ t, topo, esquerda, direita }], t em segundos desde o começo da cena), para quem se mexe.
 export const PASSO_DA_TRILHA = 15;
+// Quadro sem ninguém fica fora da trilha. Nenhum quadro com a pessoa: lugar típico com "medida": false.
 export function pessoaComTrilha(bytes, fps = 30) {
   const tam = AMOSTRA_ALFA.largura * AMOSTRA_ALFA.altura;
   const trilha = [];
   for (let k = 0; (k + 1) * tam <= bytes.length; k += 1) {
-    trilha.push({ t: Math.round(((k * PASSO_DA_TRILHA) / fps) * 1000) / 1000, ...pessoaNoAlfa(bytes.subarray(k * tam, (k + 1) * tam)) });
+    const achada = pessoaNoAlfa(bytes.subarray(k * tam, (k + 1) * tam));
+    if (achada) trilha.push({ t: Math.round(((k * PASSO_DA_TRILHA) / fps) * 1000) / 1000, ...achada });
   }
-  if (!trilha.length) return { ...PESSOA_PADRAO, trilha: [] };
+  if (!trilha.length) return { ...PESSOA_PADRAO, trilha: [], medida: false };
   const { topo, esquerda, direita } = trilha[0];
-  return { topo, esquerda, direita, trilha };
+  return { topo, esquerda, direita, trilha, medida: true };
 }
 
 export function arquivosDoTrecho(pastaRecorte, id) {
   return { video: path.join(pastaRecorte, `${id}.webm`), foto: path.join(pastaRecorte, `${id}.png`), fundo: path.join(pastaRecorte, `${id}-fundo.png`) };
 }
 
+// Sem manifesto: nada recortado ainda. Manifesto quebrado reprova com ARQUIVO_INVALIDO (apague o
+// arquivo e rode ./estudio recortar de novo), em vez de apagar as medidas em silêncio.
 export function lerManifesto(pastaRecorte) {
-  try {
-    return JSON.parse(fs.readFileSync(path.join(pastaRecorte, MANIFESTO), 'utf8'));
-  } catch {
-    return { take: '', trechos: {} };
-  }
+  return lerJson(path.join(pastaRecorte, MANIFESTO), { take: '', trechos: {}, pessoas: {} });
 }
 
 // Confere os recortes contra as cenas. Devolve { faltando: [ids], prontos: [{id, inicio, fim, video, foto}] }.
@@ -142,7 +148,7 @@ export function conferirRecortes(pastaProjeto, cenas, assinatura) {
     const anotado = (manifesto.trechos || {})[t.id];
     const igual = anotado && Math.abs(anotado.inicio - t.inicio) < 1e-3 && Math.abs(anotado.fim - t.fim) < 1e-3;
     if (manifesto.take !== assinatura || !igual || !fs.existsSync(arq.video) || !fs.existsSync(arq.foto) || !fs.existsSync(arq.fundo)) faltando.push(t.id);
-    else prontos.push({ ...t, ...arq, pessoa: anotado.pessoa || { ...PESSOA_PADRAO } });
+    else prontos.push({ ...t, ...arq, pessoa: anotado.pessoa ? { ...anotado.pessoa, medida: anotado.pessoa.medida !== false } : { ...PESSOA_PADRAO, medida: false } });
   }
   return { faltando, prontos };
 }

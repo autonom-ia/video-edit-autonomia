@@ -3,20 +3,23 @@
    O campo "origem" (de onde vem o número) é regra do kit e nunca aparece na tela. */
 (function () {
   window.__efeito = window.__efeito || {};
-  var esc = function (t) { var d = document.createElement('div'); d.textContent = t == null ? '' : String(t); return d.innerHTML; };
+  // escapa para texto e para atributo (aspas também): o que o aluno escreve nunca vira HTML
+  var esc = function (t) { var d = document.createElement('div'); d.textContent = t == null ? '' : String(t); return d.innerHTML.split('"').join('&quot;').split("'").join('&#39;'); };
   var r1 = function (n) { return Math.round(n * 10) / 10; };
 
   // tremidinha fixa da curva (um gráfico de verdade não é liso)
   var TREME = [0, 0.6, -0.4, 0.9, -0.7, 0.3, 1, -0.5, 0.4, -0.9, 0.7, -0.2, 0.5, -0.6, 0.2, 0];
 
+  // arredonda antes de separar inteiro e decimal: 2,99 com uma casa vira 3,0 (não 2,0)
   function formata(v, casas) {
     var neg = v < 0; v = Math.abs(v);
-    var inteiro = Math.floor(casas ? v : Math.round(v));
+    var decimos = Math.round(v * (casas ? 10 : 1));
+    var inteiro = casas ? Math.floor(decimos / 10) : decimos;
     // ponto a cada três dígitos, da direita para a esquerda (1.250)
     var dig = String(inteiro), txt = '';
     for (var i = 0; i < dig.length; i++) txt += (i && (dig.length - i) % 3 === 0 ? '.' : '') + dig[i];
-    if (casas) txt += ',' + String(Math.round((v - inteiro) * 10) % 10);
-    return (neg ? '-' : '') + txt;
+    if (casas) txt += ',' + String(decimos % 10);
+    return (neg && decimos ? '-' : '') + txt;
   }
 
   // pontos da curva, refeitos em passos de mesmo comprimento: a ponta anda junto com o traço
@@ -162,4 +165,6 @@
     if (c.recorte) tl.to(c.recorte, { opacity: 0, duration: saida, ease: 'power2.in' }, sai);
     tl.set([c.sel.atras, c.sel.frente], { opacity: 1 }, c.fim);
   };
+  // exposto para o teste do kit conferir o número que vai para a tela
+  window.__efeito.grafico.formata = formata;
 })();
