@@ -1,0 +1,45 @@
+/* Pedido no chat, resposta em vídeo. --cv-janela é a cor da janela e dos cantos do cartão (precisam bater). */
+.ef-conversa-video { --cv-janela: color-mix(in srgb, var(--papel) 72%, #ffffff); }
+.ef-conversa-video .cv-base { position: absolute; inset: 0; background:
+  radial-gradient(90% 55% at 50% 40%, color-mix(in srgb, var(--principal) 55%, var(--fundo)), transparent 75%),
+  linear-gradient(180deg, color-mix(in srgb, var(--fundo) 85%, #000), var(--fundo)); }
+.ef-conversa-video .cv-luz { position: absolute; left: -200px; top: 900px; width: 1480px; height: 1200px; border-radius: 50%; opacity: 0;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--principal) 70%, transparent), transparent); filter: blur(60px); }
+
+.ef-conversa-video .cv-janela { position: absolute; left: 56px; right: 56px; top: 232px; height: 1180px; border-radius: 48px; overflow: hidden;
+  background: var(--cv-janela); box-shadow: 0 40px 90px rgba(0,0,0,.45), inset 0 0 0 2px rgba(255,255,255,.6); opacity: 0; }
+.ef-conversa-video .cv-topo { position: absolute; left: 0; right: 0; top: 0; height: 104px; display: flex; align-items: center; gap: 18px; padding: 0 34px;
+  border-bottom: 2px solid color-mix(in srgb, var(--tinta) 9%, transparent); background: color-mix(in srgb, var(--cv-janela) 85%, #fff); }
+.ef-conversa-video .cv-avatar { width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; flex: none;
+  background: linear-gradient(135deg, var(--principal), color-mix(in srgb, var(--principal) 60%, var(--destaque))); }
+.ef-conversa-video .cv-avatar svg { width: 60%; height: 60%; fill: var(--papel); }
+.ef-conversa-video .cv-nome { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+.ef-conversa-video .cv-nome b { font: 800 34px/1 var(--fonte-leitura); color: var(--tinta); }
+.ef-conversa-video .cv-nome small { font: 600 24px/1 var(--fonte-leitura); color: color-mix(in srgb, var(--tinta) 55%, transparent); display: flex; align-items: center; gap: 8px; }
+.ef-conversa-video .cv-nome small i { width: 12px; height: 12px; border-radius: 50%; background: var(--principal); display: block; }
+.ef-conversa-video .cv-mais { display: flex; gap: 8px; }
+.ef-conversa-video .cv-mais i { width: 10px; height: 10px; border-radius: 50%; background: color-mix(in srgb, var(--tinta) 40%, transparent); display: block; }
+.ef-conversa-video .cv-avatar-resp { position: absolute; left: 26px; top: 360px; width: 56px; height: 56px; }
+.ef-conversa-video .cv-tarefas { position: absolute; left: 562px; top: 400px; display: flex; flex-direction: column; gap: 30px; }
+.ef-conversa-video .cv-tarefa { display: flex; align-items: center; gap: 16px; }
+.ef-conversa-video .cv-tarefa i { display: block; height: 18px; border-radius: 9px; background: color-mix(in srgb, var(--tinta) 14%, transparent); }
+.ef-conversa-video .cv-ok { width: 44px; height: 44px; border-radius: 50%; background: var(--principal); display: grid; place-items: center; flex: none; }
+.ef-conversa-video .cv-ok svg { width: 64%; height: 64%; fill: none; stroke: var(--papel); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+
+/* dentro do cartão (px do quadro antes de encolher: tudo aqui é ~2,5x o tamanho que aparece) */
+.ef-conversa-video .cv-cantos { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; opacity: 0; }
+.ef-conversa-video .cv-cantos path { fill: var(--cv-janela); }
+.ef-conversa-video .cv-player { position: absolute; left: 70px; right: 70px; bottom: 80px; opacity: 0; }
+.ef-conversa-video .cv-tempo { display: inline-block; font: 700 54px/1 var(--fonte-leitura); color: #fff; background: rgba(0,0,0,.45); padding: 12px 22px; border-radius: 22px; margin-bottom: 26px; }
+.ef-conversa-video .cv-trilho { position: relative; height: 18px; border-radius: 9px; background: rgba(255,255,255,.4); overflow: hidden; }
+.ef-conversa-video .cv-trilho i { position: absolute; inset: 0; background: var(--destaque); transform-origin: 0 50%; display: block; }
+
+/* bolha do pedido: na frente, no alto, longe do rosto */
+.ef-conversa-video .cv-envio { position: absolute; right: 210px; top: 360px; width: 640px; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+.ef-conversa-video .cv-bolha { max-width: 640px; padding: 26px 32px; border-radius: 38px 38px 10px 38px; transform-origin: 100% 100%;
+  background: var(--principal); color: var(--papel); font: 650 38px/1.28 var(--fonte-leitura); box-shadow: 0 18px 40px rgba(0,0,0,.3); }
+.ef-conversa-video .cv-bolha span { display: inline-block; }
+.ef-conversa-video .cv-visto { font: 700 24px/1 var(--fonte-leitura); color: #fff; display: flex; align-items: center; gap: 8px; opacity: 0;
+  background: rgba(0,0,0,.35); padding: 8px 14px; border-radius: 14px; }
+.ef-conversa-video .cv-visto svg { width: 30px; height: 16px; fill: none; stroke: var(--destaque); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.ef-conversa-video .cv-cur { display: inline-block; width: 0; height: 1.05em; vertical-align: -0.2em; border-left: 4px solid var(--destaque); margin-right: -4px; opacity: 0; }

@@ -28,6 +28,7 @@ As fontes são variáveis (`*-Variable.ttf`). Foram copiadas sem modificação.
 |---|---|---|---|---|---|
 | HyperFrames | 0.9.20 (npm `hyperframes`) | Motor de render do vídeo (HTML para MP4) | Apache 2.0 | npm, pelo `package.json` | `licencas/Apache-2.0-hyperframes.txt` (com aviso de dependência) |
 | Skills do HyperFrames | as da versão acima | Instruções do motor para o assistente | as do HyperFrames | o próprio HyperFrames | no pacote |
+| Modelo de recorte `u2net_human_seg` (~170 MB) e onnxruntime-node | os que o `hyperframes remove-background` pedir | Recorta a pessoa do fundo nos efeitos de cena (`./estudio recortar`) | Apache 2.0 (modelo U²-Net) e MIT (onnxruntime) | o próprio HyperFrames, no primeiro recorte | no pacote baixado |
 | chrome-headless-shell | a que o HyperFrames pedir | Navegador escondido que fotografa cada quadro e as telas | licenças do Chromium (BSD-3 e outras) | o próprio HyperFrames | no pacote baixado |
 | GSAP | 3.14.2 (npm `gsap`) | Animação da composição e das telas livres (com os plugins SplitText, MorphSVG, DrawSVG e outros, que fazem parte do mesmo pacote); copiado de `node_modules` para a pasta do vídeo na montagem, só o que o vídeo usa | GSAP Standard "no charge" License, https://gsap.com/standard-license | npm, pelo `package.json` | no pacote |
 | faster-whisper | 1.2.1 (PyPI) | Transcrição palavra por palavra, no computador do aluno | MIT, © 2023 SYSTRAN | uv, pelo `pyproject.toml` | `licencas/MIT-faster-whisper.txt` |

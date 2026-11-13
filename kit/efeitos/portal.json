@@ -1,0 +1,14 @@
+{
+  "nome": "portal",
+  "titulo": "Zoom portal",
+  "funcao": "Fora do padrão; use só se o aluno pedir. Abre a cena com o rosto pequeno numa bolha redonda sobre fundo escuro, e a bolha cresce até tomar a tela: serve para uma entrada de impacto, como 'olha isso' ou 'agora começa'. Não use em fala calma, no gancho, nem mais de uma vez no vídeo.",
+  "referencia": "Reel de referência 'Zoom Portal' (estudado, não copiado) e a ideia de passagem por portal da peça vfx-portal do registro do HyperFrames (Apache-2.0), refeita em CSS e GSAP. Direção de arte própria nas cores da marca.",
+  "recorte": false,
+  "rosto_pequeno": true,
+  "duracao": { "min": 1.5, "max": 6 },
+  "campos": {},
+  "sons": [
+    { "efeito": "whoosh-medio", "em": 0.85, "volume": 0.9 },
+    { "efeito": "impacto-medio", "em": 1.16, "volume": 1.0 }
+  ]
+}

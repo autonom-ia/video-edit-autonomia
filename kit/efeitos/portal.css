@@ -1,0 +1,23 @@
+/* Zoom portal: céu escuro atrás do rosto, anel na cor da marca em volta da bolha. */
+.ef-portal .pt-ceu { position: absolute; inset: -80px; transform-origin: var(--bx) var(--by); background:
+  radial-gradient(circle at var(--bx) var(--by), color-mix(in srgb, var(--principal) 55%, #000000) 0, transparent 34%),
+  radial-gradient(70% 45% at 75% 90%, color-mix(in srgb, var(--principal) 22%, transparent), transparent 70%),
+  radial-gradient(circle at 50% 50%, transparent 40%, rgba(0,0,0,.55) 100%),
+  #07090a; }
+.ef-portal .pt-ceu::after { content: ""; position: absolute; inset: 0;
+  background: radial-gradient(rgba(255,255,255,.08) 1.4px, transparent 1.8px) 0 0 / 34px 34px;
+  -webkit-mask-image: radial-gradient(circle at var(--bx) var(--by), #000 0, transparent 55%);
+  mask-image: radial-gradient(circle at var(--bx) var(--by), #000 0, transparent 55%); }
+.ef-portal .pt-eco { position: absolute; width: 270px; height: 270px; margin: -135px 0 0 -135px; border-radius: 50%;
+  border: 2px solid color-mix(in srgb, var(--principal) 70%, #ffffff); opacity: 0; }
+.ef-portal .pt-anel { position: absolute; left: 0; top: 0; width: 0; height: 0; border-radius: 50%; box-sizing: content-box; margin: -6px 0 0 -6px;
+  border: 7px solid color-mix(in srgb, var(--principal) 55%, #ffffff);
+  box-shadow: 0 0 0 3px var(--principal), 0 0 50px 10px color-mix(in srgb, var(--principal) 80%, transparent),
+    inset 0 0 26px color-mix(in srgb, var(--principal) 60%, transparent); opacity: 0; }
+.ef-portal .pt-arco { position: absolute; inset: -20px; filter: drop-shadow(0 0 8px color-mix(in srgb, var(--destaque) 70%, transparent)); border-radius: 50%;
+  background: conic-gradient(from 0deg, transparent 0 58%, color-mix(in srgb, var(--destaque) 20%, transparent) 70%, var(--destaque) 93%, transparent 94%);
+  -webkit-mask-image: radial-gradient(circle closest-side, transparent calc(100% - 9px), #000 calc(100% - 8px), #000 calc(100% - 1px), transparent 100%);
+  mask-image: radial-gradient(circle closest-side, transparent calc(100% - 9px), #000 calc(100% - 8px), #000 calc(100% - 1px), transparent 100%); }
+.ef-portal .pt-clarao { position: absolute; inset: 0; opacity: 0;
+  background: radial-gradient(circle at var(--dx) var(--dy), transparent 30%, color-mix(in srgb, var(--principal) 45%, #ffffff) 100%);
+  mix-blend-mode: screen; }

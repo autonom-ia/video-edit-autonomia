@@ -16,15 +16,25 @@ import { falha } from '../lib/saida.mjs';
 import { progresso, ultimasLinhas } from '../lib/executar.mjs';
 import { escreverJson } from '../lib/json.mjs';
 import { RECORTE, MASTER } from '../lib/regras.mjs';
-import { trechosDoRecorte, conferirRecortes, assinaturaDoTake, arquivosDoTrecho, lerManifesto, MANIFESTO, AMOSTRA_ALFA, pessoaNoAlfa } from '../lib/recorte.mjs';
+import { cenasSoParaMedir, trechosDoRecorte, conferirRecortes, assinaturaDoTake, arquivosDoTrecho, lerManifesto, MANIFESTO, AMOSTRA_ALFA, pessoaNoAlfa, pessoaComTrilha, PASSO_DA_TRILHA } from '../lib/recorte.mjs';
+
+// A pessoa a cada PASSO_DA_TRILHA quadros (0,5 s), para efeitos que acompanham a cabeça.
+async function medirTrilha(video, pasta, id) {
+  const bruto = path.join(pasta, `${id}-trilha.raw`);
+  const { largura, altura } = AMOSTRA_ALFA;
+  await ffmpegOk(['-y', '-c:v', 'libvpx-vp9', '-i', video, '-vf', `select=not(mod(n\\,${PASSO_DA_TRILHA})),alphaextract,scale=${largura}:${altura}`, '-fps_mode', 'passthrough', '-f', 'rawvideo', '-pix_fmt', 'gray', bruto]);
+  const bytes = fs.readFileSync(bruto);
+  fs.rmSync(bruto, { force: true });
+  return pessoaComTrilha(bytes, MASTER.fps);
+}
 
 const { largura: LARGURA, altura: ALTURA } = MASTER;
 
-// Lê o canal de transparência do primeiro quadro (decodificador libvpx: o nativo descarta o alfa).
-async function medirPessoa(video, pasta, id) {
+// Lê o canal de transparência de um quadro (decodificador libvpx: o nativo descarta o alfa).
+async function medirPessoa(video, pasta, id, quadro = 0) {
   const bruto = path.join(pasta, `${id}-alfa.raw`);
   const { largura, altura } = AMOSTRA_ALFA;
-  await ffmpegOk(['-y', '-c:v', 'libvpx-vp9', '-i', video, '-frames:v', '1', '-vf', `alphaextract,scale=${largura}:${altura}`, '-f', 'rawvideo', '-pix_fmt', 'gray', bruto]);
+  await ffmpegOk(['-y', '-c:v', 'libvpx-vp9', '-i', video, '-vf', `trim=start_frame=${quadro}:end_frame=${quadro + 1},alphaextract,scale=${largura}:${altura}`, '-frames:v', '1', '-f', 'rawvideo', '-pix_fmt', 'gray', bruto]);
   const alfa = fs.readFileSync(bruto);
   fs.rmSync(bruto, { force: true });
   return pessoaNoAlfa(alfa);
@@ -54,9 +64,12 @@ export default async function recortar({ opcoes }) {
   const anotados = lerManifesto(pasta);
   const pronto = (t) => anotados.take === assinatura && anotados.trechos && anotados.trechos[t.id] && Math.abs(anotados.trechos[t.id].inicio - t.inicio) < 1e-3 && Math.abs(anotados.trechos[t.id].fim - t.fim) < 1e-3 && fs.existsSync(arquivosDoTrecho(pasta, t.id).video);
   const fazer = trechos.filter((t) => opcoes.tudo || faltando.includes(t.id) || !pronto(t));
+  // Efeito sem recorte também mira no rosto: mede a pessoa num quadro só, na mesma carga do modelo.
+  const medidas = anotados.take === assinatura ? anotados.pessoas || {} : {};
+  const medir = cenasSoParaMedir(dados.cenas, trechos).filter((t) => opcoes.tudo || !medidas[t.id] || Math.abs(medidas[t.id].inicio - t.inicio) > 1e-3);
   const antigo = lerManifesto(pasta);
-  let manifesto = { take: assinatura, trechos: antigo.take === assinatura ? { ...antigo.trechos } : {} };
-  if (!fazer.length) return { ok: true, resumo: 'Os recortes já estavam prontos.', avisos, arquivos: { recorte: projeto.rel(RECORTE.pasta) }, dados: { recortados: [], prontos: trechos.map((t) => t.id) } };
+  let manifesto = { take: assinatura, trechos: antigo.take === assinatura ? { ...antigo.trechos } : {}, pessoas: antigo.take === assinatura ? { ...(antigo.pessoas || {}) } : {} };
+  if (!fazer.length && !medir.length) return { ok: true, resumo: 'Os recortes já estavam prontos.', avisos, arquivos: { recorte: projeto.rel(RECORTE.pasta) }, dados: { recortados: [], prontos: trechos.map((t) => t.id) } };
 
   const inicio = Date.now();
   const temp = path.join(pasta, 'temp');
@@ -74,9 +87,16 @@ export default async function recortar({ opcoes }) {
       pedacos.push({ ...t, grande, pequeno, de: quadro, ate: quadro + quadros });
       quadro += quadros;
     }
+    const soMedir = [];
+    for (const t of medir) {
+      const pequeno = path.join(temp, `${t.id}-medir.mp4`);
+      await cortarPedaco(take, { ...t, fim: t.inicio + 1 / MASTER.fps }, pequeno, `${LARGURA / 2}:${ALTURA / 2}`);
+      soMedir.push({ ...t, pequeno, de: quadro });
+      quadro += 1;
+    }
     // um vídeo só com todas as cenas, para o modelo carregar uma vez
     const lista = path.join(temp, 'lista.txt');
-    fs.writeFileSync(lista, pedacos.map((p) => `file '${path.basename(p.pequeno)}'`).join('\n'));
+    fs.writeFileSync(lista, [...pedacos, ...soMedir].map((p) => `file '${path.basename(p.pequeno)}'`).join('\n'));
     const junto = path.join(temp, 'junto.mp4');
     await ffmpegOk(['-y', '-f', 'concat', '-safe', '0', '-i', lista, '-c', 'copy', junto]);
     progresso(`Recortando a pessoa (${Math.round(quadro / MASTER.fps)} s de vídeo; leva alguns minutos)...`);
@@ -88,19 +108,26 @@ export default async function recortar({ opcoes }) {
       progresso(`Aplicando o recorte na cena ${p.id}...`);
       const arq = arquivosDoTrecho(pasta, p.id);
       const filtro = `[1:v]trim=start_frame=${p.de}:end_frame=${p.ate},setpts=PTS-STARTPTS,alphaextract,scale=${LARGURA}:${ALTURA}:flags=bicubic[a];[0:v][a]alphamerge,format=yuva420p`;
-      await ffmpegOk(['-y', '-i', p.grande, '-c:v', 'libvpx-vp9', '-i', mascara, '-filter_complex', filtro, '-c:v', 'libvpx-vp9', '-pix_fmt', 'yuva420p', '-deadline', 'good', '-cpu-used', '4', '-row-mt', '1', '-crf', String(RECORTE.crf), '-b:v', '0', '-an', arq.video]);
+      await ffmpegOk(['-y', '-i', p.grande, '-c:v', 'libvpx-vp9', '-i', mascara, '-filter_complex', filtro, '-c:v', 'libvpx-vp9', '-pix_fmt', 'yuva420p', '-deadline', 'realtime', '-cpu-used', '8', '-row-mt', '1', '-crf', String(RECORTE.crf), '-b:v', '0', '-an', arq.video]);
       await ffmpegOk(['-y', '-i', p.grande, '-frames:v', '1', arq.foto]);
-      const pessoa = await medirPessoa(arq.video, pasta, p.id);
+      // o primeiro quadro com a pessoa vazada (transparente), um pouco alargada para não sobrar borda
+      await ffmpegOk(['-y', '-i', arq.foto, '-c:v', 'libvpx-vp9', '-i', arq.video, '-filter_complex', '[1:v]trim=end_frame=1,alphaextract,dilation,dilation,dilation,negate[a];[0:v][a]alphamerge', '-frames:v', '1', arq.fundo]);
+      const pessoa = await medirTrilha(arq.video, pasta, p.id);
       manifesto = { ...manifesto, trechos: { ...manifesto.trechos, [p.id]: { inicio: p.inicio, fim: p.fim, pessoa } } };
       escreverJson(path.join(pasta, MANIFESTO), manifesto);
     }
+    for (const m of soMedir) {
+      const pessoa = await medirPessoa(mascara, pasta, m.id, m.de);
+      manifesto = { ...manifesto, pessoas: { ...manifesto.pessoas, [m.id]: { inicio: m.inicio, pessoa } } };
+    }
+    escreverJson(path.join(pasta, MANIFESTO), manifesto);
   } finally {
     fs.rmSync(temp, { recursive: true, force: true });
   }
   const segundos = Math.round((Date.now() - inicio) / 1000);
   return {
     ok: true,
-    resumo: `Pessoa recortada em ${fazer.length} cena(s), em ${segundos} s.`,
+    resumo: `Pessoa recortada em ${fazer.length} cena(s)${medir.length ? ` e medida em mais ${medir.length}` : ''}, em ${segundos} s.`,
     avisos,
     arquivos: { recorte: projeto.rel(RECORTE.pasta) },
     dados: { recortados: fazer.map((t) => t.id), prontos: trechos.map((t) => t.id), segundos },

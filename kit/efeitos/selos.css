@@ -1,0 +1,18 @@
+/* Selos de check: pílulas claras com bola na cor da marca e check desenhado. */
+.ef-selos .sl-pilha { position: absolute; width: 760px; }
+.ef-selos .sl-esq { left: 76px; }
+.ef-selos .sl-dir { left: auto; right: 230px; }
+.ef-selos .sl-selo { position: absolute; left: 0; height: 116px; display: inline-flex; align-items: center; gap: 20px; padding: 0 42px 0 16px;
+  border-radius: 999px; overflow: hidden; white-space: nowrap; transform-origin: 0% 50%;
+  background: linear-gradient(180deg, #ffffff 0%, color-mix(in srgb, var(--papel) 70%, #ffffff) 100%);
+  box-shadow: 0 16px 34px rgba(0,0,0,.24), 0 3px 8px rgba(0,0,0,.14), inset 0 -3px 0 color-mix(in srgb, var(--papel) 70%, var(--tinta) 8%), inset 0 0 0 1.5px rgba(255,255,255,.9); }
+.ef-selos .sl-dir .sl-selo { left: auto; right: 0; transform-origin: 100% 50%; }
+.ef-selos .sl-bola { position: relative; flex: none; width: 84px; height: 84px; border-radius: 50%; display: grid; place-items: center;
+  background: radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--principal) 70%, #ffffff), var(--principal) 62%);
+  box-shadow: inset 0 -3px 0 rgba(0,0,0,.16), 0 4px 10px color-mix(in srgb, var(--principal) 45%, transparent); }
+.ef-selos .sl-bola svg { position: relative; width: 58px; height: 58px; fill: none; stroke: #ffffff; stroke-width: 4.6; stroke-linecap: round; stroke-linejoin: round;
+  stroke-dasharray: 30; stroke-dashoffset: 30; }
+.ef-selos .sl-onda { position: absolute; inset: 0; border-radius: 50%; border: 3px solid var(--destaque); opacity: 0; }
+.ef-selos .sl-txt { display: inline-block; font: 800 var(--fs) / 1 var(--fonte-leitura); letter-spacing: -.01em; color: var(--tinta); padding-bottom: 3px; }
+.ef-selos .sl-luz { position: absolute; top: 0; bottom: 0; left: 0; width: 40%; pointer-events: none;
+  background: linear-gradient(100deg, transparent 0%, rgba(255,255,255,.85) 50%, transparent 100%); mix-blend-mode: soft-light; transform: translateX(-120%); }

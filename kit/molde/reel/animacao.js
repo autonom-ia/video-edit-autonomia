@@ -115,14 +115,15 @@
         id: e.id, nome: e.nome, inicio: e.inicio, fim: e.fim, golpe: e.golpe, dur: e.fim - e.inicio, p: e.p || {}, marca: e.marca || {},
         fundo: document.querySelector(camadas[0]), atras: document.querySelector(camadas[1]), frente: document.querySelector(camadas[2]),
         sel: { fundo: camadas[0], atras: camadas[1], frente: camadas[2], cam: '#cam', zoom: '#zoom', take: '#take', sombra: '#sombra-rosto' },
-        recorte: e.recorte, foto: e.foto, pessoa: e.pessoa || { topo: 620, esquerda: 300, direita: 780 },
+        recorte: e.recorte, foto: e.foto, fundoSemPessoa: e.fundoSemPessoa, pessoa: e.pessoa || { topo: 780, esquerda: 320, direita: 800, medida: false },
       });
     }
     tl.set(camadas, { visibility: 'hidden' }, e.fim);
-    tl.set('#cam', { scale: 1, rotation: 0, x: 0, clipPath: 'none', filter: 'none', borderRadius: 0 }, e.fim);
-    tl.set('#take', { scale: 1, x: 0, y: 0, filter: 'none' }, e.fim);
+    // efeito só roda com o rosto cheio (faixa 0), onde o #cam fica em y 0
+    tl.set('#cam', { scale: 1, rotation: 0, rotationX: 0, rotationY: 0, transformPerspective: 0, x: 0, y: 0, clipPath: 'none', filter: 'none', borderRadius: 0, transformOrigin: '540px 960px' }, e.fim);
+    tl.set('#take', { scale: 1, x: 0, y: 0, filter: 'none', clipPath: 'none', transformOrigin: '50% 50%' }, e.fim);
     tl.set('#sombra-rosto', { opacity: 1 }, e.fim);
-    if (e.recorte) tl.set(e.recorte, { opacity: 0 }, e.fim);
+    if (e.recorte) tl.set(e.recorte, { opacity: 0, filter: 'none', clipPath: 'none', scale: 1, rotation: 0, x: 0, y: 0 }, e.fim);
   });
 
   // série numerada: o número e o nome trocam a cada item, a barra enche um segmento por vez
@@ -139,6 +140,12 @@
       }
       tl.fromTo(['#serie-n' + k, '#serie-i' + k], { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.26, ease: P }, it.em + 0.04);
       tl.to('#serie-s' + k, { '--enche': 1, duration: 0.35, ease: 'power2.out' }, it.em);
+    });
+    // tela no alto (cartão, lista, checklist...) ocupa o mesmo lugar: a série sai e volta depois
+    D.telas.forEach(function (t) {
+      if (t.sai <= S.itens[0].em || t.entrada >= S.fim) return;
+      tl.to('#serie', { autoAlpha: 0, duration: 0.2, ease: 'power2.in' }, Math.max(S.itens[0].em, t.entrada - 0.05));
+      if (t.sai + 0.4 < S.fim - 0.3) tl.to('#serie', { autoAlpha: 1, duration: 0.25, ease: P }, t.sai + 0.4);
     });
     tl.to('#serie', { opacity: 0, y: -18, duration: 0.3, ease: 'power2.in' }, Math.max(S.itens[S.itens.length - 1].em + 0.5, S.fim - 0.3));
     tl.set('#serie', { visibility: 'hidden' }, S.fim + 0.05);

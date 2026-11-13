@@ -103,6 +103,10 @@
     "texto": "Um efeito de cena do kit está sem o arquivo de animação.",
     "acao": "Veja dados.efeito. Reinstale o estúdio pelo link da versão mais nova."
   },
+  "EFEITO_SEM_MEDIDA": {
+    "texto": "Um efeito de cena vai mirar no lugar típico do rosto, sem medida do seu vídeo.",
+    "acao": "Rode ./estudio recortar --projeto <P> (mede o rosto nas cenas com efeito em poucos minutos) e monte de novo."
+  },
   "ENFASE_SEM_CASAMENTO": {
     "texto": "Uma palavra de destaque não foi dita no vídeo.",
     "acao": "Troque a ênfase da cena por uma palavra que foi dita e rode alinhar de novo."

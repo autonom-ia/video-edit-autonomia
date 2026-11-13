@@ -1,6 +1,6 @@
 # Regras de produção
 
-São 53 regras. Elas saíram de um Reel real que precisou de 9 versões para chegar a 8,7 de 10 no revisor independente. Cada regra aqui é um erro que já aconteceu e custou uma rodada. Seguindo todas, o vídeo chega perto dessa nota em 1 ou 2 rodadas.
+São 56 regras. Elas saíram de um Reel real que precisou de 9 versões para chegar a 8,7 de 10 no revisor independente. Cada regra aqui é um erro que já aconteceu e custou uma rodada. Seguindo todas, o vídeo chega perto dessa nota em 1 ou 2 rodadas.
 
 Como usar:
 - Leia tudo antes de escrever um roteiro ou montar um vídeo.
@@ -241,3 +241,17 @@ Porquê: o silêncio de 2 s é onde o corte entra limpo. O gancho é o trecho ma
 **53. Ninguém dá nota ao próprio trabalho.**
 Todo roteiro e todo vídeo passam pelo avaliador independente (skill `avaliar`) até 8,5 ou mais, em até 3 rodadas. A nota de quem fez não conta; diferença de 0,1 é ruído. Mexer só em som e texto leva a uns 8; para passar de 8,5 é preciso mexer na imagem (gancho, trechos parados, zoom). Depois que o aluno aprova a prévia, a imagem fica congelada e só muda com novo OK. Postagem nova e com dúvida vai como Reel de teste, uma vez só; nunca repostar.
 Porquê: o mesmo roteiro levou 7,9 de quem o via sozinho e 5,5 lado a lado com outra ideia. Polir 8 vezes escondia um problema de conceito que só um olhar de fora viu.
+
+## 10. Efeitos de cena
+
+**54. Efeito de cena só onde a fala pede, com o porquê escrito.**
+Os efeitos do kit (`./estudio efeitos` lista todos, com o "quando usar" de cada um) são escolhidos pelo sentido da fala, nunca por palavra-chave. Exemplos: capa de revista para anunciar quem fala ou um tema grande; gráfico subindo quando a fala cita um resultado com prova; troca de fundo na mudança de assunto ou de lugar; quebra na virada; câmera "REC" no "olha isso aqui". Cada `efeito` leva o campo `porque`, com o trecho da fala que ele ajuda a entender. O kit confere: sem `porque`, efeito desconhecido, campo errado ou cena de tamanho errado reprovam.
+Porquê: efeito que não serve à fala vira vitrine. O Reel de referência tinha 20 efeitos em 40 s e não ensinava nada além dos próprios efeitos.
+
+**55. No máximo 1 efeito a cada 5 s, nunca o mesmo em seguida, nunca no gancho.**
+Efeito de cena só com o rosto cheio (faixa 0), depois do gancho escrito, sem repetir o da cena anterior, e no máximo 1 a cada 5 s de vídeo. Efeito com tela por cima gera aviso: os dois disputam o olho. O kit confere.
+Porquê: o quadro 0 é do título. Dois efeitos seguidos ou com tela por cima cansam mais do que prendem.
+
+**56. Rosto pequeno só quando o aluno pede.**
+Cartão inclinado, celular, conversa em vídeo e portal encolhem o rosto e geram o aviso `ROSTO_PEQUENO`. Use só se o aluno pediu esse efeito; senão, escolha um efeito com o rosto grande. Efeito que troca ou recorta o fundo pede `./estudio recortar` antes do `montar` (leva alguns minutos; avise o aluno).
+Porquê: o rosto é o que vende (regra da camada 3). Recortar só as cenas com efeito economiza o tempo do aluno.

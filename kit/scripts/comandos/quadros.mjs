@@ -28,6 +28,12 @@ export function momentos(cenas, duracao, tipo) {
     faixa = c.faixa;
   }
   for (const t of cenas.telas || []) lista.push({ t: r2(t.entra + 0.3), rotulo: `${t.id} entra` });
+  // efeito de cena: a chegada e a saída, além do meio da cena
+  for (const c of cenas.cenas || []) {
+    if (!c.efeito) continue;
+    lista.push({ t: r2(c.inicio + 0.25), rotulo: `${c.id} ${c.efeito.nome} entra` });
+    lista.push({ t: r2(c.fim - 0.12), rotulo: `${c.id} ${c.efeito.nome} sai` });
+  }
   const vistos = new Set();
   return lista
     .filter((m) => m.t >= 0 && m.t < duracao)

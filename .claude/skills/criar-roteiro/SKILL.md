@@ -12,7 +12,7 @@ Comandos: no Mac e no Windows com Git Bash, `./estudio <comando>`. No PowerShell
 ## Leia antes (todas as vezes)
 
 - `minha-marca/briefing.json` e, se existir, `minha-marca/aprendizados.md` (as regras deste perfil valem mais que as gerais).
-- `guias/regras-de-producao.md` (as 53 regras), `guias/ganchos.md`, `guias/naturalidade.md`, `guias/camadas.md`.
+- `guias/regras-de-producao.md` (as 56 regras), `guias/ganchos.md`, `guias/naturalidade.md`, `guias/camadas.md`.
 - `guias/textos-do-estudio.md` (F-00 e P-02 a P-05).
 - As réguas em `1-referencias/*/regua.md`. Se houver referência sem régua, rode a skill `estudar-referencias` antes, sem avisar. Se não houver nenhuma régua (nada baixou), use `guias/regua-embutida.md` e siga sem perguntar.
 
@@ -81,7 +81,7 @@ O gancho escolhido vira o fio do roteiro e volta no fecho.
 2. Diga o P-05 e, logo depois, o F-00 no sentido do computador para o celular.
 3. Rode `./estudio estado --projeto P --etapa gravacao`.
 
-## Regras de escrita (resumo; o completo está nas 53 regras)
+## Regras de escrita (resumo; o completo está nas 56 regras)
 
 - Abrir pelo problema de quem assiste. Nunca "oi", nome, anos de profissão ou "neste vídeo".
 - Fala do gancho até 8 palavras. Escrito até 10. Frases diferentes.

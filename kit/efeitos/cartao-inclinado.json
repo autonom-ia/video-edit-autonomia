@@ -1,0 +1,14 @@
+{
+  "nome": "cartao-inclinado",
+  "titulo": "Cartão inclinado (a cabeça escapa)",
+  "funcao": "Use só se o aluno pedir, porque o rosto fica menor. O vídeo vira um cartão inclinado com borda branca sobre fundo escuro e, na palavra de ênfase, a cabeça sai por cima da moldura, como quem fura a tela. Combina com virada, revelação ou 'olha isso'. Não use em fala calma, técnica ou triste, nem duas vezes no mesmo vídeo.",
+  "referencia": "Reel de referência 'Frame Escape' (estudado, não copiado). Ideia de moldura com sombra adaptada da peça 'device-frame-stage' do registro do HyperFrames (Apache-2.0). Direção de arte própria nas cores da marca.",
+  "recorte": true,
+  "rosto_pequeno": true,
+  "duracao": { "min": 1.5, "max": 5 },
+  "campos": {},
+  "sons": [
+    { "efeito": "whoosh-medio", "em": 0.12, "volume": 0.7 },
+    { "efeito": "pop", "em": "golpe", "volume": 0.8 }
+  ]
+}

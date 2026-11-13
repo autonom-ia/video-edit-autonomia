@@ -1,0 +1,41 @@
+/* Estúdio acendendo: sala escura atrás da pessoa, softboxes em 3D, placa luminosa na frente. */
+.ef-estudio .es-sala { position: absolute; inset: 0; transform-origin: 540px 900px; background: #070707; }
+.ef-estudio .es-parede { position: absolute; inset: 0; background:
+  radial-gradient(60% 34% at 50% 52%, color-mix(in srgb, var(--principal) 22%, #1d1d1d), transparent 75%),
+  linear-gradient(180deg, #050505 0%, #0d0d0d 40%, color-mix(in srgb, var(--principal) 14%, #161616) 66%, #0a0a0a 100%); }
+.ef-estudio .es-luz { position: absolute; inset: 0; mix-blend-mode: screen; background:
+  radial-gradient(42% 30% at 50% 50%, color-mix(in srgb, var(--principal) 30%, #8f8f8f), transparent 72%),
+  radial-gradient(30% 22% at 16% 34%, rgba(255,255,255,.22), transparent 70%),
+  radial-gradient(30% 22% at 84% 34%, rgba(255,255,255,.22), transparent 70%),
+  linear-gradient(180deg, transparent 0%, color-mix(in srgb, var(--principal) 18%, #3a3a3a) 62%, transparent 100%); }
+.ef-estudio .es-chao { position: absolute; left: -10%; right: -10%; top: 1240px; height: 680px;
+  background: radial-gradient(50% 40% at 50% 0%, color-mix(in srgb, var(--principal) 20%, #262626), transparent 80%); }
+.ef-estudio .es-feixe { position: absolute; top: 640px; width: 700px; height: 520px; border-radius: 50%; mix-blend-mode: screen; opacity: 0; filter: blur(30px);
+  background: radial-gradient(closest-side, rgba(255,255,255,.32), rgba(255,255,255,.08) 60%, transparent); }
+.ef-estudio .es-feixe.es-esq { left: -120px; transform: rotate(28deg); }
+.ef-estudio .es-feixe.es-dir { right: -120px; transform: rotate(-28deg); }
+.ef-estudio .es-poste { position: absolute; width: 10px; height: 900px; background: linear-gradient(90deg, #1a1a1a, #3a3a3a 50%, #141414); transform-origin: 50% 0; }
+.ef-estudio .es-caixa { position: absolute; width: 290px; height: 340px; perspective: 900px; }
+.ef-estudio .es-giro { position: absolute; inset: 0; transform-style: preserve-3d; }
+.ef-estudio .es-moldura { position: absolute; inset: 0; border-radius: 10px; padding: 14px; background: linear-gradient(160deg, #2b2b2b, #0e0e0e);
+  box-shadow: 0 24px 50px rgba(0,0,0,.6); }
+.ef-estudio .es-difusor, .ef-estudio .es-acesa { position: absolute; inset: 14px; border-radius: 4px; }
+.ef-estudio .es-difusor { background: linear-gradient(160deg, #2a2a2a, #1a1a1a); }
+.ef-estudio .es-acesa::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent calc(50% - 1px), rgba(0,0,0,.08) 50%, transparent calc(50% + 1px)), linear-gradient(0deg, transparent calc(50% - 1px), rgba(0,0,0,.08) 50%, transparent calc(50% + 1px)); }
+.ef-estudio .es-acesa { background: radial-gradient(90% 80% at 50% 45%, #ffffff 40%, #f1f1f1 75%, #d9d9d9);
+  box-shadow: 0 0 40px 10px rgba(255,255,255,.75), 0 0 140px 50px rgba(255,255,255,.35); }
+.ef-estudio .es-halo { position: absolute; width: 610px; height: 660px; border-radius: 50%; mix-blend-mode: screen;
+  background: radial-gradient(closest-side, rgba(255,255,255,.55), rgba(255,255,255,.12) 55%, transparent); }
+.ef-estudio .es-placa { --liga: 0; position: absolute; left: 0; right: 0; top: 290px; margin: 0 auto; width: fit-content;
+  display: flex; align-items: center; gap: 18px; padding: 18px 36px 20px 30px; border-radius: 14px;
+  background: #121212; border: 3px solid color-mix(in srgb, var(--principal) calc(var(--liga) * 100%), #2c2c2c);
+  box-shadow: 0 0 calc(var(--liga) * 30px) color-mix(in srgb, var(--principal) 45%, #ffffff), 0 0 calc(var(--liga) * 90px) color-mix(in srgb, var(--principal) 70%, #ffffff), 0 0 calc(var(--liga) * 200px) var(--principal); }
+.ef-estudio .es-placa::before { content: ""; position: absolute; inset: 0; border-radius: 11px; opacity: var(--liga);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--principal) 55%, #ffffff), color-mix(in srgb, var(--principal) 85%, #ffffff)); }
+.ef-estudio .es-placa span { position: relative; font: var(--peso-titulo) 54px/1 var(--fonte-titulo); letter-spacing: .12em; text-transform: uppercase; white-space: nowrap;
+  color: color-mix(in srgb, #ffffff calc(var(--liga) * 100%), #3a3a3a);
+  text-shadow: 0 0 calc(var(--liga) * 18px) color-mix(in srgb, var(--papel) 70%, transparent); }
+.ef-estudio .es-placa i { position: relative; width: 22px; height: 22px; border-radius: 50%;
+  background: color-mix(in srgb, var(--destaque) calc(var(--liga) * 100%), #333333);
+  box-shadow: 0 0 calc(var(--liga) * 16px) var(--destaque); }
+.ef-estudio .es-vinheta { position: absolute; inset: 0; background: radial-gradient(75% 60% at 50% 45%, transparent 55%, rgba(0,0,0,.75)); }

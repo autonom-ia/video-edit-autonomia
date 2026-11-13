@@ -1,0 +1,16 @@
+{
+  "nome": "fundo-verde",
+  "titulo": "Fundo verde",
+  "funcao": "O fundo vira um pano verde de estúdio e, na palavra de ênfase, o verde é trocado por um cenário (uma imagem do aluno ou uma cidade à noite). Bom quando a fala é sobre edição, bastidor, 'mudar de cenário', transformar ou levar a pessoa para outro lugar. Não use em fala séria ou delicada nem duas vezes no mesmo vídeo.",
+  "referencia": "Reel de referência 'Green Screen' (estudado, não copiado). Cidade desenhada em SVG e direção de arte próprias nas cores da marca. O verde de chroma é a única cor fora da marca, de propósito: é o verde de estúdio de verdade.",
+  "recorte": true,
+  "rosto_pequeno": false,
+  "duracao": { "min": 1.5, "max": 5 },
+  "campos": {
+    "imagem": { "tipo": "arquivo", "obrigatorio": false }
+  },
+  "sons": [
+    { "efeito": "whoosh-medio", "em": 0, "volume": 0.7 },
+    { "efeito": "whoosh-medio", "em": "golpe", "volume": 0.9 }
+  ]
+}

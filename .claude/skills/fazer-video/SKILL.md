@@ -74,6 +74,7 @@ Para cada app, site ou ação que a fala cita:
 2. Senão, pesquise a referência real (site oficial, print público, documentação) e desenhe uma tela `livre` com movimento: a janela chegando, o texto sendo digitado, a caixinha aprovada, o resultado aparecendo. Siga `guias/tela-livre.md`.
 3. App que o aluno usa vai em `apps_reais`, com a `referencia` e o `porque`.
 4. Pense no vídeo todo como um diretor: a forma que vira a próxima, a câmera que se aproxima, o 3D que dá profundidade. O repertório está em `guias/tela-livre.md`. Cada efeito tem função.
+5. **Efeitos de cena.** Rode `./estudio efeitos` e leia o "quando usar" de cada um. Ponha `efeito` só nas cenas de rosto cheio em que a fala fica mais clara com ele, com o `porque` escrito (regras 54 a 56 e "Efeitos de cena" em `guias/camadas.md`). Fala que é uma lista de verdade pode ganhar `serie` e, no fim, uma tela `checklist`.
 
 No caminho B, faça isto antes do F-04 (passo 5.3), para o aluno aprovar o plano já com as telas certas. No caminho A, troque a tela do plano pela gravação ou pela tela livre e mostre na prévia (GATE 2).
 
@@ -82,6 +83,7 @@ No caminho B, faça isto antes do F-04 (passo 5.3), para o aluno aprovar o plano
 
 ### 7. Telas, montagem e conferência dos quadros
 1. `./estudio telas --projeto P` (de novo, com os tempos reais).
+   - Tem efeito com recorte? `./estudio recortar --projeto P`. Antes, avise: "Agora vou recortar você do fundo nas cenas com efeito. Leva alguns minutos." Na primeira vez ele baixa um modelo (~170 MB).
 2. `./estudio montar --projeto P`.
 3. `./estudio quadros --projeto P --fonte comp --momentos cenas,transicoes`.
 4. Olhe a folha de quadros e os quadros um por um, procurando:
@@ -92,7 +94,8 @@ No caminho B, faça isto antes do F-04 (passo 5.3), para o aluno aprovar o plano
    - rosto pequeno, cortado ou emoldurado;
    - trecho parado mais de 2 s;
    - tela livre: letra pequena demais para o celular, contraste fraco, legenda passando por cima do que importa;
-   - gravação de tela: dado pessoal à mostra, parte importante cortada pelo `encaixe`.
+   - gravação de tela: dado pessoal à mostra, parte importante cortada pelo `encaixe`;
+   - efeito de cena: o texto que devia ficar atrás da cabeça está atrás, o rosto ficou livre, a saída é limpa antes da próxima cena. A folha já traz a chegada, o meio e a saída de cada efeito.
 5. Achou: corrija em `cenas.json` (tempo, faixa, tela, zoom) e repita de 1 a 4. No máximo 3 vezes. Se sobrar defeito, ele vai para o avaliador.
 
 ### 8. GATE 2: a prévia

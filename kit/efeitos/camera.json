@@ -1,0 +1,16 @@
+{
+  "nome": "camera",
+  "titulo": "Zoom digital",
+  "funcao": "Mostrar que a pessoa está gravando ou sendo filmada: aparece a moldura de uma câmera (REC piscando, leitura do zoom, contador) e o rosto aproxima em dois degraus secos. Use quando a fala é sobre gravar, filmar, câmera, celular, bastidor ou 'olha só' (\"Quero gravar um vídeo\", \"grava no celular\"). Não use em fala que não tem nada de câmera, nem em duas cenas seguidas.",
+  "referencia": "Reel de referência 'Digital Zoom' (estudado, não copiado). Moldura adaptada de 'camcorder-hud', do registro do HyperFrames (Apache-2.0), refeita sem callback: contador e REC trocam por sets na linha do tempo. Direção de arte própria nas cores da marca.",
+  "recorte": false,
+  "rosto_pequeno": false,
+  "duracao": { "min": 1.5, "max": 6 },
+  "campos": {
+    "ate": { "tipo": "numero", "min": 1.2, "max": 1.8, "obrigatorio": false }
+  },
+  "sons": [
+    { "efeito": "zip", "em": 0.3, "volume": 0.6 },
+    { "efeito": "pop", "em": 0.95, "volume": 0.7 }
+  ]
+}

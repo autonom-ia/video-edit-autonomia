@@ -1,0 +1,14 @@
+{
+  "nome": "snap",
+  "titulo": "Zoom-relâmpago",
+  "funcao": "Dar um soco visual numa palavra forte: a câmera dá um tranco no rosto bem na palavra de ênfase, com borrão e um estouro de luz, assenta perto e volta devagar. Use quando a fala tem uma virada, um número ou uma afirmação curta que precisa bater (\"Frase 1\", \"sozinho\", \"de graça\"). Não use em fala calma ou emocional, nem em cena sem palavra de ênfase, nem em duas cenas seguidas.",
+  "referencia": "Reel de referência 'Snap Zoom' (estudado, não copiado). Tempo do borrão de 'cinematic-zoom' e tremor curto de 'camera-shake', do registro do HyperFrames (Apache-2.0), refeitos em CSS e GSAP. Direção de arte própria nas cores da marca.",
+  "recorte": false,
+  "rosto_pequeno": false,
+  "duracao": { "min": 1.3, "max": 6 },
+  "campos": {},
+  "sons": [
+    { "efeito": "whoosh-rapido", "em": "golpe", "volume": 0.6 },
+    { "efeito": "impacto-medio", "em": "golpe", "volume": 0.9 }
+  ]
+}

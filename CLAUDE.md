@@ -84,6 +84,7 @@ Rode tudo de dentro da pasta do estúdio: `~/estudio-de-reels` no Mac; `%USERPRO
 - Saída 0 é ok, 1 é erro de execução, 2 é reprovado na conferência (corrija pela causa e rode de novo).
 - **Use o `./estudio` para montar, conferir e entregar.** Ele acha os programas sozinho e roda a checagem de marca antes do render. Nunca rode `hyperframes render` fora dele.
 - **Criar é livre.** Você escreve as telas livres (HTML, CSS e GSAP), prepara gravação de tela com `./estudio midia` e pesquisa a referência real de cada app citado. Veja `guias/tela-livre.md`.
+- **Efeitos de cena** (capa de revista, troca de fundo, quebra, câmera, gráfico...): `./estudio efeitos` lista todos com o "quando usar". Escolha pelo sentido da fala, com o `porque` escrito (regras 54 a 56). Efeito que recorta a pessoa pede `./estudio recortar` antes do `montar`.
 - Comando que falha duas vezes: skill `consertar`.
 
 ## 5. Caixinhas de permissão
@@ -189,7 +190,7 @@ Nunca use expressão regular para interpretar o que o aluno escreveu. Quem enten
 
 O molde do vídeo já traz o ritmo, o zoom, a faixa, a legenda e o som que levaram um Reel real à nota 8,7 de 10 no avaliador independente. Aquele vídeo precisou de 9 versões; com estas regras, o do aluno chega lá em 1 ou 2.
 
-- O molde é o ponto de partida, não o teto. Siga `guias/regras-de-producao.md` (53 regras) e melhore quando a cena pedir: tela livre, gravação de tela, app real pesquisado e o repertório de movimento do método das camadas (`guias/tela-livre.md`). As regras travam só as decisões do aluno, a verdade e o resultado; o jeito de criar é seu.
+- O molde é o ponto de partida, não o teto. Siga `guias/regras-de-producao.md` (56 regras) e melhore quando a cena pedir: tela livre, gravação de tela, app real pesquisado e o repertório de movimento do método das camadas (`guias/tela-livre.md`). As regras travam só as decisões do aluno, a verdade e o resultado; o jeito de criar é seu.
 - A tela mostra acontecendo o que a fala diz. Quando a fala cita um app ou uma ação, pesquise a referência real e desenhe, ou use a gravação de tela do aluno.
 - Sem referência baixada, use `guias/regua-embutida.md` e siga. Nunca prenda o aluno por causa de um download.
 - Referência é régua, não molde. Nunca copie o desenho de ninguém.

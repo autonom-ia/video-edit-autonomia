@@ -6,7 +6,7 @@ import { gruposDeLegenda, tempoDosGrupos, legendaY, corDaLegenda } from './legen
 import { htmlDaTela, htmlDaMidia, itensDaTela } from './telas.mjs';
 import { faixaNoInstante, tamanhoPorFaixa, fimDoGancho } from './cenas.mjs';
 import { fichaDoEfeito } from './efeitos.mjs';
-import { PESSOA_PADRAO } from './recorte.mjs';
+import { pessoaDaCena } from './recorte.mjs';
 import { normalizar, escaparHtml, palavras as separar, arred } from './texto.mjs';
 
 const r3 = (n) => arred(n, 3);
@@ -205,7 +205,7 @@ function resolverCampos(efeito, ficha) {
 
 // Efeitos de cena: três camadas vazias por efeito (fundo atrás do rosto inteiro, atrás da pessoa
 // e na frente do rosto) e o vídeo do recorte. recortes: { idDaCena: true } das cenas com recorte pronto.
-export function montarEfeitos(dados, { recortes = {}, marca = null } = {}) {
+export function montarEfeitos(dados, { recortes = {}, marca = null, medidas = [] } = {}) {
   const fundo = [];
   const atras = [];
   const frente = [];
@@ -234,7 +234,8 @@ export function montarEfeitos(dados, { recortes = {}, marca = null } = {}) {
       golpe: r3(tempoDoGolpe(c)),
       recorte: temRecorte ? `#rec-${c.id}` : null,
       foto: temRecorte ? `assets/recorte/${c.id}.png` : null,
-      pessoa: temRecorte && recortes[c.id].pessoa ? recortes[c.id].pessoa : { ...PESSOA_PADRAO },
+      fundoSemPessoa: temRecorte ? `assets/recorte/${c.id}-fundo.png` : null,
+      pessoa: temRecorte && recortes[c.id].pessoa ? { ...recortes[c.id].pessoa, medida: true } : pessoaDaCena(c.id, c.inicio, medidas),
       p: resolverCampos(c.efeito, ficha),
       marca: marca ? { nome: marca.nome || '', arroba: marca.arroba || '' } : { nome: '', arroba: '' },
     });
@@ -321,8 +322,14 @@ export function planejarSons({ dados, eventosFaixa, telasInfo, zoomEv, cta, dura
   for (const e of efeitosInfo) {
     const ficha = fichaDoEfeito(e.nome);
     for (const som of (ficha && ficha.sons) || []) {
-      const golpe = som.em === 'golpe' ? e.golpe : e.inicio + som.em;
-      if (golpe <= e.fim + 0.3) add(som.efeito, golpe, som.volume ?? 0.7, `efeito ${e.nome} ${e.id}`);
+      // "golpe": a palavra de ênfase; "fim": o fim da cena menos o recuo (efeito de saída); número: depois do início
+      const golpe = som.em === 'golpe' ? e.golpe + (som.apos || 0) : som.em === 'fim' ? e.fim - (som.recuo || 0) : e.inicio + som.em;
+      // "repetir": um som por item de um campo de lista do efeito (ex.: um pop por selo)
+      const lista = som.repetir && Array.isArray(e.p[som.repetir.campo]) ? e.p[som.repetir.campo] : [null];
+      lista.forEach((_, k) => {
+        const t = golpe + k * (som.repetir ? som.repetir.passo : 0);
+        if (t <= e.fim + 0.3) add(som.efeito, t, som.volume ?? 0.7, `efeito ${e.nome} ${e.id}`);
+      });
     }
   }
   if (serie) for (const it of serie.itens) add('swish', it.em, 0.5, `série ${it.k + 1}`);
@@ -367,14 +374,14 @@ export function jsonParaScript(objeto) {
 }
 
 // Junta tudo: dados para o animacao.js, pedaços de HTML e os arquivos sons.json e legendas.json.
-export function montarComposicao({ dados, transcricao, marca, duracao, livres = {}, midias = {}, recortes = {} }) {
+export function montarComposicao({ dados, transcricao, marca, duracao, livres = {}, midias = {}, recortes = {}, medidas = [] }) {
   const eventosFaixa = eventosDeFaixa(dados.cenas, marca, dados.legenda_rosto_y);
   const zoomEv = eventosDeZoom(dados.cenas, eventosFaixa);
   const legendas = montarLegendas(transcricao.palavras || [], dados.cenas);
   const gancho = montarGancho(dados);
   const telas = montarTelas(dados, marca, { livres, midias, duracao });
   const cta = montarCta(dados, telas.info);
-  const efeitos = montarEfeitos(dados, { recortes, marca });
+  const efeitos = montarEfeitos(dados, { recortes, marca, medidas });
   const serie = montarSerie(dados, duracao);
   const sons = planejarSons({ dados, eventosFaixa, telasInfo: telas.info, zoomEv, cta: cta.dados, duracao, efeitosInfo: efeitos.info, serie: serie.dados });
   const dadosReel = {

@@ -66,6 +66,7 @@ Você escreve `projetos/<P>/cenas.json` e, ao lado, `cenas.md` (a mesma coisa em
 | `legenda_rosto_y` | Opcional. Topo da legenda com o rosto cheio, de 250 a 1424 (padrão 1424). Olhe um quadro do take: abaixo da boca se couber; se o rosto estiver baixo e a boca passar de ~1350, acima da cabeça, sem cobrir o gancho, tela solta ou selo do pedido. Veja a regra 39 de `guias/regras-de-producao.md`. |
 | `titulo_gancho` | `{"texto", "publico"}`: o gancho escrito do quadro 0 (até 10 palavras) e, se quiser, quem é o público (até 12 palavras ou `""`). Obrigatório. |
 | `apps_reais` | Opcional. Lista `{"nome", "referencia", "porque", "citado_como"}` (o último, opcional: como o aluno chamou o app na fala) dos apps que o aluno usa de verdade e cita na fala. Libera o nome e as cores deles neste vídeo. Veja `guias/tela-livre.md`. |
+| `serie` | Opcional. `{"titulo", "itens": [{"nome", "em"}]}`: série numerada ("5 erros", "3 passos"). Cabeçalho no alto com o número, o nome do item e uma barra em segmentos que enche a cada item; some quando entra uma tela e volta depois. De 2 a 20 itens, nome de até 3 palavras, `em` em ordem. Use quando a fala é uma lista de verdade: dá motivo para ficar até o fim. |
 | `cenas` | A lista de cenas, em ordem. |
 | `telas` | A lista de telas que aparecem por cima. |
 | `cta` | `{"palavra", "em"}`: a palavra do pedido (uma só, sem espaço) e o segundo em que ela aparece. |
@@ -85,6 +86,7 @@ Você escreve `projetos/<P>/cenas.json` e, ao lado, `cenas.md` (a mesma coisa em
 | `sons` | `[{"efeito", "em", "volume"}]`. `efeito` é um dos 14 nomes abaixo. `em` é o segundo em que o som bate. `volume` 1,4 nas viradas, 0,6 a 1,0 nos demais. Som da chegada de uma tela: ponha no `entra` dela (até 1 quadro depois); o estúdio leva para o quadro em que ela aparece (4 quadros antes). Som mais longe do `entra` fica onde você pôs. Whoosh, swish e zip demoram a crescer: o estúdio começa antes para o pico cair no `em`. |
 | `virada` | `true` quando a cena muda o rumo da fala. Leva golpe de som. |
 | `reconstrucao` | `true` quando a cena foi remontada a partir de outra tomada ou fora da ordem gravada. |
+| `efeito` | Opcional. Efeito de cena do kit: `{"nome", "porque", ...campos}`. `./estudio efeitos` lista os nomes, o "quando usar" e os campos de cada um. Só com `faixa` 0, depois do gancho, sem repetir o da cena anterior, no máximo 1 a cada 5 s. Veja "Efeitos de cena" abaixo. |
 
 Efeitos: `impacto-forte`, `impacto-medio`, `whoosh-rapido`, `whoosh-medio`, `swish`, `pop`, `zip`, `teclado`, `brilho`, `notificacao-saida`, `notificacao-sucesso`, `vibrar`, `subida`, `cintilar`.
 
@@ -105,6 +107,7 @@ Palavras contadas por espaço:
 | `prompt` | `prompt`, `resposta` | até 40 · até 25 (tela de IA genérica, sem marca) |
 | `notificacao` | `app`, `texto` | `app` é "Mensagens", "E-mail" ou "Agenda" · até 35 |
 | `cta` | `palavra`, `frase` | 1 palavra · até 8 |
+| `checklist` | `titulo` (opcional), `itens` | título até 6 · de 2 a 20 itens de até 4 · contador grande que sobe a cada item marcado; acima de 8 itens, duas colunas. Bom no fim de uma série, para recapitular |
 | `livre` | `arquivo`, `descricao`, `entrada` (opcional) | `arquivo` = `telas-livres/<id>.html` no projeto · `descricao` em uma frase · `entrada` = `padrao` ou `propria` · até 8 s no ar. Veja `guias/tela-livre.md` |
 | `midia` | `arquivo`, `descricao`, `encaixe` (opcional) | `arquivo` = `midia/<nome>` preparado pelo `./estudio midia` · `encaixe` = `cobrir` ou `conter` · até 8 s no ar |
 
@@ -120,3 +123,13 @@ Nunca use a chave `etiqueta`. Ela existia para escrever "simulação" na tela e 
 6. **Fio que soma:** quando der, um número ou uma lista que cresce ao longo do vídeo (passo 1 de 4, 2 de 4...). Dá motivo para ficar até o fim.
 7. **Prova acontecendo:** cada tela ou ação citada na fala aparece. Gravação de tela do aluno, se houver; senão, a tela redesenhada da referência real, com movimento (digitação, clique, caixinha aprovada, resultado chegando).
 8. **Repertório de movimento:** texto que se mexe, forma virando outra, câmera em movimento, 3D, rastro, desenho que se traça. Cada um com função. Lista e exemplos em `guias/tela-livre.md`.
+
+### Efeitos de cena
+
+Um efeito de cena muda o rosto inteiro por uma cena: capa de revista com o nome atrás da cabeça, fundo trocado (papel, estúdio, fundo verde), quebra do fundo, câmera "REC", gráfico subindo atrás da pessoa, manchetes voando, ícones em órbita, vidro líquido, zoom-relâmpago, mergulho no rosto que atravessa o corte. Os que encolhem o rosto (cartão inclinado, celular, conversa em vídeo, portal) existem, mas fogem do método: aviso `ROSTO_PEQUENO`, só se o aluno pedir.
+
+1. **Escolha pelo sentido da fala, nunca por palavra.** Rode `./estudio efeitos` e leia a `funcao` de cada um. Pergunte: este trecho fica mais claro com este efeito? Se a resposta for "fica mais bonito", não use.
+2. **Escreva o `porque`**: o trecho da fala que o efeito ajuda a entender, em 4 palavras ou mais. O revisor confere se o efeito serve à fala.
+3. **Poucos.** No máximo 1 a cada 5 s, nunca o mesmo em seguida, nunca no gancho, nunca com tela por cima. Muitas vezes o melhor vídeo tem dois ou três.
+4. **Recorte.** Efeito com `recorte: true` precisa da pessoa recortada do fundo. Rode `./estudio recortar --projeto <P>` depois de alinhar e antes de montar. Ele recorta só as cenas com esse efeito, leva alguns minutos (avise o aluno) e mede onde está a cabeça, para o efeito pôr o texto atrás dela. Mudou o tempo da cena ou o take: rode de novo (o `montar` reprova com `RECORTE_FALTANDO`). `--cenas c03,c05` recorta outras cenas para testar.
+5. **Confira nos quadros** (passo 7 da skill `fazer-video`): o texto atrás da cabeça está atrás mesmo? O rosto ficou livre? A saída é limpa antes da próxima cena?

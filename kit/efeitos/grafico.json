@@ -1,0 +1,20 @@
+{
+  "nome": "grafico",
+  "titulo": "Curva de crescimento",
+  "funcao": "O fundo atrás da pessoa vira um painel escuro e uma curva sobe na cor da marca, com um contador que vai do número inicial ao final. Use quando a fala traz um número de resultado que cresce ('de 2 para 40 clientes', 'três vezes mais'). Só use com número que tem prova: diga a fonte em 'origem'. Não use para número inventado, estimativa solta ou fala sem número.",
+  "referencia": "Reel de referência 'Growth Curve' (estudado, não copiado). Contador em degraus inspirado na peça 'mk-progress-stat' e ritmo de chegada da 'cut-the-curve' do registro do HyperFrames (Apache-2.0), refeitos em SVG e CSS.",
+  "recorte": true,
+  "rosto_pequeno": false,
+  "duracao": { "min": 1.5, "max": 5 },
+  "campos": {
+    "rotulo": { "tipo": "texto", "palavras": 3, "obrigatorio": false },
+    "de": { "tipo": "numero", "obrigatorio": true },
+    "ate": { "tipo": "numero", "obrigatorio": true },
+    "sufixo": { "tipo": "texto", "palavras": 2, "obrigatorio": false },
+    "origem": { "tipo": "texto", "palavras": 20, "obrigatorio": true }
+  },
+  "sons": [
+    { "efeito": "subida", "em": 0.1, "volume": 0.7 },
+    { "efeito": "pop", "em": 1.2, "volume": 0.85 }
+  ]
+}

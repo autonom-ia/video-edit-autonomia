@@ -1,0 +1,37 @@
+/* Zoom digital: moldura de câmera filmando. Traço branco com sombra para ler sobre fundo claro ou escuro. */
+.ef-camera { --hud: #ffffff; --hud-sombra: drop-shadow(0 0 1px rgba(0,0,0,.55)) drop-shadow(0 2px 8px rgba(0,0,0,.45)); }
+.ef-camera .cm-quadro { --folga: 0px; position: absolute; inset: 0; transform-origin: 540px 905px; filter: var(--hud-sombra); }
+.ef-camera .cm-l { position: absolute; width: 96px; height: 96px; border: 0 solid var(--hud); }
+.ef-camera .cm-l1 { left: calc(64px + var(--folga)); top: calc(246px + var(--folga)); border-width: 7px 0 0 7px; border-top-left-radius: 14px; }
+.ef-camera .cm-l2 { right: calc(64px + var(--folga)); top: calc(246px + var(--folga)); border-width: 7px 7px 0 0; border-top-right-radius: 14px; }
+.ef-camera .cm-l3 { left: calc(64px + var(--folga)); bottom: calc(356px + var(--folga)); border-width: 0 0 7px 7px; border-bottom-left-radius: 14px; }
+.ef-camera .cm-l4 { right: calc(64px + var(--folga)); bottom: calc(356px + var(--folga)); border-width: 0 7px 7px 0; border-bottom-right-radius: 14px; }
+
+.ef-camera .cm-barra { position: absolute; left: 120px; width: 700px; top: 286px; height: 64px; display: flex; align-items: center; justify-content: space-between;
+  font: 800 38px/1 var(--fonte-leitura); letter-spacing: .06em; color: var(--hud); font-variant-numeric: tabular-nums; filter: var(--hud-sombra); }
+.ef-camera .cm-rec { display: flex; align-items: center; gap: 14px; }
+.ef-camera .cm-bola { width: 26px; height: 26px; border-radius: 50%; background: var(--destaque);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--destaque) 30%, transparent), 0 0 18px var(--destaque); }
+.ef-camera .cm-zoom { position: relative; width: 164px; height: 68px; border-radius: 34px; background: rgba(0,0,0,.42); border: 3px solid rgba(255,255,255,.85);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.ef-camera .cm-z { position: absolute; inset: 0; display: grid; place-items: center; font: var(--peso-titulo) 40px/1 var(--fonte-titulo); letter-spacing: .01em; color: var(--destaque); }
+.ef-camera .cm-tempo { position: relative; width: 210px; height: 44px; }
+.ef-camera .cm-tc { position: absolute; right: 0; top: 0; line-height: 44px; }
+
+.ef-camera .cm-regua { position: absolute; left: 82px; top: 760px; width: 40px; height: 420px; display: flex; flex-direction: column; align-items: center;
+  font: 800 30px/1 var(--fonte-leitura); color: var(--hud); filter: var(--hud-sombra); }
+.ef-camera .cm-trilho { position: relative; flex: 1; width: 6px; margin: 16px 0; background: rgba(255,255,255,.9); border-radius: 3px; }
+.ef-camera .cm-trilho i { position: absolute; left: -8px; width: 22px; height: 4px; margin-top: -2px; background: rgba(255,255,255,.85); }
+.ef-camera .cm-cursor { position: absolute; left: -17px; width: 40px; height: 16px; margin-top: -8px; border-radius: 8px; background: var(--destaque); box-shadow: 0 0 12px var(--destaque); }
+
+.ef-camera .cm-mira { position: absolute; filter: drop-shadow(0 0 1px rgba(0,0,0,.7)) drop-shadow(0 2px 6px rgba(0,0,0,.45)); }
+.ef-camera .cm-mira b { position: absolute; width: 20%; height: 20%; border: 0 solid var(--hud); }
+.ef-camera .cm-mira b:nth-child(1) { left: 0; top: 0; border-width: 6px 0 0 6px; border-top-left-radius: 6px; }
+.ef-camera .cm-mira b:nth-child(2) { right: 0; top: 0; border-width: 6px 6px 0 0; border-top-right-radius: 6px; }
+.ef-camera .cm-mira b:nth-child(3) { left: 0; bottom: 0; border-width: 0 0 6px 6px; border-bottom-left-radius: 6px; }
+.ef-camera .cm-mira b:nth-child(4) { right: 0; bottom: 0; border-width: 0 6px 6px 0; border-bottom-right-radius: 6px; }
+.ef-camera .cm-mira::after { content: ""; position: absolute; left: 50%; top: 50%; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; border: 3px solid var(--destaque); }
+.ef-camera .cm-linhas { position: absolute; inset: 0; mix-blend-mode: overlay;
+  background: repeating-linear-gradient(0deg, rgba(255,255,255,.07) 0 2px, transparent 2px 5px),
+    radial-gradient(75% 55% at 50% 50%, transparent 60%, rgba(0,0,0,.35) 100%); }
+.ef-camera .cm-svg { position: absolute; width: 0; height: 0; }

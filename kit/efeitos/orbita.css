@@ -1,0 +1,22 @@
+/* Órbita de ícones: pastilhas arredondadas e um trilho tracejado, nas duas camadas. */
+.ef-orbita .ob-palco { position: absolute; inset: 0; }
+.ef-orbita .ob-trilho { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+.ef-orbita .ob-trilho svg { display: block; overflow: visible; }
+.ef-orbita .ob-linha { fill: none; stroke: #ffffff; stroke-width: 5; opacity: .9; stroke-linecap: round;
+  stroke-dasharray: 1 16; filter: drop-shadow(0 2px 3px rgba(0,0,0,.35)); }
+.ef-orbita .ob-pos { position: absolute; left: -84px; top: -84px; width: 168px; height: 168px; will-change: transform; }
+.ef-orbita .ob-pop { width: 100%; height: 100%; }
+.ef-orbita .ob-pastilha { position: relative; width: 100%; height: 100%; border-radius: 46px; display: grid; place-items: center; overflow: hidden;
+  box-shadow: 0 18px 34px rgba(0,0,0,.32), 0 3px 8px rgba(0,0,0,.22), inset 0 0 0 2px rgba(255,255,255,.14); }
+/* brilho de vidro no alto da pastilha */
+.ef-orbita .ob-pastilha::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 52%;
+  background: linear-gradient(180deg, rgba(255,255,255,.26), rgba(255,255,255,0)); border-radius: 46px 46px 0 0; }
+.ef-orbita .ob-pastilha svg { position: relative; width: 80px; height: 80px; fill: none; stroke: currentColor; stroke-width: 2.1;
+  stroke-linecap: round; stroke-linejoin: round; }
+.ef-orbita .ob-a { background: linear-gradient(160deg, color-mix(in srgb, var(--principal) 82%, #ffffff), var(--principal)); color: var(--papel); }
+.ef-orbita .ob-b { background: linear-gradient(160deg, #ffffff, var(--papel)); color: var(--principal); }
+.ef-orbita .ob-c { background: linear-gradient(160deg, color-mix(in srgb, var(--tinta) 80%, #ffffff), var(--tinta)); color: var(--destaque); }
+.ef-orbita .ob-d { background: linear-gradient(160deg, color-mix(in srgb, var(--destaque) 75%, #ffffff), var(--destaque)); color: var(--tinta); }
+.ef-orbita .ob-brilho { position: absolute; color: color-mix(in srgb, var(--papel) 70%, #ffffff); filter: drop-shadow(0 0 10px color-mix(in srgb, var(--destaque) 70%, transparent)); }
+.ef-orbita .ob-brilho-b { color: var(--destaque); }
+.ef-orbita .ob-brilho svg { display: block; width: 100%; height: 100%; fill: currentColor; }

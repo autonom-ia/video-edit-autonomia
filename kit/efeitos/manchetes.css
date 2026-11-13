@@ -1,0 +1,18 @@
+/* Chuva de manchetes: faixas de jornal de TV, etiqueta colorida e texto em caixa alta. */
+.ef-manchetes .mc-palco { position: absolute; inset: 0; }
+.ef-manchetes .mc-veu { position: absolute; inset: 0;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--fundo) 34%, transparent) 0%, color-mix(in srgb, var(--fundo) 16%, transparent) 45%, transparent 75%); }
+.ef-manchetes .mc-flash { position: absolute; inset: 0; background: #ffffff; opacity: 0; }
+.ef-manchetes .mc-faixa { position: absolute; height: 104px; transform: rotate(var(--giro)); transform-origin: 50% 50%; white-space: nowrap; }
+.ef-manchetes .mc-deriva { display: flex; align-items: stretch; height: 100%;
+  filter: drop-shadow(0 16px 22px rgba(0,0,0,.34)) drop-shadow(0 3px 5px rgba(0,0,0,.25)); }
+.ef-manchetes .mc-tag { display: inline-flex; align-items: center; gap: 12px; padding: 0 22px 0 20px; align-self: center; height: 74px;
+  font: 800 28px/1 var(--fonte-leitura); letter-spacing: .14em; text-transform: uppercase; }
+.ef-manchetes .mc-tag i { display: block; width: 14px; height: 14px; border-radius: 50%; background: currentColor; }
+.ef-manchetes .mc-texto { display: inline-flex; align-items: center; padding: 0 32px 0 26px;
+  font: var(--peso-titulo) 54px/1 var(--fonte-titulo); letter-spacing: -.01em; text-transform: uppercase; }
+.ef-manchetes .mc-clara .mc-tag { background: var(--principal); color: var(--papel); }
+.ef-manchetes .mc-clara .mc-texto { background: linear-gradient(180deg, #ffffff, var(--papel)); color: var(--tinta); }
+.ef-manchetes .mc-escura .mc-tag { background: var(--destaque); color: var(--tinta); }
+.ef-manchetes .mc-escura .mc-texto { background: linear-gradient(180deg, color-mix(in srgb, var(--tinta) 88%, #ffffff), var(--tinta)); color: var(--papel); }
+.ef-manchetes .mc-funda .mc-texto { padding: 0 34px; }

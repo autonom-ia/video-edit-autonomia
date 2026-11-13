@@ -31,7 +31,12 @@ export function problemasDaFicha(ficha, arquivo) {
   }
   for (const s of ficha.sons || []) {
     if (!txt(s.efeito)) p.push(`${arquivo}: som sem "efeito"`);
-    if (s.em !== 'golpe' && !num(s.em)) p.push(`${arquivo}: som "${s.efeito}" precisa de "em" (segundos depois do início ou "golpe")`);
+    if (s.em !== 'golpe' && s.em !== 'fim' && !num(s.em)) p.push(`${arquivo}: som "${s.efeito}" precisa de "em" (segundos depois do início, "golpe" ou "fim")`);
+    if (s.recuo !== undefined && (!num(s.recuo) || s.recuo < 0)) p.push(`${arquivo}: "recuo" do som "${s.efeito}" é em segundos antes do fim`);
+    if (s.repetir !== undefined && (!s.repetir || !(ficha.campos || {})[s.repetir.campo] || ficha.campos[s.repetir.campo].tipo !== 'lista' || !num(s.repetir.passo) || s.repetir.passo <= 0)) {
+      p.push(`${arquivo}: "repetir" do som "${s.efeito}" precisa de {"campo": <campo de lista do efeito>, "passo": segundos}`);
+    }
+    if (s.apos !== undefined && (!num(s.apos) || s.apos < 0)) p.push(`${arquivo}: "apos" do som "${s.efeito}" é em segundos depois do golpe`);
   }
   return p;
 }

@@ -44,8 +44,9 @@ export function assinaturaDoTake(arquivo) {
 // Onde está a pessoa no primeiro quadro do recorte, em pixels do quadro (1080x1920): topo da cabeça
 // e as laterais da cabeça (os 400 px de cima). alfa: bytes do canal de transparência em LARGURA x ALTURA.
 export const AMOSTRA_ALFA = Object.freeze({ largura: 108, altura: 192, escala: 10, minimoNaLinha: 3 });
-// Sem recorte (ou sem pessoa achada): o lugar típico de quem grava falando.
-export const PESSOA_PADRAO = Object.freeze({ topo: 620, esquerda: 300, direita: 780 });
+// Sem medida: o lugar típico de quem grava falando de perto com o celular em pé (medido em dois
+// takes reais: topo da cabeça entre 740 e 880). Melhor que isto, só rodando ./estudio recortar.
+export const PESSOA_PADRAO = Object.freeze({ topo: 780, esquerda: 320, direita: 800 });
 
 export function pessoaNoAlfa(alfa) {
   const { largura, altura, escala, minimoNaLinha } = AMOSTRA_ALFA;
@@ -77,8 +78,49 @@ export function pessoaNoAlfa(alfa) {
   return { topo: topo * escala, esquerda: esquerda * escala, direita: (direita + 1) * escala };
 }
 
+// Cenas com efeito que não pedem recorte: só a posição da pessoa é medida (um quadro).
+export function cenasSoParaMedir(cenas, trechos) {
+  const recortadas = new Set(trechos.map((t) => t.id));
+  return (cenas || []).filter((c) => c.efeito && !recortadas.has(c.id)).map((c) => ({ id: c.id, inicio: noQuadro(c.inicio) }));
+}
+
+// Todas as medidas válidas para este take, em ordem de tempo: [{ id, t, pessoa }].
+export function medidasDaPessoa(pastaRecorte, assinatura) {
+  const m = lerManifesto(pastaRecorte);
+  if (m.take !== assinatura) return [];
+  const lista = [];
+  for (const [id, v] of Object.entries(m.trechos || {})) if (v.pessoa) lista.push({ id, t: v.inicio, pessoa: v.pessoa });
+  for (const [id, v] of Object.entries(m.pessoas || {})) if (v.pessoa) lista.push({ id, t: v.inicio, pessoa: v.pessoa });
+  return lista.sort((a, b) => a.t - b.t);
+}
+
+// A posição da pessoa numa cena: a medida da própria cena, senão a da cena medida mais perto no
+// tempo (o mesmo take, a pessoa quase não sai do lugar), senão o lugar típico.
+export function pessoaDaCena(id, t, medidas) {
+  // "medida": false avisa o efeito de que é só o lugar típico (rode ./estudio recortar para medir)
+  const propria = medidas.find((m) => m.id === id);
+  if (propria) return { ...propria.pessoa, medida: true };
+  let melhor = null;
+  for (const m of medidas) if (!melhor || Math.abs(m.t - t) < Math.abs(melhor.t - t)) melhor = m;
+  return melhor ? { ...melhor.pessoa, medida: true } : { ...PESSOA_PADRAO, medida: false };
+}
+
+// Quadros de vários instantes, em sequência: devolve a medida do primeiro e a trilha no tempo
+// ([{ t, topo, esquerda, direita }], t em segundos desde o começo da cena), para quem se mexe.
+export const PASSO_DA_TRILHA = 15;
+export function pessoaComTrilha(bytes, fps = 30) {
+  const tam = AMOSTRA_ALFA.largura * AMOSTRA_ALFA.altura;
+  const trilha = [];
+  for (let k = 0; (k + 1) * tam <= bytes.length; k += 1) {
+    trilha.push({ t: Math.round(((k * PASSO_DA_TRILHA) / fps) * 1000) / 1000, ...pessoaNoAlfa(bytes.subarray(k * tam, (k + 1) * tam)) });
+  }
+  if (!trilha.length) return { ...PESSOA_PADRAO, trilha: [] };
+  const { topo, esquerda, direita } = trilha[0];
+  return { topo, esquerda, direita, trilha };
+}
+
 export function arquivosDoTrecho(pastaRecorte, id) {
-  return { video: path.join(pastaRecorte, `${id}.webm`), foto: path.join(pastaRecorte, `${id}.png`) };
+  return { video: path.join(pastaRecorte, `${id}.webm`), foto: path.join(pastaRecorte, `${id}.png`), fundo: path.join(pastaRecorte, `${id}-fundo.png`) };
 }
 
 export function lerManifesto(pastaRecorte) {
@@ -99,7 +141,7 @@ export function conferirRecortes(pastaProjeto, cenas, assinatura) {
     const arq = arquivosDoTrecho(pasta, t.id);
     const anotado = (manifesto.trechos || {})[t.id];
     const igual = anotado && Math.abs(anotado.inicio - t.inicio) < 1e-3 && Math.abs(anotado.fim - t.fim) < 1e-3;
-    if (manifesto.take !== assinatura || !igual || !fs.existsSync(arq.video) || !fs.existsSync(arq.foto)) faltando.push(t.id);
+    if (manifesto.take !== assinatura || !igual || !fs.existsSync(arq.video) || !fs.existsSync(arq.foto) || !fs.existsSync(arq.fundo)) faltando.push(t.id);
     else prontos.push({ ...t, ...arq, pessoa: anotado.pessoa || { ...PESSOA_PADRAO } });
   }
   return { faltando, prontos };
