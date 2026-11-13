@@ -96,7 +96,7 @@ Antes da prévia, corrija em silêncio tudo o que já se sabe que mexe na imagem
 5. Diga o F-06 com a `descricao` de cada uma, sem inventar como ela soa, e logo depois o F-00 no sentido do computador para o celular. Recomende (★) a primeira da lista, salvo se o título dela brigar com o `tom`.
 6. Escolha "música N": pegue em `escolhas.json` a linha com `musica` = N e rode `./estudio mixar --projeto P --opcao <opcao> --esquema <esquema> --resposta "<palavras do aluno>"`. "Sem música": `./estudio mixar --projeto P --sem-musica --resposta "<palavras do aluno>"`. Nunca escolha a música no lugar dele.
 7. Se `musica.preferencia` = `nunca`: `./estudio mixar --projeto P --sem-musica --resposta "preferência do briefing: nunca"` direto, sem perguntar.
-8. `MIXAGEM_FORA_DO_ALVO`: siga a ação do código. Nunca acerte o volume por fora do estúdio.
+8. `MIXAGEM_FORA_DO_ALVO`: siga a ação do código.
 
 ### 11. Conferência técnica
 `./estudio qa --projeto P`. Item reprovado: leia `projetos/P/qa/relatorio.json`, corrija pela causa (som: mixar de novo; imagem: só com novo F-05) e rode de novo. Nunca entregue com QA reprovado.

@@ -173,7 +173,7 @@
   },
   "MIXAGEM_FORA_DO_ALVO": {
     "texto": "O som do vídeo não ficou no volume certo para o Instagram. Vou tentar de novo.",
-    "acao": "Rode mixar de novo uma vez. Se falhar de novo, rode a skill consertar com dados.lufs e dados.pico_dbtp. Nunca corrija o som por fora do estúdio."
+    "acao": "Rode mixar de novo uma vez. Se falhar de novo, rode a skill consertar com dados.lufs e dados.pico_dbtp."
   },
   "MODELO_FALA_FALTA": {
     "texto": "O ouvido de texto ainda não está pronto.",

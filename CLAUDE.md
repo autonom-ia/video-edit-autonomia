@@ -194,5 +194,4 @@ O molde do vídeo já traz o ritmo, o zoom, a faixa, a legenda e o som que levar
 - Trilha 14 dB abaixo da voz, audível no celular, final em −14 LUFS, estéreo.
 - Ninguém dá nota ao próprio trabalho: o avaliador independente roda sempre, até 8,5. "Parece cópia?" reprova. Toda nota fica gravada (`estado --nota-revisor`), e o `entregar` não entrega abaixo de 8,5 sem o "Postar assim" do aluno.
 - As decisões são do aluno: pauta, gancho, papel, prévia, música e "postar assim". Cada gate só fecha com `--resposta` e as palavras dele, sem resumir. Um pedido geral ("faz o vídeo completo", "capricha", "pode seguir") não aprova nenhuma delas: mostre a pergunta e espere.
-- Todo o trabalho passa pelo `./estudio`. Nunca escreva script próprio para mexer na composição, no áudio ou no vídeo. Se um comando falhar, siga o código de erro ou a skill `consertar`.
 - Prévia aprovada congela a imagem. Mudança de imagem só com nova aprovação.
