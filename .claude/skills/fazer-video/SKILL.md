@@ -41,14 +41,20 @@ Rode `./estudio receber --projeto P`. Ele olha a pasta 2-videos-brutos e também
 
 ### 3. Escolher as falas (corte)
 1. `./estudio transcrever --projeto P --fonte bruto`.
-2. Leia `projetos/P/transcricao-bruta.json` e escreva `projetos/P/trechos.json`:
+2. Leia `projetos/P/transcricao-bruta.json` e escreva `projetos/P/trechos.json`. Além das palavras, ela traz `fala`: onde há voz, medido pelo detector de fala (mais preciso que o tempo das palavras). Use `fala` para achar as pausas:
    - a melhor tomada de cada bloco (caminho A: compare com `roteiro.md`; prefira a mais firme e natural, não a mais longa);
    - sem respiro maior que 0,4 s dentro do trecho;
    - sem muleta ("é...", "tipo", "né" soltos, palavra repetida por gaguejo), sem falso começo, sem silêncio no fim;
-   - começo e fim de trecho no meio do silêncio, nunca cortando sílaba;
+   - começo e fim de trecho no silêncio entre dois pedaços de `fala`, nunca cortando sílaba. A folga exata de silêncio nas pontas o `cortar` acerta sozinho;
    - caminho B: pode reordenar para o melhor gancho ficar no começo (marque `motivo`).
 3. F-03 só se um trecho mudar o sentido, ferir a verdade (afirmação sem prova, `palavras_proibidas`, `cuidados_do_nicho`) ou se não houver nenhuma tomada usável do gancho. Escolha de tomada comum nunca vira pergunta.
-4. `./estudio cortar --projeto P`. `TRECHOS_INVALIDOS`: corrija e rode de novo.
+4. `./estudio cortar --projeto P`. Ele acerta as bordas pelo mapa da fala: estica o fim que caiu perto do fim de uma fala, apara o silêncio sobrando nas pontas e grava o que mudou em `corte/trechos-ajustados.json` (o seu `trechos.json` fica como está).
+   - `TRECHOS_INVALIDOS`: uma borda corta uma palavra no meio. Mude para a pausa mais perto e rode de novo.
+   - `RESPIRO_LONGO`: divida o trecho em dois, pulando a pausa, e rode de novo. Se a pausa é de propósito (suspense), deixe.
+   - `CORTE_JUSTO`: a borda ficou colada na fala. Abra a folha de quadros ou ouça esse instante; palavra cortada, mude a borda.
+   - `SEM_MAPA_DE_FALA`: a transcrição é antiga. Rode o item 1 de novo e depois o `cortar`.
+   - O `cortar` também limpa o ruído de fundo da voz (ventilador, ar-condicionado, rua) e guarda a voz limpa para os próximos cortes. `VOZ_SEM_LIMPEZA`: o vídeo sai com o filtro simples; siga a `acao`.
+   - O `cortar` também mede onde fica o rosto (`rosto.json`). Dali saem a altura da legenda (`dados.rosto.legenda_rosto_y_sugerida`), o centro do zoom e, em vídeo deitado, o recorte 9:16 em cima do rosto. `ROSTO_NAO_MEDIDO`: siga a `acao`. Projeto cortado antes disso: `./estudio rosto --projeto P`.
 5. `./estudio transcrever --projeto P --fonte take`.
 6. **Gravação de tela.** Se a fala mostra algo na tela do computador ou do celular (um app, um site, uma conta), diga o F-01e uma vez. Com o arquivo: confira os quadros (senha, chave, e-mail, nome de cliente, notificação pessoal) e prepare o trecho com `./estudio midia --projeto P --arquivo "<arquivo>" --nome <nome> --de <s> --ate <s> [--velocidade N] [--corte x,y,l,a]`. Ela entra como tela `midia` no passo 5b.
 
@@ -90,7 +96,7 @@ No caminho B, faça isto antes do F-04 (passo 5.3), para o aluno aprovar o plano
    - sobras esmaecidas da tela anterior;
    - tela branca ou vazia;
    - texto fora da zona segura (a sobreposição marca);
-   - legenda sobre a boca ou abaixo de y 1500: mude `legenda_rosto_y` (regra 39);
+   - legenda em cima do gancho escrito, de uma tela solta ou do selo do pedido: ponha `legenda_rosto_y` (regra 39). Legenda na boca o `montar` já reprova (`LEGENDA_NA_BOCA`);
    - rosto pequeno, cortado ou emoldurado;
    - trecho parado mais de 2 s;
    - tela livre: letra pequena demais para o celular, contraste fraco, legenda passando por cima do que importa;

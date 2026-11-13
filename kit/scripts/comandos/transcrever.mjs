@@ -2,10 +2,11 @@
 import { daRaiz } from '../lib/caminhos.mjs';
 import { abrirProjeto, mudarEtapa, exigirArquivo } from '../lib/projeto.mjs';
 import { escolha } from '../lib/args.mjs';
-import { lerJson } from '../lib/json.mjs';
+import { lerJson, escreverJson } from '../lib/json.mjs';
 import { validarCom } from '../lib/validar.mjs';
 import { falha } from '../lib/saida.mjs';
 import { rodarTranscricao } from '../lib/fala.mjs';
+import { somDoBruto, RELOGIO_DO_ARQUIVO } from '../lib/som-do-bruto.mjs';
 
 export default async function transcrever({ opcoes }) {
   const projeto = abrirProjeto(opcoes);
@@ -14,7 +15,8 @@ export default async function transcrever({ opcoes }) {
   let nomeSaida;
   if (fonte === 'bruto') {
     const origem = lerJson(exigirArquivo(projeto.arq('bruto', 'origem.json')));
-    entrada = exigirArquivo(daRaiz(origem.arquivo), 'SEM_VIDEO');
+    // Transcreve o som extraído pelo ffmpeg: os tempos ficam no mesmo relógio do corte.
+    entrada = await somDoBruto(projeto, exigirArquivo(daRaiz(origem.arquivo), 'SEM_VIDEO'));
     nomeSaida = 'transcricao-bruta.json';
   } else {
     entrada = exigirArquivo(projeto.arq('voz.wav'));
@@ -22,7 +24,10 @@ export default async function transcrever({ opcoes }) {
   }
   const saida = projeto.arq(nomeSaida);
   await rodarTranscricao(entrada, saida);
-  const dados = lerJson(saida);
+  const lida = lerJson(saida);
+  // Marca a transcrição do bruto feita pelo som.wav: o cortar só confia no mapa da fala dela.
+  const dados = fonte === 'bruto' ? { ...lida, relogio: RELOGIO_DO_ARQUIVO } : lida;
+  if (fonte === 'bruto') escreverJson(saida, dados);
   const erros = validarCom('transcricao', dados);
   if (erros.length) falha('TRANSCRICAO_FALHOU', { problemas: erros.slice(0, 5) });
   if (fonte === 'take') mudarEtapa(projeto, 'transcricao');

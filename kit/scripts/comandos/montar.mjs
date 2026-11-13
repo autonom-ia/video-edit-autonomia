@@ -11,7 +11,8 @@ import { estiloCss } from '../lib/amostra.mjs';
 import { escaparHtml, preencher } from '../lib/texto.mjs';
 import { conferirTabela } from './telas.mjs';
 import { lerTelaDeArquivo, pluginsCitados, tipoDeMidia } from '../lib/telas-livres.mjs';
-import { MIDIA, RITMO, RECORTE } from '../lib/regras.mjs';
+import { MIDIA, RITMO, RECORTE, FAIXA } from '../lib/regras.mjs';
+import { lerRosto, legendaSugerida, conferirLegendaNoRosto, origemDoZoom, rostoMedido } from '../lib/rosto.mjs';
 import { arquivosDoEfeito } from '../lib/efeitos.mjs';
 import { conferirRecortes, assinaturaDoTake, medidasDaPessoa, cenaForaDoTake } from '../lib/recorte.mjs';
 
@@ -126,6 +127,19 @@ function copiarEfeitos(efeitosInfo, comp) {
   return tags.join('\n');
 }
 
+// Altura da legenda com o rosto cheio: a do cenas.json, senão a sugerida pela medida do rosto.
+// Legenda entre os olhos e o lábio reprova; sem lugar bom em lugar nenhum, só avisa.
+// Só cena de rosto cheio (faixa 0) usa essa altura: sem nenhuma, não há o que conferir.
+function legendaComRosto(dados, resumo, avisos) {
+  const sugerida = legendaSugerida(resumo);
+  const y = dados.legenda_rosto_y ?? sugerida ?? FAIXA.legendaY[0];
+  if (!dados.cenas.some((c) => c.faixa === 0)) return y;
+  const problema = conferirLegendaNoRosto(y, resumo);
+  if (problema && problema.sugerida !== null) reprovado('LEGENDA_NA_BOCA', problema);
+  if (problema) avisos.push(aviso('LEGENDA_SEM_LUGAR', problema));
+  return y;
+}
+
 export default async function montar({ opcoes }) {
   const projeto = abrirProjeto(opcoes);
   const marca = lerMarca();
@@ -179,10 +193,16 @@ export default async function montar({ opcoes }) {
 
   const recortes = copiarRecortes(projeto, dados, take, assets);
   const medidas = medidasDaPessoa(projeto.arq(RECORTE.pasta), assinaturaDoTake(take));
-  const montagem = montarComposicao({ dados, transcricao, marca, duracao: info.duracao, livres: deArquivo.livres, midias: deArquivo.midias, recortes, medidas });
+  const rosto = lerRosto(projeto.arq('rosto.json'), assinaturaDoTake(take));
+  const avisosDoRosto = [];
+  if (!rosto) avisosDoRosto.push(aviso('ROSTO_NAO_MEDIDO', { onde: 'montar', detalhe: 'sem rosto.json deste take (rode ./estudio rosto)' }));
+  else if (!rostoMedido(rosto.resumo)) avisosDoRosto.push(aviso('ROSTO_NAO_MEDIDO', { onde: 'montar', detalhe: `rosto em ${Math.round((rosto.resumo.presenca || 0) * 100)}% do vídeo: escolha legenda_rosto_y olhando os quadros` }));
+  const legendaRostoY = legendaComRosto(dados, rosto?.resumo, avisosDoRosto);
+  const zoomOrigem = origemDoZoom(rosto?.resumo);
+  const montagem = montarComposicao({ dados, transcricao, marca, duracao: info.duracao, livres: deArquivo.livres, midias: deArquivo.midias, recortes, medidas, legendaRostoY, zoomOrigem });
   const tagsDeEfeito = copiarEfeitos(montagem.efeitos.info, comp);
   const semMedida = montagem.efeitos.info.filter((e) => e.pessoa && e.pessoa.medida === false).map((e) => e.id);
-  const avisosDoMontar = semMedida.length ? [...avisos, aviso('EFEITO_SEM_MEDIDA', { cenas: semMedida })] : avisos;
+  const avisosDoMontar = [...avisos, ...avisosDoRosto, ...(semMedida.length ? [aviso('EFEITO_SEM_MEDIDA', { cenas: semMedida })] : [])];
   for (const efeito of new Set(montagem.sons.map((s) => s.efeito))) {
     fs.copyFileSync(path.join(KIT, 'sfx', `${efeito}.wav`), path.join(assets, 'sfx', `${efeito}.wav`));
   }

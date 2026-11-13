@@ -7,6 +7,8 @@ import { doctor, montadorInstalado } from '../lib/hyperframes.mjs';
 import { acharChrome } from '../lib/chrome.mjs';
 import { earshot, earshotDisponivel } from '../lib/earshot.mjs';
 import { rodarTranscricao } from '../lib/fala.mjs';
+import { vozLimpa } from '../lib/voz-limpa.mjs';
+import { medirRosto, autotesteDoRosto } from '../lib/rosto.mjs';
 import { conferirEspelhos } from '../../testes/conferir-espelhos.mjs';
 import { aviso } from '../lib/saida.mjs';
 import { ultimasLinhas } from '../lib/executar.mjs';
@@ -40,6 +42,36 @@ export default async function conferirKit() {
       const saida = path.join(pasta, 'transcricao.json');
       await rodarTranscricao(wav, saida);
       return { ok: fs.existsSync(saida), texto: 'ouvido de texto respondeu' };
+    } finally {
+      fs.rmSync(pasta, { recursive: true, force: true });
+    }
+  })) });
+
+  // Limpeza da voz e medida do rosto rodam no mesmo Python da fala; aqui se prova que rodam neste
+  // computador (Windows, Mac Intel e Mac M têm onnxruntime diferentes).
+  itens.push({ id: 'limpeza', ...(await tentar(async () => {
+    const pasta = fs.mkdtempSync(path.join(os.tmpdir(), 'estudio-conferir-'));
+    try {
+      const wav = path.join(pasta, 'tom.wav');
+      const r = await ffmpeg(['-y', '-f', 'lavfi', '-i', 'sine=f=220:r=48000', '-t', '1', '-ac', '1', wav]);
+      if (r.codigo !== 0) return { ok: false, texto: 'não consegui gerar o áudio de teste' };
+      const limpa = await vozLimpa(pasta, wav);
+      return { ok: Boolean(limpa.arquivo), texto: limpa.arquivo ? 'limpeza de voz respondeu' : `limpeza de voz falhou: ${limpa.erro}` };
+    } finally {
+      fs.rmSync(pasta, { recursive: true, force: true });
+    }
+  })) });
+
+  itens.push({ id: 'rosto', ...(await tentar(async () => {
+    const pasta = fs.mkdtempSync(path.join(os.tmpdir(), 'estudio-conferir-'));
+    try {
+      const mp4 = path.join(pasta, 'teste.mp4');
+      const r = await ffmpeg(['-y', '-f', 'lavfi', '-i', 'testsrc=s=360x640:r=30', '-t', '1', '-pix_fmt', 'yuv420p', mp4]);
+      if (r.codigo !== 0) return { ok: false, texto: 'não consegui gerar o vídeo de teste' };
+      const auto = await autotesteDoRosto();
+      if (auto.erro) return { ok: false, texto: `conta do rosto errada: ${auto.erro}` };
+      const m = await medirRosto(mp4, path.join(pasta, 'rosto.json'));
+      return { ok: Boolean(m.medida), texto: m.medida ? 'medida do rosto respondeu' : `medida do rosto falhou: ${m.erro}` };
     } finally {
       fs.rmSync(pasta, { recursive: true, force: true });
     }

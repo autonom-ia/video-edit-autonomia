@@ -14,6 +14,8 @@ import { montarGancho } from '../lib/composicao.mjs';
 import { faixaNoInstante, tamanhoPorFaixa } from '../lib/cenas.mjs';
 import { ffmpeg } from '../lib/ffmpeg.mjs';
 import { escaparHtml, palavras } from '../lib/texto.mjs';
+import { lerRosto, legendaSugerida } from '../lib/rosto.mjs';
+import { assinaturaDoTake } from '../lib/recorte.mjs';
 
 function briefingBase() {
   const b = lerBriefing(false);
@@ -104,11 +106,15 @@ export async function amostrasDeEstilo(projeto) {
     const cena = cenas.cenas[Math.min(quadros.length, cenas.cenas.length - 1)] || primeira;
     quadros.push({ faixa: cena.faixa || 0, tela: '', legenda: legendaDeExemplo(palavras(cena.fala).slice(0, 3).join(' ')), rotulo: `Cena ${cena.id || ''}` });
   }
+  // A mesma altura que o montar vai usar: a do cenas.json ou, sem ela, a sugerida pelo rosto.
+  const take = projeto.arq('take.mp4');
+  const rosto = fs.existsSync(take) ? lerRosto(projeto.arq('rosto.json'), assinaturaDoTake(take)) : null;
+  const legendaRostoY = cenas.legenda_rosto_y ?? legendaSugerida(rosto?.resumo) ?? undefined;
   const saidas = [];
   for (let i = 0; i < 3; i += 1) {
     const q = quadros[i];
     const png = projeto.arq('amostras', `estilo-${i + 1}.png`);
-    await fotografarPagina(paginaDeAmostra({ marca, fundo, legendaRostoY: cenas.legenda_rosto_y, ...q }), png);
+    await fotografarPagina(paginaDeAmostra({ marca, fundo, legendaRostoY, ...q }), png);
     saidas.push(png);
   }
   return { saidas, semRosto: !fundo };

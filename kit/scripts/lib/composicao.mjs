@@ -375,8 +375,8 @@ export function jsonParaScript(objeto) {
 }
 
 // Junta tudo: dados para o animacao.js, pedaços de HTML e os arquivos sons.json e legendas.json.
-export function montarComposicao({ dados, transcricao, marca, duracao, livres = {}, midias = {}, recortes = {}, medidas = [] }) {
-  const eventosFaixa = eventosDeFaixa(dados.cenas, marca, dados.legenda_rosto_y);
+export function montarComposicao({ dados, transcricao, marca, duracao, livres = {}, midias = {}, recortes = {}, medidas = [], legendaRostoY, zoomOrigem = null }) {
+  const eventosFaixa = eventosDeFaixa(dados.cenas, marca, legendaRostoY ?? dados.legenda_rosto_y);
   const zoomEv = eventosDeZoom(dados.cenas, eventosFaixa);
   const legendas = montarLegendas(transcricao.palavras || [], dados.cenas);
   const gancho = montarGancho(dados);
@@ -389,6 +389,8 @@ export function montarComposicao({ dados, transcricao, marca, duracao, livres = 
     duracao: r3(duracao),
     faixas: eventosFaixa,
     zoom: zoomEv,
+    // Centro do rosto medido no take: o zoom cresce dali. null: centro fixo do molde.
+    zoomOrigem,
     legendas: legendas.dados,
     telas: telas.info,
     gancho: { fim: gancho.fim },

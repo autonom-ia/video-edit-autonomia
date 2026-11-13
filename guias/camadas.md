@@ -15,6 +15,8 @@ Um Reel falado bem editado é um bolo de 5 camadas, uma em cima da outra. O alun
 ## Camada 1: o take
 
 - É a base. O corte é feito pelo kit (`./estudio cortar`) a partir do `trechos.json` que você escreve: melhor tomada de cada bloco, sem respiro maior que 0,4 s, sem muleta e sem silêncio no fim.
+- O som do bruto sai num WAV no relógio do arquivo (`bruto/som.wav`): transcrição, mapa da fala e limpeza da voz usam esse mesmo tempo, o do corte. A voz passa pela limpeza de ruído (DPDFNet) antes de cortar.
+- O `cortar` usa dois medidores. O **mapa da fala** (`fala` na transcrição do bruto) acerta as bordas de cada trecho e aponta respiro longo. A **medida do rosto** (`rosto.json`) diz onde fica o rosto no take: dela saem a altura da legenda, o centro do zoom e, em vídeo deitado, onde recortar o 9:16.
 - A cor não é mexida, a não ser o ajuste automático de vídeo HDR do iPhone para cor normal.
 - Aqui no estúdio: se a gravação estiver ruim de luz ou de som, isso é dito ao aluno como pedido de regravar o trecho (texto F-03), não escondido com filtro.
 
@@ -63,7 +65,7 @@ Você escreve `projetos/<P>/cenas.json` e, ao lado, `cenas.md` (a mesma coisa em
 | `versao` | Sempre `1`. |
 | `duracao_alvo_s` | Duração esperada em segundos (médio: 30 a 45; curto: até 30). |
 | `direcao_de_arte` | Lista de trechos `{"de", "ate", "domina", "porque"}`: o que domina a tela em cada trecho e por quê. Escreva antes das cenas. |
-| `legenda_rosto_y` | Opcional. Topo da legenda com o rosto cheio, de 250 a 1424 (padrão 1424). Olhe um quadro do take: abaixo da boca se couber; se o rosto estiver baixo e a boca passar de ~1350, acima da cabeça, sem cobrir o gancho, tela solta ou selo do pedido. Veja a regra 39 de `guias/regras-de-producao.md`. |
+| `legenda_rosto_y` | Opcional. Topo da legenda com o rosto cheio, de 250 a 1424. Sem o campo, o kit usa a altura sugerida pela medida do rosto (`rosto.json`): abaixo do lábio se couber, senão acima da cabeça, já contando o zoom. Ponha o campo só para tirar a legenda de cima do gancho escrito, de uma tela solta ou do selo do pedido. Legenda entre os olhos e o lábio reprova (`LEGENDA_NA_BOCA`). Veja a regra 39 de `guias/regras-de-producao.md`. |
 | `titulo_gancho` | `{"texto", "publico"}`: o gancho escrito do quadro 0 (até 10 palavras) e, se quiser, quem é o público (até 12 palavras ou `""`). Obrigatório. |
 | `apps_reais` | Opcional. Lista `{"nome", "referencia", "porque", "citado_como"}` (o último, opcional: como o aluno chamou o app na fala) dos apps que o aluno usa de verdade e cita na fala. Libera o nome e as cores deles neste vídeo. Veja `guias/tela-livre.md`. |
 | `serie` | Opcional. `{"titulo", "itens": [{"nome", "em"}]}`: série numerada ("5 erros", "3 passos"). Cabeçalho no alto com o número, o nome do item e uma barra em segmentos que enche a cada item; some quando entra uma tela e volta depois. De 2 a 20 itens, nome de até 3 palavras, `em` em ordem. Use quando a fala é uma lista de verdade: dá motivo para ficar até o fim. |

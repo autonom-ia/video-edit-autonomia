@@ -53,6 +53,24 @@ export const FAIXA = Object.freeze({
 // dentro da zona segura: a legenda tem até ~75 px, então o topo vai até 1424 (Issue #13).
 export const LEGENDA_ROSTO_Y = Object.freeze({ min: 250, max: 1424 });
 
+// Medida do rosto (YuNet, kit/py/rosto.py). As proporções são da caixa do rosto, que vai da
+// testa ao queixo: o lábio de baixo fica ~0,12 da altura abaixo dos cantos da boca e o alto da
+// cabeça (cabelo, boné) ~0,3 acima da caixa. Faixa proibida da legenda: dos olhos ao lábio.
+// Zoom: a boca é conferida no maior zoom do vídeo (abertura, 1,26), porque legenda na boca é
+// defeito; o alto da cabeça, no punch (1,16), porque na abertura (0,8 s, durante o gancho) a
+// legenda encostar no cabelo é menos ruim que subir até o gancho escrito.
+export const ROSTO = Object.freeze({
+  intervaloS: 0.5,
+  presencaMinima: 0.6,
+  labioAbaixoDaBoca: 0.12,
+  cabecaAcimaDaCaixa: 0.3,
+  testaAcimaDosOlhos: 0.12,
+  alturaLegendaPx: 75,
+  folgaLegendaPx: 24,
+  zoomBoca: Math.max(ZOOM.abertura.de, ZOOM.punch.pico),
+  zoomCabeca: ZOOM.punch.pico,
+});
+
 export const LEGENDA = Object.freeze({
   maxPalavras: 3,
   maxCaracteres: 22,
@@ -120,6 +138,30 @@ export const DURACAO_ALVO = Object.freeze({
 export const ESPACO = Object.freeze({ avisoRenderGb: 4, minimoGb: 2 });
 
 export const MUSICA = Object.freeze({ duracaoMinS: 20, duracaoMaxS: 180, licencas: ['cc0', 'by'] });
+
+// Ajuste dos cortes pelo mapa da fala (Silero VAD, em transcricao-bruta.json "fala").
+// Folga: quanto de silêncio fica antes e depois da voz em cada trecho. O detector entra uns
+// 0,1 s atrasado em consoante soprada ("f", "s"), por isso a folga de antes. O fim tem mais folga
+// porque a última sílaba some devagar. Esticar/recuar: o quanto o kit move sozinho uma borda
+// que caiu dentro da fala. Respiro: pausa dentro do trecho que já soa como buraco.
+export const CORTE_FALA = Object.freeze({
+  folgaAntesS: 0.12,
+  folgaDepoisS: 0.15,
+  esticarFimMaxS: 0.35,
+  recuarInicioMaxS: 0.2,
+  respiroMaxS: 0.4,
+  toleranciaS: 0.02,
+  margemPalavraS: 0.03,
+  // Palavra fora do mapa da fala só conta como fala se for curta: palavra perdida pelo detector
+  // é curta ("é", "oi"); palavra longa ali é o Whisper esticando a palavra para dentro da pausa.
+  palavraPerdidaMaxS: 0.8,
+});
+
+// Limpeza da voz (DPDFNet 48 kHz, kit/py/limpar_voz.py). O limite deixa uns 24 dB de ruído a menos
+// em vez de zerar o fundo: silêncio absoluto soa como vácuo. Medido em 13/11/2026 com dois takes
+// reais e ruído de ventilador: voz acima do fundo de 11-12 dB no original, 14-15 dB com o filtro
+// antigo (afftdn) e ~34 dB com esta no limite de 24, sem mudar as palavras da transcrição.
+export const LIMPEZA = Object.freeze({ limiteDb: 24 });
 
 export const FALA = Object.freeze({ memoriaMinimaGb: 8, modeloGrande: 'large-v3-turbo', modeloPequeno: 'small' });
 

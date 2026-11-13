@@ -155,7 +155,7 @@ A cada 2 s muda algo: tela, zoom, texto ou som. O kit avisa na validação e rep
 Porquê: os dois pontos onde as pessoas iam embora eram 6 s só de rosto e um cartão parado 7 s.
 
 **34. Zoom com função.**
-Abertura de 1,26x para 1,1x em 0,8 s. Punch-in até 1,16x em 0,14 s, assentando em 1,1x em 1,0 s, na palavra de ênfase. Zoom lento até 1,1x em fala longa. Nunca passar de 1,1x com cartão na tela.
+Abertura de 1,26x para 1,1x em 0,8 s. Punch-in até 1,16x em 0,14 s, assentando em 1,1x em 1,0 s, na palavra de ênfase. Zoom lento até 1,1x em fala longa. Nunca passar de 1,1x com cartão na tela. O zoom cresce do centro do rosto medido no take (`rosto.json`), para o rosto crescer no lugar e não descer para fora da tela.
 Porquê: zoom marca a ênfase e evita rosto parado. Acima de 1,1x o cartão sai da tela.
 
 **35. Cartões chegam suaves e um pouco antes da palavra.**
@@ -177,7 +177,7 @@ Porquê: esses defeitos só aparecem parando o vídeo na troca. Assistindo, ning
 Porquê: a maioria assiste sem som. Legenda longa disputa com o rosto.
 
 **39. Legenda nunca sobre a boca.**
-Com o rosto cheio, ela fica onde não tapa a boca e não sai da zona segura (regra 31): olhe um quadro do take e ponha em `legenda_rosto_y` o topo dela, de 250 a 1424. Abaixo da boca, se couber (a legenda tem ~75 px e termina até 1500). Se o rosto estiver baixo no quadro e a boca passar de ~1350, acima da cabeça. Confira nos quadros que ela não cobre o gancho escrito (até ~610 no começo), uma tela solta (250 a ~630) nem o selo do pedido (~1290 a 1370). Sem o campo, ela fica em 1424. Com faixa, acompanha a faixa no mesmo ritmo (35 em y 700, 50 em y 988, 100 em y 1424) e troca de cor: escura sobre o papel, clara sobre o rosto.
+Com o rosto cheio, ela fica onde não tapa a boca e não sai da zona segura (regra 31). O kit mede o rosto no take (`rosto.json`, feito no `cortar`) e sugere o topo dela: abaixo do lábio, se couber (a legenda tem ~75 px e termina até 1500); senão, acima da cabeça. A conta já inclui o pico do zoom. Sem `legenda_rosto_y` no `cenas.json`, vale a sugerida. Legenda entre os olhos e o lábio reprova no `montar` (`LEGENDA_NA_BOCA`). Confira nos quadros que ela não cobre o gancho escrito (até ~610 no começo), uma tela solta (250 a ~630) nem o selo do pedido (~1290 a 1370); se cobrir, ponha `legenda_rosto_y` com outro valor de 250 a 1424. Sem medida do rosto, ela fica em 1424. Com faixa, acompanha a faixa no mesmo ritmo (35 em y 700, 50 em y 988, 100 em y 1424) e troca de cor: escura sobre o papel, clara sobre o rosto.
 Porquê: legenda na boca tapa quem vende. Legenda que some na troca de faixa comia o começo das frases.
 
 **40. Uma ênfase por cena, no máximo.**
