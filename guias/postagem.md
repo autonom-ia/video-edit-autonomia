@@ -88,7 +88,7 @@ No Instagram: tocar no Reel, depois em "Ver insights".
 - Uma regra nova sai de **um número comparado com a mediana do próprio perfil**, nunca de um vídeo isolado.
 - Escreva a regra com a origem: "Gancho com pergunta segurou mais nos 3 primeiros segundos (vídeo de 12/11, retenção acima da média)."
 - No máximo 2 regras por medição.
-- Uma regra que se repete em 3 medições vira certeza. Uma que contradiz a anterior: anote as duas e espere a próxima.
+- Uma regra que se repete em 3 medições fica mais forte, mas nunca vira certeza. Uma que contradiz a anterior: anote as duas e espere a próxima.
 - Nunca recomende repostar.
 
 ## Ler pelos portões
@@ -102,7 +102,7 @@ Um número sozinho não diz o que mudar. Leia em ordem e pare no primeiro portã
 | 3. Pedir | a ação que o vídeo pediu (o "Tipo" do pedido no roteiro), por mil visualizações: comentários com a palavra, mensagens no Direct, salvamentos ou novos seguidores | o pedido funcionou? | o pedido: a palavra, o que a pessoa recebe, onde aparece |
 | 4. Fechar | mensagens ou vendas que vieram do vídeo, se o aluno souber | quem pediu foi até o fim? | a entrega no Direct, a oferta |
 
-**Suspeita de público errado:** retenção nos 3 s acima da mediana e % do vídeo vista abaixo. Pode ser um gancho que parou gente de fora do público, ou um meio confuso. Antes de escolher, olhe no gráfico de retenção do Reel onde a curva despenca: logo depois do gancho, é público errado e a correção é no gancho (filtro de público); mais adiante, é o meio. Sem o gráfico, anote as duas hipóteses e não troque nada ainda.
+**Suspeita de público errado:** retenção nos 3 s acima da mediana e % do vídeo vista abaixo. Pode ser um gancho que parou gente de fora do público, ou um meio confuso. O gráfico de retenção do Reel só mostra **onde** as pessoas saem, não **por quê**. Ache o segundo em que a curva despenca e leia o trecho do roteiro nesse segundo: se ele entrega com clareza o que o gancho prometeu e mesmo assim as pessoas saem, a hipótese mais provável é público errado; se o trecho está confuso ou demora, a hipótese mais provável é o meio. Escreva as duas hipóteses com a mais provável primeiro e mude só uma coisa no próximo vídeo. Sem o gráfico, anote as duas e não troque nada ainda.
 
 Cada portão é comparado com a **mediana do próprio aluno**, nunca com perfis grandes. Sem mediana (primeiros vídeos), diga qual portão parece fraco e marque "a confirmar".
 
@@ -112,7 +112,7 @@ O roteiro de cada vídeo traz código, variável e hipótese (`guias/ganchos.md`
 
 | Variável | Portão que decide |
 |---|---|
-| gancho | 1. Se o gráfico confirmou público errado, o veredito é "caiu", mesmo com o portão 1 acima |
+| gancho | 1. Com suspeita de público errado, o veredito é "inconclusiva (suspeita de público errado)", mesmo com o portão 1 acima |
 | formato | 2 |
 | pedido | 3 |
 | assunto | 1 e 2: validada só com os dois acima; caiu com qualquer um abaixo |
@@ -123,7 +123,7 @@ O roteiro de cada vídeo traz código, variável e hipótese (`guias/ganchos.md`
 
 Poucas visualizações costumam ser efeito de um começo fraco, porque o Instagram para de mostrar o vídeo. Por isso, vídeo com menos da metade das visualizações da mediana e portão 1 abaixo da mediana fica "caiu (a reconfirmar)", não inconclusivo. Com poucas visualizações e portão 1 acima, aí sim é inconclusivo.
 
-Ficar acima da mediana acontece em cerca de metade dos vídeos por puro acaso, por isso um vídeo só nunca vira regra. A hipótese validada em 2 vídeos com visualizações na faixa normal do perfil (pelo menos metade da mediana) vira regra do perfil, ainda provisória: se depois cair em 2 vídeos, sai. Com 3 vídeos validados e nenhuma queda, vira base fixa.
+Ficar acima da mediana acontece em cerca de metade dos vídeos por puro acaso, por isso um vídeo só nunca vira regra. A hipótese validada em 2 vídeos com visualizações na faixa normal do perfil (pelo menos metade da mediana) vira **regra provável** do perfil: a melhor aposta até agora, nunca uma certeza. Com poucas visualizações, até 3 vitórias seguidas podem ser acaso. Toda medição continua conferindo a regra, e se ela cair em 2 vídeos, sai.
 
 ## Banco de peças e a regra 70/30
 
