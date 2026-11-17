@@ -12,6 +12,14 @@ A skill criar-roteiro lê este arquivo antes de sugerir pautas e ganchos.
 
 - {{regra}} (confirmada em {{N}} vídeos)
 
+## Banco de peças
+
+<!-- Uma linha por vídeo medido. Nunca apague. Com 2 regras ou mais em "Regras que valem para este perfil", vale a regra 70/30 de guias/postagem.md. -->
+
+| Código | Tipo | Variável | Hipótese | Portão que quebrou | Veredito |
+|---|---|---|---|---|---|
+| {{código}} | {{base ou teste}} | {{...}} | {{...}} | {{1 a 4, ou nenhum}} | {{validada, caiu ou inconclusiva}} |
+
 ## Palavras que o aluno usa de verdade
 
 <!-- Palavras tiradas da lista de "palavras de máquina" de guias/naturalidade.md porque fazem parte do jeito dele. -->
@@ -24,5 +32,6 @@ A skill criar-roteiro lê este arquivo antes de sugerir pautas e ganchos.
 
 - Projeto: {{P}}
 - O que aconteceu: {{uma frase}}
+- Código: {{código}} · Portão que quebrou: {{1 a 4, ou nenhum}} · Veredito: {{validada, caiu ou inconclusiva}}
 - Regra nova: {{regra}} · Origem: {{número comparado com a mediana}}
 - Situação: {{nova | confirmada | caiu}}

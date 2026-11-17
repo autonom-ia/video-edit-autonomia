@@ -73,8 +73,8 @@ Porquê: a pessoa decide no primeiro quadro, e a capa no perfil é esse quadro.
 **15. A palavra-soco cai com um golpe de som até 2,5 s.**
 Porquê: o golpe marca a virada e acorda quem está rolando sem prestar atenção.
 
-**16. Três ganchos de fórmulas diferentes, escolhidos entre pelo menos seis.**
-Escreva pelo menos 6 ganchos, cada um de uma fórmula diferente de `guias/ganchos.md`. Sozinho, descarte os que falham no teste do dedo (regra 11), falam só de quem grava, exageram o que aconteceu, prometem o que o produto não faz ou passam de 8 palavras. Mostre os 3 melhores. Não são 3 reescritas da mesma frase.
+**16. Três ganchos de fórmulas diferentes, escolhidos numa leva de 12 a 30.**
+Monte a leva pela seção "A leva e a régua" de `guias/ganchos.md`, no máximo 2 ganchos por fórmula. Sozinho, descarte os que falham no teste do dedo (regra 11), falam só de quem grava, exageram o que aconteceu, prometem o que o produto não faz ou passam de 8 palavras. Mostre os 3 de maior nota na régua. Não são 3 reescritas da mesma frase.
 Quando o resultado é visível (vídeo pronto, tela, antes e depois), prefira fórmulas que o mostram no quadro 0, como a 6, a 13 e a 18: o resultado aparece antes de qualquer explicação, e a curiosidade é "como?".
 O gancho escolhido vira o fio do roteiro e volta no fecho. Exemplo: "Escrevi três frases" vira "Frase um... Frase dois... Frase três..." e o pedido final repete "as três frases".
 Nunca reescreva um gancho só para passar numa medida (`tempo-de-fala`, avaliador). A medida confere o gancho; quem escolhe é o teste do dedo.
