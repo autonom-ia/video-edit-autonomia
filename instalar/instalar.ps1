@@ -81,7 +81,7 @@ function Vv([string]$Chave) {
     return ''
 }
 
-$script:VersaoEstudio = '1.3.1'
+$script:VersaoEstudio = '1.4.0'
 $arquivoVersao = Join-Path $script:Repo 'VERSAO'
 if (Test-Path -LiteralPath $arquivoVersao) { $script:VersaoEstudio = ([System.IO.File]::ReadAllText($arquivoVersao)).Trim() }
 
