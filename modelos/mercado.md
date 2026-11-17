@@ -38,9 +38,9 @@ A skill criar-roteiro lê este arquivo antes de sugerir pautas.
 
 ### O que dura (grupo A, um voto por conta)
 
-| Elemento | Contas | Leitura |
-|---|---|---|
-| {{ângulo, formato ou oferta, com palavras nossas}} | {{N de N}} | {{frequência ou hipótese}} |
+| Elemento | Contas em A | Contas em B | Leitura |
+|---|---|---|---|
+| {{ângulo, formato ou oferta, com palavras nossas}} | {{N de N}} | {{N de N, ou "sem contraste"}} | {{aparece mais nos que duram, frequência ou hipótese}} |
 
 ### O que está quente (entradas recentes)
 

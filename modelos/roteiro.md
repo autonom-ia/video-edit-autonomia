@@ -20,7 +20,7 @@ Regras deste arquivo (o kit lê a seção "Fala"):
 
 ## Ganchos
 
-1. Falado: "{{...}}" · Escrito: "{{...}}" · Visual do quadro 0: {{...}} · Fórmula: {{...}} · Nota: {{N}}/12
+1. Falado: "{{...}}" · Escrito: "{{...}}" · Visual do quadro 0: {{...}} · Fórmula: {{...}} · Nota: {{N}}/12 (vídeo base: /10)
 2. Falado: "{{...}}" · Escrito: "{{...}}" · Visual do quadro 0: {{...}} · Fórmula: {{...}} · Nota: {{N}}/12
 3. Falado: "{{...}}" · Escrito: "{{...}}" · Visual do quadro 0: {{...}} · Fórmula: {{...}} · Nota: {{N}}/12
 

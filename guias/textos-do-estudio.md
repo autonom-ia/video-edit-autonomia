@@ -270,17 +270,20 @@ R-01d:
 > - Salvamentos
 > - Comentários com a palavra {{cta.palavra}}
 >
-> Se chegaram mensagens ou vendas por causa do vídeo, me conte quantas também.
+> Se chegaram mensagens ou vendas por causa do vídeo, me conte quantas também. E, se aparecer o gráfico de retenção (a curva de quanto as pessoas assistiram), mande um print dele.
 >
 > Se for mais fácil, tire uma foto da tela e passe para o computador como eu expliquei antes.
 
 **M-01b** (teste com 3 versões que o aluno subiu):
 > Vamos ver as 3. Para comparar direito, cada versão é medida no 3º dia depois da própria postagem. Nesse dia, abra a versão, toque em "Ver insights" e anote:
+> - Quanto tempo a versão dura
 > - Visualizações
 > - Quantos assistiram os 3 primeiros segundos (ou a "retenção")
 > - Tempo médio assistido
 > - Salvamentos
 > - Comentários com a palavra {{cta.palavra}}
+>
+> E, se souber, quantas mensagens ou vendas vieram de cada versão.
 >
 > Pode ser um print de cada, desde que tirado no 3º dia. Quando tiver as 3, me mande juntas.
 
