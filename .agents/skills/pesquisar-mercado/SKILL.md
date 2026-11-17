@@ -22,18 +22,18 @@ Se `minha-marca/briefing.json` faltar, rode a skill `minha-marca` primeiro.
 ## Passo a passo
 
 ### 1. Quem somos (só na primeira vez)
-Se `minha-marca/mercado.md` não existir:
-1. Crie a partir de `modelos/mercado.md`.
-2. Preencha o nicho com o que o briefing já diz e peça a confirmação (R-01a).
-3. Faça R-01b, R-01c e R-01d, uma mensagem de cada vez, esperando a resposta: mercado amplo, referências e diferencial.
-4. Com navegador, sugira perfis que caibam no mercado amplo e que você abriu e viu que existem. Sem navegador, não sugira: use só os que o aluno indicou. Peça a confirmação (R-02) e use só os confirmados.
+Se `minha-marca/mercado.md` não existir, ou existir com algum campo de "Quem somos" ou "Referências" ainda com `{{`:
+1. Peça a confirmação do nicho que o briefing já diz (R-01a).
+2. Faça R-01b, R-01c e R-01d, uma mensagem de cada vez, esperando a resposta: mercado amplo, referências e diferencial. Pergunte só o que ainda falta.
+3. Com navegador, sugira perfis que caibam no mercado amplo e que você abriu e viu que existem. Sem navegador, não sugira: use só os que o aluno indicou. Peça a confirmação (R-02) e use só os confirmados.
+4. Só agora grave `minha-marca/mercado.md` pelo molde `modelos/mercado.md`, com as respostas.
 
-Se o arquivo já existir, não pergunte nada: siga para o passo 2.
+Se o arquivo já existir completo, não pergunte nada: siga para o passo 2.
 
 ### 2. Biblioteca de anúncios
 1. Escolha de 3 a 6 buscas: palavras do mercado amplo e palavras do nicho.
 2. **Com navegador na sessão:** abra `facebook.com/ads/library`, só anúncios ativos, país do aluno, e leia em ritmo normal.
-3. **Sem navegador:** diga o R-03 com os links de busca já preenchidos e leia as fotos de tela que o aluno mandar. Sem foto, siga só com o orgânico e anote o limite.
+3. **Sem navegador:** diga o R-03 com os links de busca já preenchidos e leia as fotos de tela que o aluno mandar. Sem print de anúncio, siga só com o orgânico e anote o limite. Sem print de anúncio e sem nada do orgânico (nem print nem o que o aluno contou), não grave rodada nem diga o R-04: diga em uma frase que sem os prints não dá para olhar o mercado e que é só mandar quando puder.
 4. Anote o que o guia pede (seção 3). Separe grupo A, grupo B e teste.
 
 ### 3. Orgânico

@@ -35,10 +35,10 @@ Para cada anúncio, anote:
 - o ângulo, o formato e a oferta, **descritos com palavras suas**.
 
 **Como ler:**
-- **Tempo no ar é sinal, não medição.** A biblioteca não mostra gasto nem resultado. Um anúncio que dura semanas provavelmente se paga. Diga isso ao aluno com essas palavras.
+- **Tempo no ar é sinal, não medição.** A biblioteca não mostra gasto nem resultado. Anote só o que dá para ver: há quanto tempo está no ar e se o anunciante repete o criativo. Nunca diga ao aluno que o anúncio dá lucro ou dá resultado: diga que o anunciante o mantém no ar.
 - **Grupo A:** 21 dias ou mais no ar.
-- **Grupo B:** menos de 7 dias, sem repetição. A biblioteca só mostra anúncio ativo, então o grupo B é de "recém-entrados". Para saber quem morreu cedo, releia as mesmas buscas em 14 dias.
-- **Dentro de cada conta, separe o que já provou do que está em teste.** O criativo mais antigo, ou o repetido, é o que provou. O que entrou nesta semana e está sozinho é teste: não tire padrão dele.
+- **Grupo B:** menos de 7 dias, sem repetição. A biblioteca só mostra anúncio ativo, então o grupo B é de "recém-entrados". Para saber quem parou cedo, anote cada anúncio do grupo B e releia em 14 dias, separando: ainda no ar, saiu do ar, não achado.
+- **Dentro de cada conta, separe o que já provou do que está em teste.** O criativo mais antigo, ou o repetido, é o que o anunciante manteve. O que entrou nesta semana e está sozinho é teste: não tire padrão dele.
 - **Repetição não é dinheiro.** O mesmo criativo em vários posicionamentos aparece várias vezes.
 
 ## 4. Orgânico das referências (o que o mercado posta)
@@ -61,7 +61,7 @@ Leia os últimos Reels de cada perfil da lista do aluno, só lendo. Nunca peça 
 
 - **Uma conta, um voto.** Uma conta com 60 anúncios iguais vale um voto, não 60.
 - **Elemento em menos de 3 contas é hipótese, não padrão.** Um criador sozinho é talento, não tendência.
-- **Frequência não é prova.** "Aparece em 13 de 37 contas que duram" é frequência. Com 8 ou mais contas no grupo B, dá para dizer que um elemento **aparece mais nos que duram** do que nos recém-entrados. Nunca escreva que ele "faz" o anúncio durar: muitos recém-entrados também vão durar. O contraste fica mais forte quando as mesmas buscas são relidas em 14 dias e o grupo B vira "os que saíram do ar". Sem 8 contas em B, escreva "sem contraste" e use só a frequência.
+- **Frequência não é prova.** "Aparece em 13 de 37 contas que duram" é frequência. Com 8 ou mais contas no grupo B, anote a proporção de contas com o elemento em cada grupo (exemplo: 13 de 37 em A, 2 de 8 em B). Só quando a proporção em A for maior dá para dizer que o elemento **aparece mais nos que duram** do que nos recém-entrados. Nunca escreva que ele "faz" o anúncio durar: muitos recém-entrados também vão durar. A comparação mais forte é com os anúncios do grupo B que, relidos em 14 dias, saíram do ar. Sem 8 contas em B, escreva "sem contraste" e use só a frequência.
 - **Hype é outra conta:** muitas contas começando a mesma coisa nas últimas semanas. Separe o que **dura** (grupo A) do que **está quente** (muitas entradas recentes).
 
 ## 6. Traduzir para o nicho

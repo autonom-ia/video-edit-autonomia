@@ -30,7 +30,7 @@ Cada gancho da leva tem cinco partes:
 
 O falado e o visual são **duas variáveis diferentes**. Um gancho bom pode morrer por um quadro 0 parado, e um visual forte não salva uma fala fraca.
 
-**Régua** (0 a 2 em cada critério, máximo 12):
+**Régua** (0 a 2 em cada critério, máximo 12; em vídeo base o critério "Diferente" sai e o máximo é 10, escrito como N/10):
 
 | Critério | 2 | 1 | 0 |
 |---|---|---|---|
@@ -61,9 +61,9 @@ Sem isso, o resultado volta e ninguém sabe o que validou. A medição (`postar-
 
 O estúdio monta uma versão por projeto. Se o aluno montar por conta 3 versões do mesmo vídeo para subir como Reel de teste:
 
-- **A variável é a abertura inteira:** falado, escrito e visual do quadro 0 mudam juntos. O resultado vale para o conjunto, não para uma parte.
+- **A variável é a abertura inteira:** falado, escrito e visual do quadro 0 mudam juntos. Se a última frase também mudar (próximo item), ela entra no conjunto testado. O resultado vale para o conjunto, não para uma parte.
 - Avise o aluno: o roteiro do estúdio fecha voltando ao gancho (regra 16). Nas versões 2 e 3, ele precisa trocar também a última frase, ou o vídeo termina citando a abertura da versão 1.
-- Capa, legenda e horário o mais iguais possível. O que muda é só a abertura.
+- Capa, legenda e horário o mais iguais possível. O que muda é só a abertura e, se preciso, a última frase.
 - A medição segue `guias/postagem.md`, "Teste com 3 versões".
 
 ---

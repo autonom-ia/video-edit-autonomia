@@ -38,8 +38,8 @@ Se o vídeo foi postado há menos de 24 horas e está com 0 visualizações: dig
 ### 4. Comparar pelos portões
 - Compare cada número com a **mediana** das medições anteriores do aluno (`projetos/*/medicao.md`). Nunca com perfis grandes.
 - Leia os 4 portões em ordem e pare no primeiro que quebrou (`guias/postagem.md`, "Ler pelos portões"). Ele aponta o pedaço do vídeo a consertar.
-- O portão 2 usa a % do vídeo vista (tempo médio dividido pela duração), nunca os segundos soltos.
-- Confira a regra do público errado: 3 s acima da mediana e % do vídeo vista abaixo quer dizer que o gancho parou gente de fora do público. A correção é no gancho, não no meio.
+- O portão 2 usa a % do vídeo vista (tempo médio dividido pela duração), nunca os segundos soltos. Medição antiga sem tempo médio não entra na mediana desse portão. Com menos de 3 medições que tenham o número, trate o portão 2 como primeiro vídeo ("a confirmar").
+- Suspeita de público errado (3 s acima da mediana e % do vídeo vista abaixo): siga `guias/postagem.md`, "Ler pelos portões". O M-01 já pede o print do gráfico de retenção. Sem gráfico, anote as duas hipóteses e não mande trocar o gancho.
 - Primeiro vídeo: não há mediana. Diga qual portão parece fraco, marque "a confirmar" e diga que a comparação de verdade começa no terceiro vídeo.
 - Ligue cada diferença a algo do vídeo: a fórmula do gancho (em `roteiro.md`), o visual do quadro 0, a duração, a música, o tipo de pedido.
 
@@ -55,7 +55,7 @@ Se o vídeo foi postado há menos de 24 horas e está com 0 visualizações: dig
 Se o aluno contar que subiu 3 versões do vídeo como Reel de teste (ele monta as versões 2 e 3 por conta; o estúdio monta uma por projeto):
 1. Diga o M-01b no lugar do M-01.
 2. Siga "Teste com 3 versões" de `guias/postagem.md`, passo a passo.
-3. Preencha a seção "Teste com 3 versões" de `projetos/P/medicao.md` (molde `modelos/medicao.md`). O veredito e a linha do banco de peças falam da abertura inteira. Só os números da vencedora entram na mediana dos próximos vídeos; teste inconclusivo não entra.
+3. Preencha a seção "Teste com 3 versões" de `projetos/P/medicao.md` (molde `modelos/medicao.md`). O veredito e a linha do banco de peças falam da abertura inteira. Na tabela "Números" do `medicao.md`, escreva "teste com 3 versões: fora da mediana". Os números do teste nunca entram na mediana do perfil (`guias/postagem.md`, "Teste com 3 versões").
 4. Diga o M-02b no lugar do M-02.
 
 ### 6. Contar ao aluno

@@ -99,10 +99,10 @@ Um número sozinho não diz o que mudar. Leia em ordem e pare no primeiro portã
 |---|---|---|---|
 | 1. Interromper | retenção nos 3 primeiros segundos | o começo fez a pessoa parar? | o gancho falado, o escrito e o visual do quadro 0 |
 | 2. Sustentar | quanto do vídeo a pessoa viu: tempo médio assistido dividido pela duração, em % | o vídeo segurou? | o meio do vídeo, **ou um gancho que atraiu o público errado** |
-| 3. Pedir | comentários com a palavra, por mil visualizações | o pedido funcionou? | o pedido: a palavra, o que a pessoa recebe, onde aparece |
+| 3. Pedir | a ação que o vídeo pediu (o "Tipo" do pedido no roteiro), por mil visualizações: comentários com a palavra, mensagens no Direct, salvamentos ou novos seguidores | o pedido funcionou? | o pedido: a palavra, o que a pessoa recebe, onde aparece |
 | 4. Fechar | mensagens ou vendas que vieram do vídeo, se o aluno souber | quem pediu foi até o fim? | a entrega no Direct, a oferta |
 
-**A regra mais útil:** se a retenção nos 3 s ficou acima da mediana e a % do vídeo vista ficou abaixo, o gancho parou gente que não é do público. A correção é no gancho (filtro de público), não no meio do vídeo.
+**Suspeita de público errado:** retenção nos 3 s acima da mediana e % do vídeo vista abaixo. Pode ser um gancho que parou gente de fora do público, ou um meio confuso. Antes de escolher, olhe no gráfico de retenção do Reel onde a curva despenca: logo depois do gancho, é público errado e a correção é no gancho (filtro de público); mais adiante, é o meio. Sem o gráfico, anote as duas hipóteses e não troque nada ainda.
 
 Cada portão é comparado com a **mediana do próprio aluno**, nunca com perfis grandes. Sem mediana (primeiros vídeos), diga qual portão parece fraco e marque "a confirmar".
 
@@ -112,22 +112,22 @@ O roteiro de cada vídeo traz código, variável e hipótese (`guias/ganchos.md`
 
 | Variável | Portão que decide |
 |---|---|
-| gancho | 1 (e confira o público errado) |
+| gancho | 1. Se o gráfico confirmou público errado, o veredito é "caiu", mesmo com o portão 1 acima |
 | formato | 2 |
 | pedido | 3 |
 | assunto | 1 e 2: validada só com os dois acima; caiu com qualquer um abaixo |
 
-- **validada:** o portão da variável ficou acima da mediana;
-- **caiu:** ficou abaixo. Num vídeo só, a combinação fica "a reconfirmar"; só sai do jogo depois de cair em 2 vídeos;
-- **inconclusiva:** faltou número ou ainda não há mediana (primeiros vídeos).
+- **validada:** o portão da variável ficou pelo menos 10% acima da mediana (diferença relativa);
+- **caiu:** ficou pelo menos 10% abaixo. Num vídeo só, a peça fica "a reconfirmar"; só sai do jogo depois de cair em 2 vídeos;
+- **inconclusiva:** diferença menor que 10% para qualquer lado (inclusive igual, como zero contra zero), faltou número ou ainda não há mediana (primeiros vídeos).
 
 Poucas visualizações costumam ser efeito de um começo fraco, porque o Instagram para de mostrar o vídeo. Por isso, vídeo com menos da metade das visualizações da mediana e portão 1 abaixo da mediana fica "caiu (a reconfirmar)", não inconclusivo. Com poucas visualizações e portão 1 acima, aí sim é inconclusivo.
 
-Ficar acima da mediana acontece em cerca de metade dos vídeos, por isso um vídeo só nunca vira regra. A hipótese validada em 2 vídeos vira regra do perfil. Com 3 vídeos, vira base fixa.
+Ficar acima da mediana acontece em cerca de metade dos vídeos por puro acaso, por isso um vídeo só nunca vira regra. A hipótese validada em 2 vídeos com visualizações na faixa normal do perfil (pelo menos metade da mediana) vira regra do perfil, ainda provisória: se depois cair em 2 vídeos, sai. Com 3 vídeos validados e nenhuma queda, vira base fixa.
 
 ## Banco de peças e a regra 70/30
 
-Toda medição acrescenta uma linha ao "Banco de peças" de `minha-marca/aprendizados.md`: código, tipo (base ou teste), variável, hipótese, portão que quebrou e veredito. Uma combinação que caiu em 2 vídeos não volta como novidade.
+Toda medição acrescenta uma linha ao "Banco de peças" de `minha-marca/aprendizados.md`: código, tipo (base ou teste), variável, hipótese, portão que quebrou e veredito. Uma **peça** é a variável com o valor testado (exemplo: gancho na fórmula 13; pedido com a palavra no começo). Peça que caiu em 2 vídeos não volta como novidade.
 
 Uma linha validada é um vídeo só. O que vale como base é o que está em "Regras que valem para este perfil" (confirmado em 2 vídeos). Quando houver **2 regras ou mais** ali, a criação de roteiro segue a regra 70/30:
 - **7 de cada 10 vídeos** (base) usam só essas regras (formato, tipo de gancho, pedido);
@@ -140,8 +140,8 @@ Antes disso, todo vídeo é exploração.
 Quando o aluno sobe 3 versões como Reel de teste (`guias/ganchos.md`, "Teste com 3 versões"):
 
 1. Meça cada versão 72 horas depois da **própria** postagem.
-2. Versão com menos da metade das visualizações da mediana do perfil não entra. Com menos de 2 versões válidas, o teste é inconclusivo. Sem mediana (primeiros vídeos), o resultado é uma pista fraca: diga isso ao aluno.
-3. Tire da disputa a versão que caiu na regra do público errado (3 s mais alto que as outras e % do vídeo vista mais baixa).
-4. Entre as que sobraram, vence a maior % do vídeo vista (portão 2). Diferença relativa menor que 10% é empate. Exemplo: 50% contra 46% é empate.
-5. No empate, desempatam os comentários com a palavra por mil visualizações e depois as mensagens.
-6. Com essas visualizações, o resultado é uma pista, não uma prova. A vencedora pode ir para o feed. O aprendizado vale para a abertura inteira, não para uma parte dela.
+2. Versão com menos da metade das visualizações da mediana do perfil, ou sem a duração, não entra. Com menos de 2 versões válidas, o teste é inconclusivo. Sem mediana (primeiros vídeos), o resultado é uma pista fraca: diga isso ao aluno.
+3. Entre as válidas, vence a maior % do vídeo vista (tempo médio dividido pela duração de cada versão). Diferença relativa menor que 10% é empate. Exemplo: 50% contra 46% é empate.
+4. No empate, desempata a ação pedida por mil visualizações (portão 3) e depois as mensagens.
+5. Com essas visualizações, o resultado é uma pista, não uma prova. A vencedora pode ir para o feed. O aprendizado vale para o conjunto que mudou (abertura e, se mudou, a última frase), não para uma parte dele.
+6. Os números do teste ficam fora da mediana do perfil: escolher só a vencedora puxaria a régua para cima.

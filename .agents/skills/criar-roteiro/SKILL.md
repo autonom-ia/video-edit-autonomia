@@ -28,7 +28,7 @@ Não pergunte nada antes das pautas. Se o aluno já disse o assunto, as pautas s
 Rode `./estudio novo-projeto --titulo "<assunto em poucas palavras>" --caminho A`. Guarde `arquivos.projeto` como `P`. (Sem assunto dito, use `--titulo "ideias"`.)
 
 ### 2. As pautas
-1. Gere 6 pautas a partir de `publico.dores`, `nicho.descricao`, `oferta` e dos aprendizados. Se existir `minha-marca/mercado.md`, até 2 das 6 saem das traduções da rodada mais recente que ainda não foram usadas (coluna "Usada em" vazia), com a premissa da tradução. Se o aluno chegou aqui aceitando o R-04, pelo menos 2 das 3 pautas do P-02 saem das traduções. Combinação que caiu em 2 vídeos no "Banco de peças" não volta como novidade. Com 2 regras ou mais em "Regras que valem para este perfil", siga a regra 70/30: decida antes se este vídeo é base (usa só essas regras) ou teste (uma variável nova sobre essa base). Para cada uma: assunto, a dor que resolve, o que a pessoa ganha, premissa, prova (item de `provas[]` com origem, ou "hipótese"), teste dos 30 segundos, começo falado e escrito na tela.
+1. Gere 6 pautas a partir de `publico.dores`, `nicho.descricao`, `oferta` e dos aprendizados. Se existir `minha-marca/mercado.md`, até 2 das 6 saem das traduções da rodada mais recente que ainda não foram usadas (coluna "Usada em" vazia), com a premissa da tradução. Se o aluno chegou aqui aceitando o R-04, são até 4 das 6, e a ★ do P-02 vai para a tradução mais forte que passar no `avaliar`. Peça que caiu em 2 vídeos no "Banco de peças" não volta como novidade (`guias/postagem.md`, "Banco de peças e a regra 70/30"). Com 2 regras ou mais em "Regras que valem para este perfil", siga a regra 70/30: decida antes se este vídeo é base (usa só essas regras) ou teste (uma variável nova sobre essa base). Para cada uma: assunto, a dor que resolve, o que a pessoa ganha, premissa, prova (item de `provas[]` com origem, ou "hipótese"), teste dos 30 segundos, começo falado e escrito na tela.
 2. Descarte, você mesmo, as que falham no teste dos 30 segundos ou dependem de inventar algo de `cuidados_do_nicho`.
 3. Rode a skill `avaliar`, tipo `premissa`, com as que sobraram. Descarte as que caírem. Ajuste as "de pé com ajuste".
 4. Mostre as 3 melhores no P-02. A recomendada (★) é a que tem prova. Se nenhuma tiver prova no briefing (o comum logo depois da instalação, quando `provas[]` está vazio), a ★ vai para a de premissa mais segura, sempre com a linha "Para ser verdade". Pauta sem prova no briefing leva no cartão a linha "Para ser verdade: {{premissa}}. É assim com os seus clientes?". Escolher essa pauta é confirmar a premissa. "Não é bem assim": volte às outras pautas. Assunto próprio ("ou me diga o seu assunto"): gere 3 pautas sobre ele, passe pelos passos 2 e 3 e mostre o P-02 de novo.
@@ -38,7 +38,7 @@ Rode `./estudio novo-projeto --titulo "<assunto em poucas palavras>" --caminho A
 ### 3. Os ganchos
 1. Monte a leva em `projetos/P/leva-de-ganchos.md` (`guias/ganchos.md`, "A leva e a régua"): de 12 a 30 ganchos, no máximo 2 por fórmula, das fórmulas que caibam na pauta, cada um com falado, escrito, visual do quadro 0, versão negativa e premissa. Fórmula de número só com prova. Resultado visível? Prefira fórmulas que o mostram no quadro 0, como a 6, a 13 e a 18.
 2. Em silêncio, descarte os que falham no teste do dedo, falam só de quem grava, exageram, passam de 8 palavras ou têm premissa inventada (regras 11 e 16). Dê a nota da régua aos que sobraram. Os descartados ficam na leva com o motivo em uma linha. Nunca mude a frase só para subir a nota.
-3. Para os 3 de maior nota: fala de até 8 palavras e escrito de até 10, frases diferentes, e o visual do quadro 0.
+3. Escolha os 3 de maior nota com fórmulas diferentes (no máximo um por fórmula). Para cada um: fala de até 8 palavras e escrito de até 10, frases diferentes, e o visual do quadro 0.
 4. Diga o P-03. Recomende (★) a maior nota. No empate, o que filtra melhor o público e depois o que mostra o resultado no quadro 0.
 5. Rode `./estudio estado --projeto P --etapa roteiro --gate gancho=<n> --resposta "<palavras do aluno>"`.
 
@@ -62,7 +62,7 @@ O gancho escolhido vira o fio do roteiro e volta no fecho.
 3. No máximo 3 rodadas. Se a terceira ficar abaixo de 8,5, diga o P-03b (em `guias/textos-do-estudio.md`). "Trocar o assunto": volte ao passo 2. "Seguir com este": continue.
 
 ### 6. O plano das cenas (em silêncio)
-1. Escreva `direcao_de_arte` primeiro: o que domina a tela em cada trecho e por quê.
+1. Escreva `direcao_de_arte` primeiro: o que domina a tela em cada trecho e por quê. O quadro 0 mostra o visual do gancho que o aluno escolheu no P-03 ("Na tela"), exatamente como foi mostrado a ele.
 2. Escreva `projetos/P/cenas.json` pelo guia de `guias/camadas.md`, com tempos estimados a 2,75 palavras por segundo. Siga "Como pensar a tabela".
    - Quando a fala cita um app, um site ou uma ação na tela, pesquise como ele é de verdade e desenhe a tela livre a partir dessa referência (`guias/tela-livre.md`). App que o aluno usa vai em `apps_reais`.
    - Se a tela do vídeo vai mostrar algo que o aluno faz no computador ou no celular, a folha de gravação já pede para ele gravar a tela também (`guias/guia-de-gravacao.md`, "Se o vídeo mostra algo na tela").
