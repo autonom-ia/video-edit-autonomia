@@ -263,12 +263,12 @@ R-01d:
 ## "como foi meu vídeo"
 
 **M-01:**
-> Vamos ver. Abra o Instagram, toque no seu Reel e depois em "Ver insights". Me escreva estes 5 números, do jeito que aparecer:
+> Vamos ver. Abra o Instagram, toque no seu Reel e depois em "Ver insights". Me escreva estes números, do jeito que aparecer:
 > - Visualizações
 > - Quantos assistiram os 3 primeiros segundos (ou a "retenção")
 > - Tempo médio assistido
 > - Salvamentos
-> - Comentários com a palavra {{cta.palavra}}
+> - {{a ação que o vídeo pediu: "Comentários com a palavra PALAVRA", "Mensagens no Direct" ou "Novos seguidores vindos do Reel"; se o pedido foi salvar, esta linha sai, porque salvamentos já está na lista}}
 >
 > Se chegaram mensagens ou vendas por causa do vídeo, me conte quantas também. E, se aparecer o gráfico de retenção (a curva de quanto as pessoas assistiram), mande um print dele.
 >
@@ -281,7 +281,7 @@ R-01d:
 > - Quantos assistiram os 3 primeiros segundos (ou a "retenção")
 > - Tempo médio assistido
 > - Salvamentos
-> - Comentários com a palavra {{cta.palavra}}
+> - {{a ação que o vídeo pediu: "Comentários com a palavra PALAVRA", "Mensagens no Direct" ou "Novos seguidores vindos do Reel"; se o pedido foi salvar, esta linha sai, porque salvamentos já está na lista}}
 >
 > E, se souber, quantas mensagens ou vendas vieram de cada versão.
 >

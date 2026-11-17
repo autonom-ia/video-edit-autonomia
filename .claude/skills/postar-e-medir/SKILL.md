@@ -26,7 +26,7 @@ O projeto mais recente com `estado.etapa` = `postagem`. Se houver mais de um sem
 > 2. {{título do outro}}
 
 ### 2. Pedir os números
-Se o aluno ainda não mandou, diga o M-01. O jeito padrão é ele escrever os 5 números; a foto da tela é alternativa. Se ele já colou números ou mandou foto, pule direto para ler.
+Se o aluno ainda não mandou, diga o M-01. O jeito padrão é ele escrever os números da lista; a foto da tela é alternativa. Se ele já colou números ou mandou foto, pule direto para ler.
 
 Se o vídeo foi postado há menos de 24 horas e está com 0 visualizações: diga que é atraso comum do Instagram e peça para voltar em 1 dia. Não tire regra.
 
@@ -55,7 +55,7 @@ Se o vídeo foi postado há menos de 24 horas e está com 0 visualizações: dig
 Se o aluno contar que subiu 3 versões do vídeo como Reel de teste (ele monta as versões 2 e 3 por conta; o estúdio monta uma por projeto):
 1. Diga o M-01b no lugar do M-01.
 2. Siga "Teste com 3 versões" de `guias/postagem.md`, passo a passo.
-3. Preencha a seção "Teste com 3 versões" de `projetos/P/medicao.md` (molde `modelos/medicao.md`). O veredito e a linha do banco de peças falam da abertura inteira. Na tabela "Números" do `medicao.md`, escreva "teste com 3 versões: fora da mediana". Os números do teste nunca entram na mediana do perfil (`guias/postagem.md`, "Teste com 3 versões").
+3. Preencha a seção "Teste com 3 versões" de `projetos/P/medicao.md` (molde `modelos/medicao.md`). O veredito e a linha do banco de peças falam do conjunto que mudou (a abertura e, se mudou, a última frase). Na tabela "Números" do `medicao.md`, escreva "teste com 3 versões: fora da mediana". Os números do teste nunca entram na mediana do perfil (`guias/postagem.md`, "Teste com 3 versões").
 4. Diga o M-02b no lugar do M-02.
 
 ### 6. Contar ao aluno
@@ -68,7 +68,7 @@ Rode `./estudio estado --projeto P --etapa concluido`.
 - 0 visualizações nas primeiras horas, com a conta em dia, é atraso: orientar a esperar 24 horas.
 - Nunca recomendar repostar o mesmo vídeo. As versões de um teste com 3 versões não contam como repostagem: cada uma tem abertura própria.
 - Nunca pedir senha nem entrar na conta do Instagram.
-- Nunca concluir nada de um vídeo só. Uma regra vira certeza em 3 medições.
+- Nunca concluir nada de um vídeo só. Regra do perfil é aposta provável, nunca certeza: toda medição continua conferindo.
 - Nunca inventar número que o aluno não mandou.
 
 ## Saídas
