@@ -79,7 +79,7 @@ ler_versoes() {
 }
 ler_versoes
 
-VERSAO_ESTUDIO="1.3.1"
+VERSAO_ESTUDIO="1.4.0"
 if [ -f "$REPO/VERSAO" ]; then
   IFS= read -r VERSAO_ESTUDIO < "$REPO/VERSAO" || true
   VERSAO_ESTUDIO="${VERSAO_ESTUDIO%$'\r'}"
