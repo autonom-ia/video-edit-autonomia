@@ -75,9 +75,9 @@ A linha "Para ser verdade" substitui a antiga pergunta separada de confirmação
 
 **P-03, os ganchos:**
 > Agora o começo do vídeo, os 3 primeiros segundos. É o que segura a pessoa. Fiz 3 jeitos diferentes:
-> 1 ★ Falado: "{{...}}" · Escrito: "{{...}}" ({{porquê}})
-> 2 Falado: "{{...}}" · Escrito: "{{...}}"
-> 3 Falado: "{{...}}" · Escrito: "{{...}}"
+> 1 ★ Falado: "{{...}}" · Escrito: "{{...}}" · Na tela: {{visual do quadro 0}} ({{porquê}})
+> 2 Falado: "{{...}}" · Escrito: "{{...}}" · Na tela: {{...}}
+> 3 Falado: "{{...}}" · Escrito: "{{...}}" · Na tela: {{...}}
 >
 > Qual você prefere?
 
@@ -229,16 +229,63 @@ Logo depois do F-08, diga o F-00 no sentido do computador para o celular. Para c
 
 Se o aluno escolher 2: diga, em palavras simples, que esse serviço não vem ligado no estúdio e que, para usar, ele precisa pedir ajuda no suporte do curso. Siga grátis enquanto isso. Nunca peça senha, chave ou cartão na conversa, nunca crie conta por ele e nunca ligue o serviço por conta própria. Voz sintética e rosto simulado o estúdio não faz, nem pago.
 
+## "o que está funcionando no meu mercado"
+
+**R-01** (só na primeira vez; são 4 mensagens, uma de cada vez, esperando a resposta entre elas):
+
+R-01a:
+> Antes de olhar o mercado, preciso de 4 respostas rápidas suas. A primeira: pelo que você me contou, você fala com {{nicho do briefing}}. É isso?
+
+R-01b:
+> Quem mais disputa a atenção dessas pessoas, mesmo sem ser do seu ramo? Exemplo: {{exemplo do nicho}}.
+
+R-01c:
+> Que perfis você admira ou acompanha nesse mercado? Pode mandar o @ ou o link.
+
+R-01d:
+> O que você faz que esses perfis não fazem?
+
+**R-02:**
+> Vou usar estes perfis como régua:
+> {{lista: @perfil · por quê}}
+> Tiro, troco ou acrescento algum?
+
+**R-03** (só quando a sessão não tem navegador):
+> Para ver os anúncios do seu mercado, abra estes links no navegador e me mande um print (captura de tela) de cada página:
+> {{links de busca já preenchidos}}
+> Não precisa entrar em conta nenhuma. Se puder, mande também um print da aba de Reels de cada perfil da lista.
+
+**R-04** (no fim da pesquisa):
+> {{o que dura, o que está quente e as 2 ou 3 traduções, em até 5 frases}}
+>
+> Quer que eu monte as ideias de vídeo a partir disso?
+
 ## "como foi meu vídeo"
 
 **M-01:**
-> Vamos ver. Abra o Instagram, toque no seu Reel e depois em "Ver insights". Me escreva estes 4 números, do jeito que aparecer:
+> Vamos ver. Abra o Instagram, toque no seu Reel e depois em "Ver insights". Me escreva estes 5 números, do jeito que aparecer:
 > - Visualizações
 > - Quantos assistiram os 3 primeiros segundos (ou a "retenção")
+> - Tempo médio assistido
 > - Salvamentos
 > - Comentários com a palavra {{cta.palavra}}
 >
+> Se chegaram mensagens ou vendas por causa do vídeo, me conte quantas também.
+>
 > Se for mais fácil, tire uma foto da tela e passe para o computador como eu expliquei antes.
+
+**M-01b** (teste com 3 versões que o aluno subiu):
+> Vamos ver as 3. Para comparar direito, cada versão é medida no 3º dia depois da própria postagem. Nesse dia, abra a versão, toque em "Ver insights" e anote:
+> - Visualizações
+> - Quantos assistiram os 3 primeiros segundos (ou a "retenção")
+> - Tempo médio assistido
+> - Salvamentos
+> - Comentários com a palavra {{cta.palavra}}
+>
+> Pode ser um print de cada, desde que tirado no 3º dia. Quando tiver as 3, me mande juntas.
 
 **M-02:**
 > Anotei. {{1 frase do que aconteceu}}. Para o próximo vídeo, vou {{1 a 2 regras novas em linguagem simples}}. Guardei isso.
+
+**M-02b** (resultado do teste com 3 versões):
+> Anotei. {{a versão que se saiu melhor, ou "ficou empatado"}}. É uma pista, não uma certeza: {{1 frase do porquê}}. {{Se houve vencedora: "Pode compartilhar essa com todos."}}

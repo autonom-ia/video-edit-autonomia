@@ -55,6 +55,7 @@ Você entende o pedido do aluno. Não existe lista de palavras: decida pelo sent
 | Instalar, reinstalar, ou o estúdio não está instalado | `instalar-estudio` |
 | Responder ou mudar as perguntas do negócio, as cores, a letra, o logo | `minha-marca` |
 | Estudar um vídeo de exemplo, colar um link de vídeo | `estudar-referencias` |
+| Saber o que está funcionando no mercado dele, o que os concorrentes anunciam, o que está em alta | `pesquisar-mercado` |
 | Gravar um vídeo novo, ter uma ideia, montar um roteiro | `criar-roteiro` |
 | Transformar um vídeo já gravado num Reel, continuar um vídeo parado | `fazer-video` |
 | Uma nota ou uma revisão de um roteiro ou vídeo | `avaliar` |
@@ -129,7 +130,8 @@ Só nestes momentos. Os textos exatos estão nos arquivos indicados.
 | Música | F-06 | idem |
 | Nota baixa depois de 3 rodadas | P-03b, F-07 | idem |
 | Algo pago | F-09 | idem |
-| Medição | M-01 | idem |
+| Medição | M-01 ou M-01b | idem |
+| Pesquisa de mercado (fora do orçamento por vídeo) | R-01a a R-01d (só na primeira vez), R-02, R-03 (só sem navegador), R-04 | idem |
 
 **Orçamento por vídeo, fora a instalação: no máximo 5 decisões** (pauta, gancho, GATE 1, GATE 2, música). No caminho B, sem pauta e sem gancho. Não existe pergunta antes das pautas: o P-02 já traz "ou me diga o seu assunto". O avaliador roda depois da conferência técnica (passo 12 da skill fazer-video). Se ele ou o QA pedirem mudança na imagem, junte tudo e mostre uma única nova prévia ("É a última prévia"), que conta como parte do GATE 2. Nunca mais de uma. F-01b, F-01d, F-01c, F-01e e F-03 só aparecem quando o caso exige.
 
@@ -175,9 +177,9 @@ Nunca use expressão regular para interpretar o que o aluno escreveu. Quem enten
 | `1-referencias/` | Vídeos de exemplo e as réguas que você escreve. `links.json` tem a lista que vem com o estúdio. Se nada baixar, vale a régua embutida em `guias/regua-embutida.md` |
 | `2-videos-brutos/` | Onde o aluno põe o vídeo gravado |
 | `3-videos-prontos/` | Onde sai o Reel: vídeo, capa e legenda |
-| `minha-marca/` | `briefing.json` (você escreve), `marca.json` (o kit gera), logo, letras, `aprendizados.md` |
+| `minha-marca/` | `briefing.json` (você escreve), `marca.json` (o kit gera), logo, letras, `aprendizados.md`, `mercado.md` (a skill `pesquisar-mercado` cria) |
 | `projetos/` | Uma pasta por vídeo, com o estado e tudo o que foi feito |
-| `guias/` | Regras de produção, régua do avaliador, ganchos, camadas, naturalidade, postagem, referências, textos do estúdio, guia de gravação |
+| `guias/` | Regras de produção, régua do avaliador, ganchos, camadas, naturalidade, postagem, pesquisa de mercado, referências, textos do estúdio, guia de gravação |
 | `briefing/` | As perguntas do briefing e o briefing em branco |
 | `modelos/` | Moldes de pauta, roteiro, cenas, revisão, medição e aprendizados |
 | `kit/` | O motor do estúdio. Não edite: a atualização sobrescreve. O que você cria (telas livres, mídia) fica na pasta do projeto |

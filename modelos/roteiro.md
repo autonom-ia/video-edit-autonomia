@@ -14,12 +14,15 @@ Regras deste arquivo (o kit lê a seção "Fala"):
 - Por quê: {{o que quem assiste ganha, numa frase}}
 - Premissa e prova: {{premissa}} · {{prova com origem, ou confirmação do aluno}}
 - Duração alvo: {{medio: 30 a 45 s | curto: até 30 s}}
+- Código: {{AAAA-MM-DD-assunto-fórmula}} · Tipo: {{base ou teste}} · Variável: {{gancho, formato, pedido ou assunto}}
+- Hipótese: Se for bem, aprendemos que {{...}}
+- Leva: projetos/P/leva-de-ganchos.md ({{N}} ganchos; os 3 abaixo são os melhores pela régua)
 
 ## Ganchos
 
-1. Falado: "{{...}}" · Escrito: "{{...}}" · Fórmula: {{...}}
-2. Falado: "{{...}}" · Escrito: "{{...}}" · Fórmula: {{...}}
-3. Falado: "{{...}}" · Escrito: "{{...}}" · Fórmula: {{...}}
+1. Falado: "{{...}}" · Escrito: "{{...}}" · Visual do quadro 0: {{...}} · Fórmula: {{...}} · Nota: {{N}}/12
+2. Falado: "{{...}}" · Escrito: "{{...}}" · Visual do quadro 0: {{...}} · Fórmula: {{...}} · Nota: {{N}}/12
+3. Falado: "{{...}}" · Escrito: "{{...}}" · Visual do quadro 0: {{...}} · Fórmula: {{...}} · Nota: {{N}}/12
 
 Escolhido: {{n}}
 

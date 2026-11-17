@@ -11,7 +11,9 @@ Comandos: no Mac e no Windows com Git Bash, `./estudio <comando>`. No PowerShell
 
 ## Leia antes (todas as vezes)
 
-- `minha-marca/briefing.json` e, se existir, `minha-marca/aprendizados.md` (as regras deste perfil valem mais que as gerais).
+- `minha-marca/briefing.json` e, se existir, `minha-marca/aprendizados.md` (as regras deste perfil valem mais que as gerais, e o "Banco de peças" diz o que já foi testado).
+- `minha-marca/mercado.md`, se existir: as traduções da rodada mais recente viram pautas (passo 2).
+- `guias/postagem.md`, seção "Banco de peças e a regra 70/30".
 - `guias/regras-de-producao.md` (as 56 regras), `guias/ganchos.md`, `guias/naturalidade.md`, `guias/camadas.md`.
 - `guias/textos-do-estudio.md` (F-00 e P-02 a P-05).
 - As réguas em `1-referencias/*/regua.md`. Se houver referência sem régua, rode a skill `estudar-referencias` antes, sem avisar. Se não houver nenhuma régua (nada baixou), use `guias/regua-embutida.md` e siga sem perguntar.
@@ -26,7 +28,7 @@ Não pergunte nada antes das pautas. Se o aluno já disse o assunto, as pautas s
 Rode `./estudio novo-projeto --titulo "<assunto em poucas palavras>" --caminho A`. Guarde `arquivos.projeto` como `P`. (Sem assunto dito, use `--titulo "ideias"`.)
 
 ### 2. As pautas
-1. Gere 6 pautas a partir de `publico.dores`, `nicho.descricao`, `oferta` e dos aprendizados. Para cada uma: assunto, a dor que resolve, o que a pessoa ganha, premissa, prova (item de `provas[]` com origem, ou "hipótese"), teste dos 30 segundos, começo falado e escrito na tela.
+1. Gere 6 pautas a partir de `publico.dores`, `nicho.descricao`, `oferta` e dos aprendizados. Se existir `minha-marca/mercado.md`, até 2 das 6 saem das traduções da rodada mais recente que ainda não foram usadas (coluna "Usada em" vazia), com a premissa da tradução. Se o aluno chegou aqui aceitando o R-04, pelo menos 2 das 3 pautas do P-02 saem das traduções. Combinação que caiu em 2 vídeos no "Banco de peças" não volta como novidade. Com 2 regras ou mais em "Regras que valem para este perfil", siga a regra 70/30: decida antes se este vídeo é base (usa só essas regras) ou teste (uma variável nova sobre essa base). Para cada uma: assunto, a dor que resolve, o que a pessoa ganha, premissa, prova (item de `provas[]` com origem, ou "hipótese"), teste dos 30 segundos, começo falado e escrito na tela.
 2. Descarte, você mesmo, as que falham no teste dos 30 segundos ou dependem de inventar algo de `cuidados_do_nicho`.
 3. Rode a skill `avaliar`, tipo `premissa`, com as que sobraram. Descarte as que caírem. Ajuste as "de pé com ajuste".
 4. Mostre as 3 melhores no P-02. A recomendada (★) é a que tem prova. Se nenhuma tiver prova no briefing (o comum logo depois da instalação, quando `provas[]` está vazio), a ★ vai para a de premissa mais segura, sempre com a linha "Para ser verdade". Pauta sem prova no briefing leva no cartão a linha "Para ser verdade: {{premissa}}. É assim com os seus clientes?". Escolher essa pauta é confirmar a premissa. "Não é bem assim": volte às outras pautas. Assunto próprio ("ou me diga o seu assunto"): gere 3 pautas sobre ele, passe pelos passos 2 e 3 e mostre o P-02 de novo.
@@ -34,16 +36,16 @@ Rode `./estudio novo-projeto --titulo "<assunto em poucas palavras>" --caminho A
 6. Rode `./estudio estado --projeto P --etapa gancho --gate pauta=<A|B|C> --resposta "<palavras do aluno>"`.
 
 ### 3. Os ganchos
-1. Escreva pelo menos 6 ganchos, cada um de uma fórmula diferente de `guias/ganchos.md` que caiba na pauta. Fórmula de número só com prova. Resultado visível? Prefira fórmulas que o mostram no quadro 0, como a 6, a 13 e a 18.
-2. Em silêncio, descarte os que falham no teste do dedo, falam só de quem grava, exageram ou passam de 8 palavras (regras 11 e 16). Nunca mude a frase só para passar numa medida.
-3. Para os 3 melhores: fala de até 8 palavras e escrito de até 10, frases diferentes.
-4. Diga o P-03. Recomende (★) o que faz quem não conhece quem fala parar de rolar. Na dúvida, o que mostra o resultado no quadro 0.
+1. Monte a leva em `projetos/P/leva-de-ganchos.md` (`guias/ganchos.md`, "A leva e a régua"): de 12 a 30 ganchos, no máximo 2 por fórmula, das fórmulas que caibam na pauta, cada um com falado, escrito, visual do quadro 0, versão negativa e premissa. Fórmula de número só com prova. Resultado visível? Prefira fórmulas que o mostram no quadro 0, como a 6, a 13 e a 18.
+2. Em silêncio, descarte os que falham no teste do dedo, falam só de quem grava, exageram, passam de 8 palavras ou têm premissa inventada (regras 11 e 16). Dê a nota da régua aos que sobraram. Os descartados ficam na leva com o motivo em uma linha. Nunca mude a frase só para subir a nota.
+3. Para os 3 de maior nota: fala de até 8 palavras e escrito de até 10, frases diferentes, e o visual do quadro 0.
+4. Diga o P-03. Recomende (★) a maior nota. No empate, o que filtra melhor o público e depois o que mostra o resultado no quadro 0.
 5. Rode `./estudio estado --projeto P --etapa roteiro --gate gancho=<n> --resposta "<palavras do aluno>"`.
 
 ### 4. O roteiro (em silêncio)
 O gancho escolhido vira o fio do roteiro e volta no fecho.
 
-1. Escreva `projetos/P/roteiro.md` pelo molde `modelos/roteiro.md`. Só a seção "Fala" usa linhas começadas por `> `, um bloco por linha.
+1. Escreva `projetos/P/roteiro.md` pelo molde `modelos/roteiro.md`. Só a seção "Fala" usa linhas começadas por `> `, um bloco por linha. Preencha o código, o tipo (base ou teste), a variável e a hipótese (`guias/ganchos.md`, "Código e hipótese"). Se a pauta veio de uma tradução de `minha-marca/mercado.md`, escreva o código na coluna "Usada em" dela.
 2. Aplique `guias/naturalidade.md` em cada linha.
 3. Rode `./estudio tempo-de-fala --arquivo projetos/P/roteiro.md` e confira:
    - `gancho_s` até 3;
@@ -93,7 +95,7 @@ O gancho escolhido vira o fio do roteiro e volta no fecho.
 
 ## Saídas
 
-`projetos/P/`: `estado.json`, `pauta.md`, `roteiro.md`, `cenas.json`, `cenas.md` (só para você e o avaliador), a página de aprovação, `amostras/`, `telas/`, `folha-de-gravacao.html`, `folha-de-gravacao.pdf`, `revisor/`, `revisao-premissa-N.md`, `revisao-roteiro-N.md`.
+`projetos/P/`: `estado.json`, `pauta.md`, `leva-de-ganchos.md`, `roteiro.md`, `cenas.json`, `cenas.md` (só para você e o avaliador), a página de aprovação, `amostras/`, `telas/`, `folha-de-gravacao.html`, `folha-de-gravacao.pdf`, `revisor/`, `revisao-premissa-N.md`, `revisao-roteiro-N.md`.
 
 ## Onde você para e pergunta
 

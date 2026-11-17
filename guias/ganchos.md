@@ -7,7 +7,7 @@
 ## Como usar
 
 - Um Reel tem dois ganchos que disparam juntos e não são a mesma frase: **o falado** (cerca de 2 segundos) e **o escrito na tela** (cerca de 1 segundo, porque é lido antes de ser ouvido).
-- Para cada pauta, escreva **pelo menos 6 ganchos, de 6 fórmulas diferentes**, descarte os fracos e mostre os **3 melhores**. Não escreva versões da mesma fórmula.
+- Para cada pauta, escreva uma **leva interna de 12 a 30 ganchos, no máximo 2 por fórmula**, passe pela régua da seção "A leva e a régua" e mostre só os **3 melhores**. O aluno nunca vê a leva inteira.
 - **Teste do dedo**, no escrito e na fala: alguém que não conhece quem fala pararia de rolar lendo ou ouvindo só a frase? Gancho em primeira pessoa só passa se a mesma frase já mostrar o que quem assiste ganha.
 - Resultado visível (vídeo pronto, tela, antes e depois)? Prefira fórmulas que o mostram no quadro 0, como a 6, a 13 e a 18.
 - O gancho escolhido vira o fio do roteiro e volta no fecho.
@@ -15,6 +15,56 @@
 - Os exemplos abaixo mostram o jeito. Nunca use um exemplo como está: o gancho sai da dor do público do aluno, nas palavras dele.
 - Fórmulas que pedem número só servem se houver número em `provas[]`. Sem prova, escolha outra fórmula.
 - Nunca use o nome de uma pessoa real nem um resultado que não aconteceu.
+
+## A leva e a régua
+
+Cada gancho da leva tem cinco partes:
+
+| Parte | Regra |
+|---|---|
+| Falado | até 8 palavras, dito no quadro 0 |
+| Escrito | até 10 palavras, na tela desde o quadro 0, diferente da fala |
+| Visual do quadro 0 | o que aparece além do rosto: a tela, um objeto, uma marcação (círculo, seta ou tarja) que já abre uma curiosidade |
+| Versão negativa | a mesma promessa pelo lado da perda. Serve de teste barato e segue a mesma regra de verdade: não afirma uma dor que ninguém mediu |
+| Premissa | o que precisa ser verdade e de onde vem a prova (só `provas[]`), ou "hipótese". Comentário e mensagem são indício, não prova |
+
+O falado e o visual são **duas variáveis diferentes**. Um gancho bom pode morrer por um quadro 0 parado, e um visual forte não salva uma fala fraca.
+
+**Régua** (0 a 2 em cada critério, máximo 12):
+
+| Critério | 2 | 1 | 0 |
+|---|---|---|---|
+| Impacto no quadro 0 | resultado na tela, ou exagero forte só no verbo | promessa clara | pergunta educada |
+| Filtro de público | tem palavra que só o público do nicho reconhece | palavra genérica de negócio ou de cliente | serve para qualquer curioso |
+| Curto | fala com até 6 palavras | 7 ou 8 | mais de 8 (descarte) |
+| Premissa | prova em `provas[]` ou demonstração real | dedução razoável, coerente com a premissa da pauta escolhida no P-02 | inventado (descarte) |
+| Diferente | abertura que o aluno ainda não usou | parecida com a dos últimos vídeos (`projetos/*/roteiro.md`) | repete. Em vídeo base (regra 70/30), este critério não conta |
+| Entrega em 8 s | a promessa cabe numa entrega até o segundo 8 | precisa de até 15 s | precisa de mais |
+
+- **O filtro de público** existe por causa da medição. Gancho que para qualquer curioso tem retenção alta nos 3 s e cai logo depois, e isso afunda o vídeo (ver `guias/postagem.md`, "Ler pelos portões").
+- **No empate,** vence quem filtra melhor o público e depois quem mostra o resultado no quadro 0.
+- **Nunca mude a frase só para subir a nota.**
+- A leva inteira fica em `projetos/P/leva-de-ganchos.md`, com a nota de cada critério. Nada é apagado: gancho bom que não foi usado volta numa pauta parecida.
+
+## Código e hipótese
+
+Todo vídeo leva um código e uma hipótese, escritos em `roteiro.md`:
+
+- **Código:** `AAAA-MM-DD-<assunto curto>-<fórmula>`. Exemplo: `2026-11-20-cardapio-f13`.
+- **Tipo:** base (usa só o que está em "Regras que valem para este perfil", em `minha-marca/aprendizados.md`) ou teste (uma variável nova). Com menos de 2 regras ali, todo vídeo é teste.
+- **Variável:** o que este vídeo testa (o gancho, o formato, o pedido ou o assunto).
+- **Hipótese:** "Se for bem, aprendemos que...", numa frase.
+
+Sem isso, o resultado volta e ninguém sabe o que validou. A medição (`postar-e-medir`) fecha cada hipótese com um veredito.
+
+## Teste com 3 versões (Reel de teste)
+
+O estúdio monta uma versão por projeto. Se o aluno montar por conta 3 versões do mesmo vídeo para subir como Reel de teste:
+
+- **A variável é a abertura inteira:** falado, escrito e visual do quadro 0 mudam juntos. O resultado vale para o conjunto, não para uma parte.
+- Avise o aluno: o roteiro do estúdio fecha voltando ao gancho (regra 16). Nas versões 2 e 3, ele precisa trocar também a última frase, ou o vídeo termina citando a abertura da versão 1.
+- Capa, legenda e horário o mais iguais possível. O que muda é só a abertura.
+- A medição segue `guias/postagem.md`, "Teste com 3 versões".
 
 ---
 
