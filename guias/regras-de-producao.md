@@ -75,7 +75,7 @@ Porquê: o golpe marca a virada e acorda quem está rolando sem prestar atençã
 
 **16. Três ganchos de fórmulas diferentes, escolhidos numa leva de 12 a 30.**
 Monte a leva pela seção "A leva e a régua" de `guias/ganchos.md`, no máximo 2 ganchos por fórmula. Sozinho, descarte os que falham no teste do dedo (regra 11), falam só de quem grava, exageram o que aconteceu, prometem o que o produto não faz ou passam de 8 palavras. Mostre os 3 de maior nota na régua, um por fórmula. Não são 3 reescritas da mesma frase.
-Quando o resultado é visível (vídeo pronto, tela, antes e depois), prefira fórmulas que o mostram no quadro 0, como a 6, a 13 e a 18: o resultado aparece antes de qualquer explicação, e a curiosidade é "como?".
+Quando o resultado é visível (vídeo pronto, tela, antes e depois), prefira fórmulas que o mostram no quadro 0, como a 6, a 13, a 18 e a 28: o resultado aparece antes de qualquer explicação, e a curiosidade é "como?".
 O gancho escolhido vira o fio do roteiro e volta no fecho. Exemplo: "Escrevi três frases" vira "Frase um... Frase dois... Frase três..." e o pedido final repete "as três frases".
 Nunca reescreva um gancho só para passar numa medida (`tempo-de-fala`, avaliador). A medida confere o gancho; quem escolhe é o teste do dedo.
 Porquê: reescrever a mesma frase só troca palavra. Fórmulas diferentes dão escolha de verdade. Com 3 candidatos só, o primeiro gancho razoável vira o escolhido; com 6, o fraco cai antes de chegar ao aluno.
