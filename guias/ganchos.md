@@ -1,15 +1,16 @@
-# As 26 fórmulas de gancho
+# As 28 fórmulas de gancho
 
 > Adaptado e traduzido de "instagram-agent-skill", de Jake Schincariol, sob a licença MIT.
 > Copyright (c) 2026 Jake Schincariol. Texto integral da licença em `licencas/MIT-instagram-agent-skill.txt`.
 > Mudanças: tradução para o português do Brasil, exemplos novos em vários nichos e regras do estúdio. Os scripts de pontuação do original não vêm junto.
+> As fórmulas 27 e 28 e as variantes da 14 e da 26 foram escritas pelo estúdio a partir de moldes vistos em Reels brasileiros e não vêm do original.
 
 ## Como usar
 
 - Um Reel tem dois ganchos que disparam juntos e não são a mesma frase: **o falado** (cerca de 2 segundos) e **o escrito na tela** (cerca de 1 segundo, porque é lido antes de ser ouvido).
 - Para cada pauta, escreva uma **leva interna de 12 a 30 ganchos, no máximo 2 por fórmula**, passe pela régua da seção "A leva e a régua" e mostre só os **3 melhores**. O aluno nunca vê a leva inteira.
 - **Teste do dedo**, no escrito e na fala: alguém que não conhece quem fala pararia de rolar lendo ou ouvindo só a frase? Gancho em primeira pessoa só passa se a mesma frase já mostrar o que quem assiste ganha.
-- Resultado visível (vídeo pronto, tela, antes e depois)? Prefira fórmulas que o mostram no quadro 0, como a 6, a 13 e a 18.
+- Resultado visível (vídeo pronto, tela, antes e depois)? Prefira fórmulas que o mostram no quadro 0, como a 6, a 13, a 18 e a 28.
 - O gancho escolhido vira o fio do roteiro e volta no fecho.
 - Fala de até 8 palavras (3 segundos). Escrito de até 10 palavras.
 - Os exemplos abaixo mostram o jeito. Nunca use um exemplo como está: o gancho sai da dor do público do aluno, nas palavras dele.
@@ -165,6 +166,7 @@ O estúdio monta uma versão por projeto. Se o aluno montar por conta 3 versões
 - Na tela: MENOS DE R$ 100 A SESSÃO
 - Quando usar: para cortar um público grande no pedaço que compra. As pessoas marcam umas às outras.
 - Como estraga: grupo tão grande que não é chamado. "Empreendedores" não é grupo.
+- Variante pela perda: "{Grupo} sem {coisa} deixa dinheiro na mesa." Exemplo: "Nutri sem cardápio pronto deixa dinheiro na mesa." Na tela: NUTRI, CADÊ O CARDÁPIO PRONTO? A forma longa ("Se você é {grupo} e não faz {ação}, está deixando dinheiro na mesa") passa de 8 palavras: use-a só no escrito. A perda segue a regra da versão negativa: só entra se é real para o público, nunca uma dor que ninguém mediu.
 
 **15. O histórico de tropeços**
 - Molde: "Minhas primeiras {N} {tentativas} não deram em nada. Na {N+1} mudou isto."
@@ -249,3 +251,18 @@ O estúdio monta uma versão por projeto. Se o aluno montar por conta 3 versões
 - Na tela: O JEITO MAIS RÁPIDO
 - Quando usar: em vídeo de uma afirmação só, sem história. É o formato mais comum e o mais fácil de escrever mal.
 - Como estraga: superlativo com resposta mole. Se a segunda metade é "constância", você não disse nada.
+- Variante em primeira pessoa: "A melhor coisa que eu {fiz} para {resultado} foi {a resposta}." Exemplo: "A melhor coisa que eu fiz pela voz firme no vídeo foi gravar em pé." Na fala, curto: "Melhor coisa pra voz firme: gravar em pé." Na tela: GRAVE EM PÉ. Gancho em primeira pessoa só passa no teste do dedo se o resultado de quem assiste estiver na mesma frase, e a resposta precisa ser algo que ela possa copiar hoje.
+
+**27. Pedir licença**
+- Molde: "Posso te dar um conselho? {O conselho, numa frase curta}."
+- Exemplo: "Posso te dar um conselho? Cobra o sinal."
+- Na tela: SINAL PRIMEIRO, BOLO DEPOIS
+- Quando usar: em vídeo de uma dica só, com rosto. A pergunta soa como conversa de perto, e a pessoa fica para ouvir a resposta.
+- Como estraga: parar na pergunta. Sozinha, ela é "pergunta educada" e tira 0 em impacto na régua. O conselho vem na mesma respiração, dentro das 8 palavras (até o segundo 3), e o escrito na tela já é o conselho, não a pergunta. A pergunta gasta 5 das 8 palavras: se o conselho não cabe em 3, escolha outra fórmula.
+
+**28. Parece, mas não é**
+- Molde: "Isso aqui parece {o que todo mundo acha que é}, mas é {o que é de verdade}."
+- Exemplo: "Parece foto de estúdio. Foi na janela."
+- Na tela: ESTÚDIO? NÃO. JANELA.
+- Quando usar: quando a coisa aparece no quadro 0 (objeto, tela, resultado pronto). Quem assiste acredita na primeira leitura e fica para ver a virada. Serve para resultado visível, como a 6, a 13 e a 18.
+- Como estraga: primeira leitura que não é a de todo mundo (se ninguém achou que era X, não existe virada), ou virada que não se prova. A prova da virada aparece na tela até o segundo 8.

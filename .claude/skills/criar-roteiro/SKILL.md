@@ -36,7 +36,7 @@ Rode `./estudio novo-projeto --titulo "<assunto em poucas palavras>" --caminho A
 6. Rode `./estudio estado --projeto P --etapa gancho --gate pauta=<A|B|C> --resposta "<palavras do aluno>"`.
 
 ### 3. Os ganchos
-1. Monte a leva em `projetos/P/leva-de-ganchos.md` (`guias/ganchos.md`, "A leva e a régua"): de 12 a 30 ganchos, no máximo 2 por fórmula, das fórmulas que caibam na pauta, cada um com falado, escrito, visual do quadro 0, versão negativa e premissa. Fórmula de número só com prova. Resultado visível? Prefira fórmulas que o mostram no quadro 0, como a 6, a 13 e a 18.
+1. Monte a leva em `projetos/P/leva-de-ganchos.md` (`guias/ganchos.md`, "A leva e a régua"): de 12 a 30 ganchos, no máximo 2 por fórmula, das fórmulas que caibam na pauta, cada um com falado, escrito, visual do quadro 0, versão negativa e premissa. Fórmula de número só com prova. Resultado visível? Prefira fórmulas que o mostram no quadro 0, como a 6, a 13, a 18 e a 28.
 2. Em silêncio, descarte os que falham no teste do dedo, falam só de quem grava, exageram, passam de 8 palavras ou têm premissa inventada (regras 11 e 16). Dê a nota da régua aos que sobraram. Os descartados ficam na leva com o motivo em uma linha. Nunca mude a frase só para subir a nota.
 3. Escolha os 3 de maior nota com fórmulas diferentes (no máximo um por fórmula). Para cada um: fala de até 8 palavras e escrito de até 10, frases diferentes, e o visual do quadro 0.
 4. Diga o P-03. Recomende (★) a maior nota. No empate, o que filtra melhor o público e depois o que mostra o resultado no quadro 0.
